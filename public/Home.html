@@ -10,14 +10,30 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 20%, #bdbdbd 100%), 
-                        url('/images/ascend.png') no-repeat center top;
-            background-size: cover;
-            min-height: 100vh; /* Ensures full viewport height */
         }
-        
+
+        /* Parallax background container */
+        .parallax {
+            position: relative;
+            height: 100vh; /* Full viewport height */
+            background: url('/images/ascend.png') no-repeat center top;
+            background-size: cover;
+            background-attachment: scroll;
+        }
+
+        /* Parallax scrolling effect */
+        .parallax::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 80%, #800080 100%);
+        }
+
         header {
-            background-color: #800080; /* Changed to purple */
+            background-color: #800080; /* Purple header */
             color: white;
             padding: 15px;
             display: flex;
@@ -41,7 +57,7 @@
         }
         header button {
             background-color: white;
-            color: #800080; /* Changed text color to purple */
+            color: #800080; /* Purple button text */
             border: none;
             padding: 10px;
             cursor: pointer;
@@ -49,12 +65,13 @@
             border-radius: 5px;
         }
         header button:hover {
-            background-color: #9932CC; /* A lighter purple when hovering */
+            background-color: #9932CC;
             color: white;
         }
         /* Layout for the panels */
         .container {
             display: flex;
+            padding: 20px;
         }
         /* Routes panel on the left taking up 10% of the page width */
         .panel.routes {
@@ -90,14 +107,14 @@
         }
         .panel h2 {
             text-align: center;
-            background-color: #800080; /* Changed to purple */
+            background-color: #800080;
             color: white;
             padding: 10px;
             border-radius: 10px;
         }
         /* Footer styling */
         footer {
-            background-color: #800080; /* Changed to purple */
+            background-color: #800080;
             color: white;
             padding: 15px;
             text-align: center;
@@ -116,6 +133,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Parallax Background -->
+    <div class="parallax"></div>
 
     <!-- Header with website title, Discourse button on left and login, etc. buttons on the right -->
     <header>
@@ -194,6 +214,15 @@
         <a href="#">Copyright</a>
         <a href="#">Contact Us</a>
     </footer>
+
+    <script>
+        // JavaScript to create parallax scrolling effect
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.parallax');
+            parallax.style.backgroundPositionY = -(scrolled * 0.5) + 'px'; // Move the background slower
+        });
+    </script>
 
 </body>
 </html>

@@ -10,10 +10,14 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #e0e0e0; /* Slightly darker than the panels */
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 20%, #bdbdbd 100%), 
+                        url('/images/ascend.png') no-repeat center top;
+            background-size: cover;
+            min-height: 100vh; /* Ensures full viewport height */
         }
+        
         header {
-            background-color: #2E8B57; /* Darker green for the header */
+            background-color: #800080; /* Changed to purple */
             color: white;
             padding: 15px;
             display: flex;
@@ -37,7 +41,7 @@
         }
         header button {
             background-color: white;
-            color: #2E8B57;
+            color: #800080; /* Changed text color to purple */
             border: none;
             padding: 10px;
             cursor: pointer;
@@ -45,7 +49,7 @@
             border-radius: 5px;
         }
         header button:hover {
-            background-color: #3CB371;
+            background-color: #9932CC; /* A lighter purple when hovering */
             color: white;
         }
         /* Layout for the panels */
@@ -61,8 +65,8 @@
             height: 100vh; /* Full page height */
         }
         /* Right-side column for announcements and updates */
-        .right-column {
-            width: 10%;
+        .panel.stack {
+            width: 5%;
             background-color: #f5f5f5;
             padding: 20px;
             border-left: 1px solid #ddd;
@@ -75,6 +79,7 @@
         .center-panel {
             flex-grow: 1; /* Fills the remaining space */
             padding: 20px;
+            border-radius: 5px;
         }
         .panel {
             border: 1px solid #ccc;
@@ -85,14 +90,14 @@
         }
         .panel h2 {
             text-align: center;
-            background-color: #2E8B57;
+            background-color: #800080; /* Changed to purple */
             color: white;
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 10px;
         }
         /* Footer styling */
         footer {
-            background-color: #2E8B57;
+            background-color: #800080; /* Changed to purple */
             color: white;
             padding: 15px;
             text-align: center;
@@ -128,6 +133,7 @@
 
     <!-- Main content container -->
     <div class="container">
+        
         <!-- Routes Panel on the left -->
         <div class="panel routes" id="routes">
             <h2>Available Routes</h2>
@@ -165,7 +171,7 @@
         </div>
 
         <!-- Right-side column (Announcements and Updates) -->
-        <div class="right-column">
+        <div class="panel stacks">
             <!-- Announcements Panel -->
             <div class="panel" id="announcements">
                 <h2>Announcements</h2>
