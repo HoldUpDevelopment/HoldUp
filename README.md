@@ -1,5 +1,4 @@
 This is a ChatGPT-assisted README file. **BE ESPECIALLY WARY WITH THE INSTALLATION INSTRUCTIONS UNTIL THEY HAVE BEEN DOUBLE CHEKED**
----
 
 # HoldUp: Empowering Climbing Gyms and Communities
 
