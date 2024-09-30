@@ -36,7 +36,7 @@ HoldUp connects climbers with their local gyms by providing a robust online plat
 
 ## Tech Stack
 
-HoldUp is built using the following technologies:
+HoldUp is built using the following technologies: (*Not Accurate ATM*)
 
 - **Frontend**: React.js, Tailwind CSS
 - **Backend**: Node.js, Express.js
