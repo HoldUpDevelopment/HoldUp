@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webpage Layout</title>
+    <style>
+        /* Basic styling for layout */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 20%, #bdbdbd 100%), 
+                        url('/images/ascend.png') no-repeat center top;
+            background-size: cover;
+            min-height: 100vh; /* Ensures full viewport height */
+        }
+        
+        header {
+            background-color: #800080; /* Changed to purple */
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        /* Left side of header */
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        .header-left h1 {
+            margin: 0;
+            padding-right: 20px;
+            font-size: 24px;
+        }
+        /* Right side of header with buttons */
+        .header-right {
+            display: flex;
+            gap: 10px;
+        }
+        header button {
+            background-color: white;
+            color: #800080; /* Changed text color to purple */
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        header button:hover {
+            background-color: #9932CC; /* A lighter purple when hovering */
+            color: white;
+        }
+        /* Layout for the panels */
+        .container {
+            display: flex;
+        }
+        /* Routes panel on the left taking up 10% of the page width */
+        .panel.routes {
+            width: 10%;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+            height: 100vh; /* Full page height */
+        }
+        /* Right-side column for announcements and updates */
+        .panel.stack {
+            width: 5%;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-left: 1px solid #ddd;
+            height: 100vh;
+        }
+        .right-column .panel {
+            margin-bottom: 20px;
+        }
+        /* Center column for the dashboard */
+        .center-panel {
+            flex-grow: 1; /* Fills the remaining space */
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .panel {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fafafa; /* Lighter than the background */
+            border-radius: 5px;
+        }
+        .panel h2 {
+            text-align: center;
+            background-color: #800080; /* Changed to purple */
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        /* Footer styling */
+        footer {
+            background-color: #800080; /* Changed to purple */
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        footer a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header with website title, Discourse button on left and login, etc. buttons on the right -->
+    <header>
+        <div class="header-left">
+            <h1>Website Title</h1>
+            <button>Discourse Forum</button>
+        </div>
+        <div class="header-right">
+            <button>Routes</button>
+            <button>News</button>
+            <button>Account Profile</button>
+            <button>Login</button>
+        </div>
+    </header>
+
+    <!-- Main content container -->
+    <div class="container">
+        
+        <!-- Routes Panel on the left -->
+        <div class="panel routes" id="routes">
+            <h2>Available Routes</h2>
+            <ul>
+                <li>Route 1</li>
+                <li>Route 2</li>
+                <li>Route 3</li>
+            </ul>
+        </div>
+
+        <!-- Center Dashboard Panel -->
+        <div class="center-panel">
+            <div class="panel" id="dashboard">
+                <h2>Dashboard</h2>
+                <p><strong>Username:</strong> user123</p>
+                
+                <!-- Recent Forum Replies/Pings -->
+                <div>
+                    <h3>Recent Forum Replies/Pings</h3>
+                    <ul>
+                        <li>Reply 1: "Thanks for your input!"</li>
+                        <li>Ping: "You were mentioned in post XYZ"</li>
+                    </ul>
+                </div>
+                
+                <!-- Direct Mail Notifications -->
+                <div>
+                    <h3>Direct Messages</h3>
+                    <ul>
+                        <li>Message from Admin: "Your profile has been updated."</li>
+                        <li>Message from User456: "Can we collaborate on this?"</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right-side column (Announcements and Updates) -->
+        <div class="panel stacks">
+            <!-- Announcements Panel -->
+            <div class="panel" id="announcements">
+                <h2>Announcements</h2>
+                <p>No new announcements at the moment.</p>
+            </div>
+
+            <!-- Updates Panel -->
+            <div class="panel" id="updates">
+                <h2>Latest Updates</h2>
+                <p>Check back soon for more updates.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer with links -->
+    <footer>
+        <a href="#">About</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Copyright</a>
+        <a href="#">Contact Us</a>
+    </footer>
+
+</body>
+</html>
