@@ -13,6 +13,8 @@ server.use(favicon('./public/favicon.ico'));
 server.use('/', homePageRoutes);
 server.use('/', imageRoutes);
 
+
+
 //Listen to server
 server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}//`);
