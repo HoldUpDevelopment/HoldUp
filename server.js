@@ -11,9 +11,7 @@ const imageRoutes = require('./src/routes/image');
 const server = express();
 server.use(favicon('./public/favicon.ico')); 
 server.use('/', homePageRoutes);
-server.use('/', imageRoutes);
-
-
+server.use('/images', imageRoutes);
 
 //Listen to server
 server.listen(port, hostname, () => {
