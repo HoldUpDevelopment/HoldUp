@@ -37,5 +37,57 @@ module.exports = {
         });
         res.write(JSON.stringify(response_body));
         res.end();
+    },
+    getSettingsFromID: (req, res) => {
+        response_body = {
+            username: "test-username",
+            profile_picture: "pfp.png"
+        };
+        json_message = JSON.stringify(response_body);
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
+        });
+        res.write(JSON.stringify(response_body));
+        res.end();
+    },
+    deleteAccount: (req, res) => {
+        response_body = {
+            username: "test-username",
+            profile_picture: "pfp.png"
+        };
+        json_message = JSON.stringify(response_body);
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
+        });
+        res.write(JSON.stringify(response_body));
+        res.end();
+    },
+    editAccountDetails: (req, res) => {
+        response_body = {
+            username: "test-username",
+            profile_picture: "pfp.png"
+        };
+        json_message = JSON.stringify(response_body);
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
+        });
+        res.write(JSON.stringify(response_body));
+        res.end();
+    },
+    createAccount: (req, res) => {
+        response_body = {
+            username: "test-username",
+            profile_picture: "pfp.png"
+        };
+        json_message = JSON.stringify(response_body);
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
+        });
+        res.write(JSON.stringify(response_body));
+        res.end();
     }
 }
