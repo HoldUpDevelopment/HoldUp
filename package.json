@@ -12,6 +12,6 @@
   },
   "scripts": {
     "initEnv": "fnm env --use-on-cd | Out-String | Invoke-Expression",
-    "start": "node app.js"
+    "start": "node server.js"
   }
 }
