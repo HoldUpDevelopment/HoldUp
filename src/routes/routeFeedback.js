@@ -3,7 +3,7 @@ const routeFeedbackController = require('../controllers/routeFeedbackController'
 
 const router = express.Router();
 
-router.post('/createReview', routeFeedbackController.createReview);
+router.post('/', routeFeedbackController.createReview);
 
 router.put('/editReview', routeFeedbackController.editReview);
 

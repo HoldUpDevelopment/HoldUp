@@ -1,21 +1,21 @@
 const express = require('express');
-const userAccountController = require('../controllers/routeManagementController');
+const routeManagementController = require('../controllers/routeManagementController');
 
 const router = express.Router();
 
-router.post('/createRoute', userAccountController.createRoute);
-router.post('/archiveRoute', userAccountController.archiveRoute);
-router.post('/unarchiveRoute', userAccountController.unarchiveRoute);
+router.post('/createRoute', routeManagementController.createRoute);
+router.post('/archiveRoute', routeManagementController.archiveRoute);
+router.post('/unarchiveRoute', routeManagementController.unarchiveRoute);
 
-router.delete('/deleteLiveRoute', userAccountController.deleteLiveRoute);
-router.delete('/deleteArchiveRoute', userAccountController.deleteArchiveRoute);
-router.delete('/deleteRoute', userAccountController.deleteRoute);
+router.delete('/deleteLiveRoute', routeManagementController.deleteLiveRoute);
+router.delete('/deleteArchiveRoute', routeManagementController.deleteArchiveRoute);
+router.delete('/deleteRoute', routeManagementController.deleteRoute);
 
-router.put('/editRouteDetails', userAccountController.editRouteDetails);
+router.put('/editRouteDetails', routeManagementController.editRouteDetails);
 
-router.get('/getRouteDetails', userAccountController.getRouteDetails);
-router.get('/getRouteInfo', userAccountController.getRouteInfo);
-router.get('/getRouteMapInfo', userAccountController.getRouteMapData);
-router.get('/getAuthorRoutes', userAccountController.getAuthorRoutes);
+router.get('/getRouteDetails', routeManagementController.getRouteDetails);
+router.get('/getRouteInfo', routeManagementController.getRouteInfo);
+router.get('/getRouteMapData', routeManagementController.getRouteMapData);
+router.get('/getAuthorRoutes', routeManagementController.getAuthorRoutes);
 
 module.exports = router;
