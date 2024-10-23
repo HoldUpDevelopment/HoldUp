@@ -13,6 +13,11 @@ const routeFeedbackRoutes = require('./src/routes/routeFeedback');
 const announcementRoutes = require('./src/routes/announcements');
 const forumManagementRoutes = require('./src/routes/forumManagement');
 
+//Models
+//Mongo
+const mongo = require('./src/models/mongo');
+mongo.startConnection();
+
 const server = express();
 server.use(favicon('./public/favicon.ico')); 
 server.use('/', homePageRoutes);

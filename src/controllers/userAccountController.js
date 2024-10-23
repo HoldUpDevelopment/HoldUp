@@ -1,21 +1,34 @@
+const { response } = require('express');
+const mongo = require('../models/mongo');
+
 module.exports = {
     // POST Methods
     createAccount: (req, res) => {
-
-        var reqBody;
+        var reqBody = '';
 
         req.on('data', function (chunk) { // reading the request into a var.
-            reqBody += chunk;
+            reqBody += chunk.toString();
         });
 
         req.on('end', async () => {
-
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
+            response_body = {
 
-            response_body = { // Creating Response and converting it to JSON string object.
-                username: "test-username",
-                profile_picture: "pfp.png"
-            };
+            }
+            var confirmation_id = await mongo.createListing("route_mngt", "users", reqBody);
+            var response_body;
+            if (confirmation_id == false) {
+                response_body = {
+                    isValid: false,
+                    id: 403
+                }
+            } else {
+                response_body = {
+                    isValid: true,
+                    id: confirmation_id
+                }
+            }
+            
             json_message = JSON.stringify(response_body);
 
             res.writeHead(202, { // Writing Response
@@ -25,6 +38,8 @@ module.exports = {
             res.end();
         });
     },
+
+    
 
     // PUT Methods
     editAccountDetails: (req, res) => {
