@@ -1,5 +1,8 @@
 const {MongoClient, Collection} = require('mongodb');
+const mongoose = require('mongoose');
 var client;
+
+startConnection().catch(err => console.log(err));
 
 async function startConnection(){
     /**
