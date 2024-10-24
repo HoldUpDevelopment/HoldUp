@@ -47,7 +47,8 @@ module.exports = {
 
         req.on('end', async () => {
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
-            response_body = {};
+            var name = reqBody.name;
+            response_body = await mongo.updateListingByName(name, reqBody);
             
             json_message = JSON.stringify(response_body);
 

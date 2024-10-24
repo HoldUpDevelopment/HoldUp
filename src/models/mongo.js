@@ -58,7 +58,7 @@ async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
 async function updateListingByName( nameOfListing, updatedListing) {
     const result = await client.db("route_mngt").collection("users")
                         .updateOne({ Name: nameOfListing }, { $set: updatedListing });
-
+    
     console.log(`${result.matchedCount} document(s) matched the query criteria.`);
     console.log(`${result.modifiedCount} document(s) was/were updated.`);
 }
