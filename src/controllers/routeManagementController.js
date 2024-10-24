@@ -1,20 +1,18 @@
+const mongo = require('../models/mongo');
+
 module.exports = {
     // POST Methods
     createRoute: (req, res) => {
-        var reqBody;
+        var reqBody = '';
 
-        req.on('data', function(chunk) { // reading the request into a var.
-            reqBody += chunk;
+        req.on('data', function (chunk) { // reading the request into a var.
+            reqBody += chunk.toString();
         });
 
         req.on('end', async () => {
-
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
+            response_body = {};
             
-            response_body = { // Creating Response and converting it to JSON string object.
-                username: "test-username",
-                profile_picture: "pfp.png"
-            };
             json_message = JSON.stringify(response_body);
 
             res.writeHead(202, { // Writing Response
@@ -25,20 +23,16 @@ module.exports = {
         });
     },
     archiveRoute: (req, res) => {
-        var reqBody;
+        var reqBody = '';
 
-        req.on('data', function(chunk) { // reading the request into a var.
-            reqBody += chunk;
+        req.on('data', function (chunk) { // reading the request into a var.
+            reqBody += chunk.toString();
         });
 
         req.on('end', async () => {
-
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
+            response_body = {};
             
-            response_body = { // Creating Response and converting it to JSON string object.
-                username: "test-username",
-                profile_picture: "pfp.png"
-            };
             json_message = JSON.stringify(response_body);
 
             res.writeHead(202, { // Writing Response
@@ -49,20 +43,16 @@ module.exports = {
         });
     },
     unarchiveRoute: (req, res) => {
-        var reqBody;
+        var reqBody = '';
 
-        req.on('data', function(chunk) { // reading the request into a var.
-            reqBody += chunk;
+        req.on('data', function (chunk) { // reading the request into a var.
+            reqBody += chunk.toString();
         });
 
         req.on('end', async () => {
-
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
+            response_body = {};
             
-            response_body = { // Creating Response and converting it to JSON string object.
-                username: "test-username",
-                profile_picture: "pfp.png"
-            };
             json_message = JSON.stringify(response_body);
 
             res.writeHead(202, { // Writing Response
@@ -75,20 +65,16 @@ module.exports = {
 
     // PUT Methods
     editRouteDetails: (req, res) => {
-        var reqBody;
+        var reqBody = '';
 
-        req.on('data', function(chunk) { // reading the request into a var.
-            reqBody += chunk;
+        req.on('data', function (chunk) { // reading the request into a var.
+            reqBody += chunk.toString();
         });
 
         req.on('end', async () => {
-
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
+            response_body = {};
             
-            response_body = { // Creating Response and converting it to JSON string object.
-                username: "test-username",
-                profile_picture: "pfp.png"
-            };
             json_message = JSON.stringify(response_body);
 
             res.writeHead(200, { // Writing Response
