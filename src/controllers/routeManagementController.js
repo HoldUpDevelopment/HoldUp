@@ -51,33 +51,33 @@ module.exports = {
         req.on('end', async () => {
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
             response_body = {};
-            var confirmation_id = await mongo.createListing("route_mngt", "archived_routes", reqBody); //reqBody should have the object id of the live route
-            await mongo.deleteListingByKey("route_mngt", "live_routes", reqBody._id);
+            status_code = 0;
+
+            var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", reqBody.routeid)
+            var confirmation_id = await mongo.createListing("route_mngt", "archived_routes", route_payload); //reqBody should have the object id of the live route
+            await mongo.deleteListingByKey("route_mngt", "live_routes", reqBody.routeid);
+            
             if (confirmation_id == false) {
                 response_body = {
                     isValid: false,
-                    id: 403
-                }
-                json_message = JSON.stringify(response_body);
-
-                res.writeHead(403, { // Writing Response
-                    'Content-Type': 'application/json'
-                });
-                res.write(JSON.stringify(response_body));
-                res.end();
+                    id: 500
+                };
+                status_code = 500;
             } else {
                 response_body = {
                     isValid: true,
                     id: confirmation_id
-                }
-                json_message = JSON.stringify(response_body);
-
-                res.writeHead(202, { // Writing Response
-                    'Content-Type': 'application/json'
-                });
-                res.write(JSON.stringify(response_body));
-                res.end();
+                };
+                status_code = 202;
             }
+
+
+            json_message = JSON.stringify(response_body);
+            res.writeHead(status_code, { // Writing Response
+                'Content-Type': 'application/json'
+            });
+            res.write(JSON.stringify(response_body));
+            res.end();
         });
     },
     unarchiveRoute: (req, res) => {
@@ -90,32 +90,33 @@ module.exports = {
         req.on('end', async () => {
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
             response_body = {};
+            status_code = 0;
 
-            var confirmation_id = await mongo.createListing("route_mngt", "live_routes", reqBody); //reqBody should have the object id of the archived route
-            await mongo.deleteListingByKey("route_mngt", "archived_routes", reqBody._id);
+            var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "archived_routes", reqBody.routeid)
+            var confirmation_id = await mongo.createListing("route_mngt", "live_routes", route_payload); //reqBody should have the object id of the live route
+            await mongo.deleteListingByKey("route_mngt", "archived_routes", reqBody.routeid);
+
             if (confirmation_id == false) {
                 response_body = {
                     isValid: false,
                     id: 500
-                }
-                res.writeHead(500, { // Writing Response
-                    'Content-Type': 'application/json'
-                });
-                json_message = JSON.stringify(response_body);
-                res.write(JSON.stringify(response_body));
-                res.end();
+                };
+                status_code = 500;
             } else {
                 response_body = {
                     isValid: true,
                     id: confirmation_id
-                }
-                json_message = JSON.stringify(response_body);
-                res.writeHead(202, { // Writing Response
-                    'Content-Type': 'application/json'
-                });
-                res.write(JSON.stringify(response_body));
-                res.end();
+                };
+                status_code = 202;
             }
+
+
+            json_message = JSON.stringify(response_body);
+            res.writeHead(status_code, { // Writing Response
+                'Content-Type': 'application/json'
+            });
+            res.write(JSON.stringify(response_body));
+            res.end();
         });
     },
 

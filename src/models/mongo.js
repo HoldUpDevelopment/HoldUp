@@ -1,4 +1,4 @@
-const {MongoClient, Collection} = require('mongodb');
+const {MongoClient, Collection, ObjectId} = require('mongodb');
 var client;
 
 async function startConnection(){
@@ -44,11 +44,11 @@ async function createListing(dbName, collection, newListing){
 }
 
 async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
-    const result = await client.db(dbName).collection(collection).findOne({ username: nameOfListing });
+    const result = await client.db(dbName).collection(collection).findOne({ _id: new ObjectId(nameOfListing) });
 
     if (result) {
         console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
-        return (result._id)
+        return (result)
     } else {
         console.log(`No listings found with the name '${nameOfListing}'`);
         return (undefined)
@@ -65,7 +65,7 @@ async function updateListingByKey(dbName, collection, listingKey, updatedListing
 
 async function deleteListingByKey(dbName, collection, listingKey) {
     const result = await client.db(dbName).collection(collection)
-            .deleteOne({ Name: listingKey });
+            .deleteOne({ _id: new ObjectId(listingKey) });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
 }
 
