@@ -55,17 +55,17 @@ async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
     }
 }
 
-async function updateListingByName( nameOfListing, updatedListing) {
-    const result = await client.db("route_mngt").collection("users")
-                        .updateOne({ Name: nameOfListing }, { $set: updatedListing });
+async function updateListingByKey(dbName, collection, listingKey, updatedListing) {
+    const result = await client.db(dbName).collection(collection)
+                        .updateOne({ Name: listingKey }, { $set: updatedListing });
     
     console.log(`${result.matchedCount} document(s) matched the query criteria.`);
     console.log(`${result.modifiedCount} document(s) was/were updated.`);
 }
 
-async function deleteListingByName(client, nameOfListing) {
-    const result = await client.db("route_mngt").collection("users")
-            .deleteOne({ Name: nameOfListing });
+async function deleteListingByKey(dbName, collection, listingKey) {
+    const result = await client.db(dbName).collection(collection)
+            .deleteOne({ Name: listingKey });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
 }
 
@@ -79,7 +79,7 @@ module.exports = {
     listDatabases: listDatabases,
     createListing: createListing,
     findOneListingByKeyValue: findOneListingByKeyValue,
-    updateListingByName: updateListingByName,
-    deleteListingByName: deleteListingByName,
+    updateListingByKey: updateListingByKey,
+    deleteListingByKey: deleteListingByKey,
     closeConnection: closeConnection
 }

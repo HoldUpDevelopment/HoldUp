@@ -16,7 +16,7 @@ const forumManagementRoutes = require('./src/routes/forumManagement');
 //Models
 //Mongo
 const mongo = require('./src/models/mongo');
-mongo.startConnection();
+
 
 const server = express();
 server.use(favicon('./public/favicon.ico')); 
@@ -29,6 +29,7 @@ server.use('/announcements', announcementRoutes);
 server.use('/forum', forumManagementRoutes);
 
 //Listen to server
-server.listen(port, hostname, () => {
+server.listen(port, hostname, async () => {
     console.log(`Server running at http://${hostname}:${port}//`);
+    await mongo.startConnection();
 })
