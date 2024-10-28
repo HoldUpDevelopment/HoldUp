@@ -1,6 +1,10 @@
 const {MongoClient, Collection} = require('mongodb');
 const mongoose = require('mongoose');
 var client;
+var Admin = mongoose.mongo.Admin;
+
+// Importing Schemas
+const accountSchema = require('src/models/accountSchema');
 
 startConnection().catch(err => console.log(err));
 
@@ -11,6 +15,8 @@ async function startConnection(){
      */
     const uri = "mongodb+srv://ian:TTN6oSvbr3Aj36io@holdupcluster0.cn20z.mongodb.net/?retryWrites=true&w=majority&appName=HoldUpCluster0";
 
+    await mongoose.connect(uri);
+    /*
     try {
         client = new MongoClient(uri);
         await client.connect();
@@ -21,13 +27,26 @@ async function startConnection(){
     } catch (e) {
         console.error(e);
     }
+    */
 }
 
 async function listDatabases(){
+    /*
+    Mongoose doesn't seem to have any methods for directly getting the Databases list from the connection, so I 
+    am using "Mongoose.mongo.admin" to use a list databases function I found here. It should work the same as before.
+        - Bryan
+    */
+
+    new Admin(mongoose.db).listDatabases(function(err, result) {
+        console.log('listDatabases succeeded');
+        // database list stored in result.databases
+        var databasesList = result.databases;    
+        console.log("Databases:");
+        databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+    });
+    /*
     databasesList = await client.db().admin().listDatabases();
- 
-    console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+    */
 };
 
 
@@ -58,7 +77,7 @@ async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
     }
 }
 
-async function updateListingByName( nameOfListing, updatedListing) {
+async function updateListingByKey(dbName, collection, listingKey, updatedListing) {
     const result = await client.db("route_mngt").collection("users")
                         .updateOne({ Name: nameOfListing }, { $set: updatedListing });
 
@@ -66,7 +85,7 @@ async function updateListingByName( nameOfListing, updatedListing) {
     console.log(`${result.modifiedCount} document(s) was/were updated.`);
 }
 
-async function deleteListingByName(client, nameOfListing) {
+async function deleteListingByKey(dbName, collection, listingKey) {
     const result = await client.db("route_mngt").collection("users")
             .deleteOne({ Name: nameOfListing });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
@@ -82,7 +101,7 @@ module.exports = {
     listDatabases: listDatabases,
     createListing: createListing,
     findOneListingByKeyValue: findOneListingByKeyValue,
-    updateListingByName: updateListingByName,
-    deleteListingByName: deleteListingByName,
+    updateListingByKey: updateListingByKey,
+    deleteListingByKey: deleteListingByKey,
     closeConnection: closeConnection
 }
