@@ -48,6 +48,16 @@ module.exports = {
         req.on('end', async () => {
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
             response_body = {};
+            var confirmation = await mongo.updateListingByKey("route_mngt", "users", reqBody._id, reqBody.update);
+            if (confirmation == false) {
+                response_body = {
+                    success: false,
+                }
+            } else {
+                response_body = {
+                    success: true,
+                }
+            }
             
             json_message = JSON.stringify(response_body);
 
@@ -61,21 +71,69 @@ module.exports = {
 
     // DELETE Methods
     deleteAccount: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.png"
-        };
-        json_message = JSON.stringify(response_body);
+        var reqBody = '';
 
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
+        req.on('data', function (chunk) { // reading the request into a var.
+            reqBody += chunk.toString();
         });
-        res.write(JSON.stringify(response_body));
-        res.end();
+
+        req.on('end', async () => {
+            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
+            response_body = {};
+            var confirmation = await mongo.deleteListingByKey("route_mngt", "users", reqBody._id);
+            if (confirmation == false) {
+                response_body = {
+                    success: false,
+                }
+            } else {
+                response_body = {
+                    success: true,
+                }
+            }
+            
+            json_message = JSON.stringify(response_body);
+
+            res.writeHead(200, { // Writing Response
+                'Content-Type': 'application/json'
+            });
+            res.write(JSON.stringify(response_body));
+            res.end();
+        });
     },
 
     // GET Methods
     getUserIdFromUserName: (req, res) => {
+        var reqBody = '';
+
+        req.on('data', function (chunk) { // reading the request into a var.
+            reqBody += chunk.toString();
+        });
+
+        req.on('end', async () => {
+            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
+            response_body = {};
+            var confirmation = await mongo.findOneListingByKeyValue("route_mngt", "users", reqBody.name);
+            if (confirmation == false) {
+                response_body = {
+                    success: false,
+                    id: 403
+                }
+            } else {
+                response_body = {
+                    success: true,
+                    id: confirmation.id
+                }
+            }
+            
+            json_message = JSON.stringify(response_body);
+
+            res.writeHead(200, { // Writing Response
+                'Content-Type': 'application/json'
+            });
+            res.write(JSON.stringify(response_body));
+            res.end();
+        });
+        
         response_body = {
             userid: 111222333
         };

@@ -1,4 +1,4 @@
-const {MongoClient, Collection} = require('mongodb');
+const {MongoClient, Collection, ObjectId} = require('mongodb');
 var client;
 
 async function startConnection(){
@@ -43,8 +43,8 @@ async function createListing(dbName, collection, newListing){
     
 }
 
-async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
-    const result = await client.db(dbName).collection(collection).findOne({ username: nameOfListing });
+async function findOneListingByKeyValue(dbName, collection, nameOfListing, key) {
+    const result = await client.db(dbName).collection(collection).findOne({ [key]: nameOfListing });
 
     if (result) {
         console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
@@ -55,17 +55,25 @@ async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
     }
 }
 
-async function updateListingByName( nameOfListing, updatedListing) {
-    const result = await client.db("route_mngt").collection("users")
-                        .updateOne({ Name: nameOfListing }, { $set: updatedListing });
+async function updateListingByKey(dbName, collection, nameOfListing, updatedListing, key) {
+    if (key == "_id"){
+        nameOfListing = new ObjectId(nameOfListing);
+    }
+    const result = await client.db(dbName).collection(collection)
+                        .updateOne({ [key]: nameOfListing }, { $set: updatedListing });
 
     console.log(`${result.matchedCount} document(s) matched the query criteria.`);
     console.log(`${result.modifiedCount} document(s) was/were updated.`);
+    if (result.matchedCount != 0 && result.modifiedCount != 0){
+        return true;
+    }else{
+        return false;
+    }
 }
 
-async function deleteListingByName(client, nameOfListing) {
-    const result = await client.db("route_mngt").collection("users")
-            .deleteOne({ Name: nameOfListing });
+async function deleteListingByKey(dbName, collection, nameOfListing, key) {
+    const result = await client.db(dbName).collection(collection)
+            .deleteOne({ [key]: nameOfListing });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
 }
 
@@ -79,7 +87,7 @@ module.exports = {
     listDatabases: listDatabases,
     createListing: createListing,
     findOneListingByKeyValue: findOneListingByKeyValue,
-    updateListingByName: updateListingByName,
-    deleteListingByName: deleteListingByName,
+    updateListingByKey: updateListingByKey,
+    deleteListingByKey: deleteListingByKey,
     closeConnection: closeConnection
 }
