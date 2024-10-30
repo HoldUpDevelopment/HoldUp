@@ -1,3 +1,4 @@
+const express = require('express');
 const mongo = require('../models/mongo');
 
 module.exports = {
@@ -56,7 +57,7 @@ module.exports = {
             var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", reqBody.routeid)
             var confirmation_id = await mongo.createListing("route_mngt", "archived_routes", route_payload); //reqBody should have the object id of the live route
             await mongo.deleteListingByKey("route_mngt", "live_routes", reqBody.routeid);
-            
+
             if (confirmation_id == false) {
                 response_body = {
                     isValid: false,
@@ -129,8 +130,17 @@ module.exports = {
         });
 
         req.on('end', async () => {
-            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
+            reqBody = JSON.parse(reqBody); // converting the request into a JSON object\
             response_body = {};
+
+            const isArchived = req.query.isArchived;
+            const routeId = req.query.routeId;
+
+            if (isArchived === 'true') {
+                await mongo.updateListingByKey("route_mngt", "archived_routes", routeId, reqBody, false);
+            } else {
+                await mongo.updateListingByKey("route_mngt", "live_routes", routeId, reqBody, false);
+            }
 
             json_message = JSON.stringify(response_body);
 
@@ -143,12 +153,14 @@ module.exports = {
     },
 
     // DELETE Methods
-    deleteLiveRoute: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.jpg"
-        };
+    deleteLiveRoute: async (req, res) => {
+        const routeId = req.query.routeId;
+
+        response_body = {};
+        await mongo.deleteListingByKey("route_mngt", "live_routes", routeId);
+
         json_message = JSON.stringify(response_body);
+        console.log();
 
         res.writeHead(200, {
             'Content-Type': 'application/json'

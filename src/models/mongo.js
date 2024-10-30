@@ -55,9 +55,9 @@ async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
     }
 }
 
-async function updateListingByKey(dbName, collection, listingKey, updatedListing) {
+async function updateListingByKey(dbName, collection, listingKey, updatedListing, doUpsert) {
     const result = await client.db(dbName).collection(collection)
-                        .updateOne({ Name: listingKey }, { $set: updatedListing });
+                        .updateOne({ _id: new ObjectId(listingKey) }, { $set: updatedListing }, {upsert: doUpsert});
     
     console.log(`${result.matchedCount} document(s) matched the query criteria.`);
     console.log(`${result.modifiedCount} document(s) was/were updated.`);
@@ -67,6 +67,11 @@ async function deleteListingByKey(dbName, collection, listingKey) {
     const result = await client.db(dbName).collection(collection)
             .deleteOne({ _id: new ObjectId(listingKey) });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
+    if (result.deletedCount == 0) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 async function closeConnection() {
