@@ -5,6 +5,7 @@ var Admin = mongoose.mongo.Admin;
 
 // Importing Schemas
 const accountSchema = require('src/models/accountSchema');
+const Account = mongoose.model('Account', accountSchema);
 
 startConnection().catch(err => console.log(err));
 
@@ -53,6 +54,19 @@ async function listDatabases(){
 //Post 
 async function createListing(dbName, collection, newListing){
     console.log(newListing);
+
+    switch(collection) {
+        case "accounts":
+            const doc = new Account(newListing);
+            await doc.save();
+            console.log('New listing created: ' + doc);
+        default:
+            console.log('Collection not recognized in src/models/mongo.js');
+    }
+
+
+    /*
+    console.log(newListing);
     try{
         const result = await client.db(dbName).collection(collection).insertOne(newListing);
         console.log(`New listing created with the following id: ${result.insertedId}`);
@@ -62,7 +76,7 @@ async function createListing(dbName, collection, newListing){
         console.error(e);
         return false;
     }
-    
+    */
 }
 
 async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
