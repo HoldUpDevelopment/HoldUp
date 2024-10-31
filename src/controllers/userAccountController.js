@@ -18,20 +18,26 @@ module.exports = {
                     isValid: false,
                     id: 403
                 }
+                json_message = JSON.stringify(response_body);
+
+                res.writeHead(403, { // Writing Response
+                    'Content-Type': 'application/json'
+                });
+                res.write(JSON.stringify(response_body));
+                res.end();
             } else {
                 response_body = {
                     isValid: true,
                     id: confirmation_id
                 }
-            }
-            
-            json_message = JSON.stringify(response_body);
+                json_message = JSON.stringify(response_body);
 
-            res.writeHead(202, { // Writing Response
-                'Content-Type': 'application/json'
-            });
-            res.write(JSON.stringify(response_body));
-            res.end();
+                res.writeHead(202, { // Writing Response
+                    'Content-Type': 'application/json'
+                });
+                res.write(JSON.stringify(response_body));
+                res.end();
+            }
         });
     },
 
@@ -46,8 +52,11 @@ module.exports = {
         });
 
         req.on('end', async () => {
-            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
-            response_body = {};
+            reqBody = JSON.parse(reqBody); // converting the request into a JSON object\
+            var response_body = {};
+
+            const userId = req.query.userId;
+            await mongo.updateListingByKey("route_mngt", "users", userId, reqBody);
             
             json_message = JSON.stringify(response_body);
 
@@ -60,25 +69,49 @@ module.exports = {
     },
 
     // DELETE Methods
-    deleteAccount: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.png"
-        };
-        json_message = JSON.stringify(response_body);
+    deleteAccount: async (req, res) => {
+        const userId = req.query.userId;
+        var response_body = {};
+        await mongo.deleteListingByKey("route_mngt", "users", userId);
 
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
+        json_message = JSON.stringify(response_body);
+        console.log();
+
+        req.on('data', function (chunk) { // reading the request into a var.
+            reqBody += chunk.toString();
         });
-        res.write(JSON.stringify(response_body));
-        res.end();
+
+        req.on('end', async () => {
+            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
+            response_body = {};
+            var confirmation = await mongo.deleteListingByKey("route_mngt", "users", reqBody._id);
+            if (confirmation == false) {
+                response_body = {
+                    success: false,
+                }
+            } else {
+                response_body = {
+                    success: true,
+                }
+            }
+            
+            json_message = JSON.stringify(response_body);
+
+            res.writeHead(200, { // Writing Response
+                'Content-Type': 'application/json'
+            });
+            res.write(JSON.stringify(response_body));
+            res.end();
+        });
     },
 
     // GET Methods
-    getUserIdFromUserName: (req, res) => {
-        response_body = {
-            userid: 111222333
-        };
+    //Perhaps more realistically, get list of users from username search. May need reworked
+    getUserIdFromUserName: async (req, res) => { 
+        const userName = req.query.userName;
+        var response_body;
+        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userName) //Needs custom search field, get this implemented
+
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
@@ -87,12 +120,12 @@ module.exports = {
         res.write(JSON.stringify(response_body));
         res.end();
     },
-    getRoutePacketFromID: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.jpg",
-            displayname: "test-user",
-        };
+    //Gets information to be used when displaying a review. User name, profile picture, and display name.
+    getRoutePacketFromID: async(req, res) => {
+        const userId = req.query.userId;
+        var response_body;
+        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId) //Needs custom DB call
+
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
@@ -101,11 +134,13 @@ module.exports = {
         res.write(JSON.stringify(response_body));
         res.end();
     },
-    getForumPacketFromID: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.jpg"
-        };
+    //Gets information to be used when displaying a review. User name and profile picture.
+    //Maybe internally call the same search filter that getRoutePacketFromID does, and then just send a document with the first two values.
+    getForumPacketFromID: async (req, res) => {
+        const userId = req.query.userId;
+        var response_body;
+        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId) //Needs custom DB call
+
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
@@ -114,11 +149,12 @@ module.exports = {
         res.write(JSON.stringify(response_body));
         res.end();
     },
-    getSettingsFromID: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.png"
-        };
+    //Send back the settings document in the users data
+    getSettingsFromID: async (req, res) => {
+        const userId = req.query.userId;
+        var response_body;
+        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId) //Needs custom DB call
+
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
