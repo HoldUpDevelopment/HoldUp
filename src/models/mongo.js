@@ -43,6 +43,18 @@ async function createListing(dbName, collection, newListing){
     
 }
 
+async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
+    const result = await client.db(dbName).collection(collection).findOne({ username: nameOfListing });
+
+    if (result) {
+        console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
+        return (result)
+    } else {
+        console.log(`No listings found with the name '${nameOfListing}'`);
+        return (undefined)
+    }
+}
+
 
 async function updateListingByKey(dbName, collection, listingKey, updatedListing, doUpsert) {
     const result = await client.db(dbName).collection(collection)
