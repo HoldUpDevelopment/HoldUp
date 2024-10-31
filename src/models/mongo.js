@@ -1,4 +1,4 @@
-const {MongoClient, Collection} = require('mongodb');
+const {MongoClient, Collection, ObjectId} = require('mongodb');
 var client;
 
 async function startConnection(){
@@ -44,29 +44,34 @@ async function createListing(dbName, collection, newListing){
 }
 
 async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
-    const result = await client.db(dbName).collection(collection).findOne({ username: nameOfListing });
+    const result = await client.db(dbName).collection(collection).findOne({ _id: new ObjectId(nameOfListing) });
 
     if (result) {
         console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
-        return (result._id)
+        return (result)
     } else {
         console.log(`No listings found with the name '${nameOfListing}'`);
         return (undefined)
     }
 }
 
-async function updateListingByName( nameOfListing, updatedListing) {
-    const result = await client.db("route_mngt").collection("users")
-                        .updateOne({ Name: nameOfListing }, { $set: updatedListing });
-
+async function updateListingByKey(dbName, collection, listingKey, updatedListing, doUpsert) {
+    const result = await client.db(dbName).collection(collection)
+                        .updateOne({ _id: new ObjectId(listingKey) }, { $set: updatedListing }, {upsert: doUpsert});
+    
     console.log(`${result.matchedCount} document(s) matched the query criteria.`);
     console.log(`${result.modifiedCount} document(s) was/were updated.`);
 }
 
-async function deleteListingByName(client, nameOfListing) {
-    const result = await client.db("route_mngt").collection("users")
-            .deleteOne({ Name: nameOfListing });
+async function deleteListingByKey(dbName, collection, listingKey) {
+    const result = await client.db(dbName).collection(collection)
+            .deleteOne({ _id: new ObjectId(listingKey) });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
+    if (result.deletedCount == 0) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 async function closeConnection() {
@@ -79,7 +84,7 @@ module.exports = {
     listDatabases: listDatabases,
     createListing: createListing,
     findOneListingByKeyValue: findOneListingByKeyValue,
-    updateListingByName: updateListingByName,
-    deleteListingByName: deleteListingByName,
+    updateListingByKey: updateListingByKey,
+    deleteListingByKey: deleteListingByKey,
     closeConnection: closeConnection
 }
