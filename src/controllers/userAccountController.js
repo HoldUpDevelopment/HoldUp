@@ -77,11 +77,32 @@ module.exports = {
         json_message = JSON.stringify(response_body);
         console.log();
 
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
+        req.on('data', function (chunk) { // reading the request into a var.
+            reqBody += chunk.toString();
         });
-        res.write(JSON.stringify(response_body));
-        res.end();
+
+        req.on('end', async () => {
+            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
+            response_body = {};
+            var confirmation = await mongo.deleteListingByKey("route_mngt", "users", reqBody._id);
+            if (confirmation == false) {
+                response_body = {
+                    success: false,
+                }
+            } else {
+                response_body = {
+                    success: true,
+                }
+            }
+            
+            json_message = JSON.stringify(response_body);
+
+            res.writeHead(200, { // Writing Response
+                'Content-Type': 'application/json'
+            });
+            res.write(JSON.stringify(response_body));
+            res.end();
+        });
     },
 
     // GET Methods

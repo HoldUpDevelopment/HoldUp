@@ -43,25 +43,22 @@ async function createListing(dbName, collection, newListing){
     
 }
 
-async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
-    const result = await client.db(dbName).collection(collection).findOne({ _id: new ObjectId(nameOfListing) });
-
-    if (result) {
-        console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
-        return (result)
-    } else {
-        console.log(`No listings found with the name '${nameOfListing}'`);
-        return (undefined)
-    }
-}
 
 async function updateListingByKey(dbName, collection, listingKey, updatedListing, doUpsert) {
     const result = await client.db(dbName).collection(collection)
                         .updateOne({ _id: new ObjectId(listingKey) }, { $set: updatedListing }, {upsert: doUpsert});
     
+
     console.log(`${result.matchedCount} document(s) matched the query criteria.`);
     console.log(`${result.modifiedCount} document(s) was/were updated.`);
+    if (result.matchedCount != 0 && result.modifiedCount != 0){
+        return true;
+    }else{
+        return false;
+    }
 }
+
+
 
 async function deleteListingByKey(dbName, collection, listingKey) {
     const result = await client.db(dbName).collection(collection)
