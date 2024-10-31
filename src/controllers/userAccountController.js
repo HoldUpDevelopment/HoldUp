@@ -12,7 +12,7 @@ module.exports = {
         req.on('end', async () => {
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
             response_body = {};
-            var confirmation_id = await mongo.createListing("route_mngt", "users", reqBody);
+            var confirmation_id = await mongo.createListing("test", "accounts", reqBody);
             if (confirmation_id == false) {
                 response_body = {
                     isValid: false,
