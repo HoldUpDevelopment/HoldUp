@@ -9,6 +9,7 @@ router.post('/unarchiveRoute', routeManagementController.unarchiveRoute);
 
 router.delete('/deleteLiveRoute', routeManagementController.deleteLiveRoute);
 router.delete('/deleteArchiveRoute', routeManagementController.deleteArchiveRoute);
+router.delete('/deleteRoute', routeManagementController.deleteRoute);
 
 router.put('/editRouteDetails', routeManagementController.editRouteDetails);
 

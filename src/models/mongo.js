@@ -1,4 +1,7 @@
-const {MongoClient, Collection, ObjectId} = require('mongodb');
+const {
+    MongoClient,
+    Collection
+} = require('mongodb');
 const mongoose = require('mongoose');
 var client;
 var Admin = mongoose.mongo.Admin;
@@ -110,42 +113,13 @@ async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
 
     if (result) {
         console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
-        return (result)
+        return (result._id)
     } else {
         console.log(`No listings found with the name '${nameOfListing}'`);
         return (undefined)
     }
     */
 }
-
-
-/*
-async function updateListingByKey(dbName, collection, listingKey, updatedListing, doUpsert) {
-    const result = await client.db(dbName).collection(collection)
-                        .updateOne({ _id: new ObjectId(listingKey) }, { $set: updatedListing }, {upsert: doUpsert});
-    
-
-    console.log(`${result.matchedCount} document(s) matched the query criteria.`);
-    console.log(`${result.modifiedCount} document(s) was/were updated.`);
-    if (result.matchedCount != 0 && result.modifiedCount != 0){
-        return true;
-    }else{
-        return false;
-    }
-}
-
-
-
-async function deleteListingByKey(dbName, collection, listingKey) {
-    const result = await client.db(dbName).collection(collection)
-            .deleteOne({ _id: new ObjectId(listingKey) });
-    console.log(`${result.deletedCount} document(s) was/were deleted.`);
-    if (result.deletedCount == 0) {
-        return false;
-    } else {
-        return true;
-    }
-*/
 
 async function updateListingByKey(dbName, collection, listingKey, updatedListing, doUpsert) {
     mongoose.connection.dbName = dbName;
@@ -198,7 +172,6 @@ async function deleteListingByKey(dbName, collection, listingKey) {
             .deleteOne({ Name: nameOfListing });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
     */
-
 }
 
 async function closeConnection() {
