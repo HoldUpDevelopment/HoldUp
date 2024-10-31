@@ -168,25 +168,14 @@ module.exports = {
         res.write(JSON.stringify(response_body));
         res.end();
     },
-    deleteArchiveRoute: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.jpg"
-        };
-        json_message = JSON.stringify(response_body);
+    deleteArchiveRoute: async (req, res) => {
+        const routeId = req.query.routeId;
 
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
-        });
-        res.write(JSON.stringify(response_body));
-        res.end();
-    },
-    deleteRoute: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.jpg"
-        };
+        response_body = {};
+        await mongo.deleteListingByKey("route_mngt", "archive_routes", routeId);
+
         json_message = JSON.stringify(response_body);
+        console.log();
 
         res.writeHead(200, {
             'Content-Type': 'application/json'
@@ -196,11 +185,16 @@ module.exports = {
     },
 
     // GET Methods
-    getRouteDetails: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.jpg"
-        };
+    getRouteDetails: async (req, res) => {
+        const routeId = req.query.routeId;
+        const isArchived = req.query.isArchived;
+        var response_body;
+        if (isArchived === 'true') {
+            response_body = await mongo.findOneListingByKeyValue("route_mngt", "archived_routes", routeId)
+        } else {
+            response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", routeId)
+        }
+        
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
@@ -209,11 +203,22 @@ module.exports = {
         res.write(JSON.stringify(response_body));
         res.end();
     },
-    getRouteInfo: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.jpg"
-        };
+    getRouteInfo: (req, res) => { //May Be Obsolete
+        // const routeId = req.query.routeId;
+        // const isArchived = req.query.isArchived;
+        // var response_body;
+        // json_message = JSON.stringify(response_body);
+
+        res.writeHead(200, {
+             'Content-Type': 'application/json'
+        });
+        res.write(JSON.stringify({}));
+        res.end();
+    },
+    //Check the excel for details
+    getRouteMapData: async (req, res) => {
+        const routeId = req.query.routeId;
+        var response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", routeId); //Needs custom DB call
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
@@ -222,24 +227,10 @@ module.exports = {
         res.write(JSON.stringify(response_body));
         res.end();
     },
-    getRouteMapData: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.jpg"
-        };
-        json_message = JSON.stringify(response_body);
-
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
-        });
-        res.write(JSON.stringify(response_body));
-        res.end();
-    },
-    getAuthorRoutes: (req, res) => {
-        response_body = {
-            username: "test-username",
-            profile_picture: "pfp.jpg"
-        };
+    //Check the excel for details
+    getAuthorRoutes: async (req, res) => {
+        const authorId = req.query.authorId;
+        var response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", authorId); //Needs custom DB call
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
