@@ -43,19 +43,20 @@ async function createListing(dbName, collection, newListing){
     
 }
 
-async function findOneListingByKeyValue(dbName, collection, nameOfListing, key) {
-    const result = await client.db(dbName).collection(collection).findOne({ [key]: nameOfListing });
+async function findOneListingByKeyValue(dbName, collection, listingKey) {
+    const result = await client.db(dbName).collection(collection).findOne({_id: new ObjectId(listingKey)});
 
     if (result) {
-        console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
-        return (result._id)
+        console.log(`Found a listing in the collection with the id '${listingKey}':`);
+        return (result)
     } else {
-        console.log(`No listings found with the name '${nameOfListing}'`);
+        console.log(`No listings found with the id '${listingKey}'`);
         return (undefined)
     }
 }
 
-async function updateListingByKey(dbName, collection, nameOfListing, updatedListing, key) {
+/*
+async function updateListingByGivenKey(dbName, collection, nameOfListing, updatedListing, key) {
     if (key == "_id"){
         nameOfListing = new ObjectId(nameOfListing);
     }
@@ -70,11 +71,30 @@ async function updateListingByKey(dbName, collection, nameOfListing, updatedList
         return false;
     }
 }
+*/
 
-async function deleteListingByKey(dbName, collection, nameOfListing, key) {
+async function updateListingByKey(dbName, collection, listingKey, updatedListing) {
     const result = await client.db(dbName).collection(collection)
-            .deleteOne({ [key]: nameOfListing });
+                        .updateOne({_id: new ObjectId(listingKey)}, { $set: updatedListing });
+
+    console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+    console.log(`${result.modifiedCount} document(s) was/were updated.`);
+    if (result.matchedCount != 0 && result.modifiedCount != 0){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+async function deleteListingByKey(dbName, collection, listingKey) {
+    const result = await client.db(dbName).collection(collection)
+            .deleteOne({ _id: new ObjectId(listingKey) });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
+    if (result.deletedCount == 0) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 async function closeConnection() {
