@@ -47,7 +47,7 @@ module.exports = {
         req.on('end', async () => {
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
             response_body = {};
-            var confirmation = await mongo.updateListingByKey("route_mngt", "announcements",query, reqBody.updates);
+            var confirmation = await mongo.updateListingByKey("route_mngt", "announcements",query, reqBody);
             if (confirmation == false) {
                 response_body = {
                     success: false,
