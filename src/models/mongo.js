@@ -15,8 +15,8 @@ async function startConnection() {
      */
     const uri = "mongodb+srv://ian:TTN6oSvbr3Aj36io@holdupcluster0.cn20z.mongodb.net/?retryWrites=true&w=majority&appName=HoldUpCluster0";
 
-    await mongoose.connect(uri);
-    /*
+    //await mongoose.connect(uri);
+    
     try {
         client = new MongoClient(uri);
         await client.connect();
@@ -27,7 +27,7 @@ async function startConnection() {
     } catch (e) {
         console.error(e);
     }
-    */
+    
 }
 
 async function listDatabases() {
@@ -37,16 +37,17 @@ async function listDatabases() {
         - Bryan
     */
 
-    new Admin(mongoose.db).listDatabases(function (err, result) {
-        console.log('listDatabases succeeded');
-        // database list stored in result.databases
-        var databasesList = result.databases;
-        console.log("Databases:");
-        databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-    });
-    /*
+    // new Admin(mongoose.db).listDatabases(function (err, result) {
+    //     console.log('listDatabases succeeded');
+    //     // database list stored in result.databases
+    //     var databasesList = result.databases;
+    //     console.log("Databases:");
+    //     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+    // });
     databasesList = await client.db().admin().listDatabases();
-    */
+ 
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 };
 
 
@@ -60,22 +61,22 @@ async function createListing(dbName, collection, newListing) {
         - Bryan
     */
     console.log(newListing);
-    mongoose.connection.dbName = dbName; // Sets the database used by the mongoose connection
+    // mongoose.connection.dbName = dbName; // Sets the database used by the mongoose connection
 
-    switch (collection) {
-        case "accounts":
-            const Account = mongoose.model('Account', accountSchema.accountSchema);
-            const doc = new Account(newListing);
-            await doc.save();
-            console.log('New listing created: ', doc);
-            return doc._id;
-        default:
-            console.log('Collection not recognized in src/models/mongo.js');
-            return false;
-    }
+    // switch (collection) {
+    //     case "accounts":
+    //         const Account = mongoose.model('Account', accountSchema.accountSchema);
+    //         const doc = new Account(newListing);
+    //         await doc.save();
+    //         console.log('New listing created: ', doc);
+    //         return doc._id;
+    //     default:
+    //         console.log('Collection not recognized in src/models/mongo.js');
+    //         return false;
+    // }
 
 
-    /*
+    
     console.log(newListing);
     try{
         const result = await client.db(dbName).collection(collection).insertOne(newListing);
@@ -86,27 +87,11 @@ async function createListing(dbName, collection, newListing) {
         console.error(e);
         return false;
     }
-    */
+    
 }
 
 async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
-    mongoose.connection.dbName = dbName;
-
-    switch (collection) {
-        case "accounts":
-            const Account = mongoose.model('Account', accountSchema.accountSchema);
-            Account.findById(nameOfListing, function (err, doc) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("Found document matching key: ", nameOfListing);
-                    return doc;
-                }
-            });
-    }
-
-    /*
-    const result = await client.db(dbName).collection(collection).findOne({ username: nameOfListing });
+    const result = await client.db(dbName).collection(collection).findOne({ _id: new ObjectId(nameOfListing) });
 
     if (result) {
         console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
@@ -115,10 +100,7 @@ async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
         console.log(`No listings found with the name '${nameOfListing}'`);
         return (undefined)
     }
-    */
 }
-
-
 /*
 async function updateListingByKey(dbName, collection, listingKey, updatedListing, doUpsert) {
     const result = await client.db(dbName).collection(collection)
@@ -150,61 +132,63 @@ async function deleteListingByKey(dbName, collection, listingKey) {
 async function updateListingByKey(dbName, collection, listingKey, updatedListing, doUpsert) {
     mongoose.connection.dbName = dbName;
 
-    switch (collection) {
-        case "accounts":
-            const Account = mongoose.model('Account', accountSchema.accountSchema);
-            Account.findById(nameOfListing, function (err, doc) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("Found document matching key: ", nameOfListing);
-                    return doc;
-                }
-            });
-    }
+    // switch (collection) {
+    //     case "accounts":
+    //         const Account = mongoose.model('Account', accountSchema.accountSchema);
+    //         Account.findById(nameOfListing, function (err, doc) {
+    //             if (err) {
+    //                 console.log(err);
+    //             } else {
+    //                 console.log("Found document matching key: ", nameOfListing);
+    //                 return doc;
+    //             }
+    //         });
+    // }
     
-    /*
+    
     const result = await client.db("route_mngt").collection("users")
         .updateOne({
-            Name: nameOfListing
+            _id: new ObjectId(listingKey)
         }, {
             $set: updatedListing
         });
 
     console.log(`${result.matchedCount} document(s) matched the query criteria.`);
     console.log(`${result.modifiedCount} document(s) was/were updated.`);
-    */
+    
 }
 
 async function deleteListingByKey(dbName, collection, listingKey) {
-    mongoose.connection.dbName = dbName;
+    // mongoose.connection.dbName = dbName;
 
-    switch (collection) {
-        case "accounts":
-            const Account = mongoose.model('Account', accountSchema.accountSchema);
-            Account.findById(nameOfListing, function (err, doc) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("Found document matching key: ", nameOfListing);
-                    return doc;
-                }
-            });
+    // switch (collection) {
+    //     case "accounts":
+    //         const Account = mongoose.model('Account', accountSchema.accountSchema);
+    //         Account.findById(nameOfListing, function (err, doc) {
+    //             if (err) {
+    //                 console.log(err);
+    //             } else {
+    //                 console.log("Found document matching key: ", nameOfListing);
+    //                 return doc;
+    //             }
+    //         });
 
-    }
+    // }
 
-    /*
+    
     const result = await client.db("route_mngt").collection("users")
-            .deleteOne({ Name: nameOfListing });
+            .deleteOne({ _id: new ObjectId(listingKey) });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
-    */
+    
 
 }
 
 async function closeConnection() {
     // Essentially the same as the standard mongo function.
-    console.log(`Closing Connection to ${mongoose.connection}`);
-    await mongoose.connection.close();
+    // console.log(`Closing Connection to ${mongoose.connection}`);
+    // await mongoose.connection.close();
+    console.log(`Closing Connection to ${client}`);
+    await client.close();
 }
 
 module.exports = {
