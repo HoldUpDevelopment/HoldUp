@@ -15,7 +15,8 @@ async function startConnection() {
   const uri =
     "mongodb+srv://ian:TTN6oSvbr3Aj36io@holdupcluster0.cn20z.mongodb.net/?retryWrites=true&w=majority&appName=HoldUpCluster0";
   try {
-    await mongoose.connect(uri);
+    await mongoose.connect(uri, {dbName: "route_mngt"});
+    //listDatabases();
     //return true;
   } catch {
     //return false;
@@ -29,8 +30,7 @@ async function listDatabases() {
         - Bryan
     */
   // returns a list of databases (should be {gyms, test, route_mngt})
-
-  new Admin(mongoose.db).listDatabases(function (err, result) {
+  new Admin(mongoose.connection.db).listDatabases(function (err, result) {
     console.log("listDatabases succeeded");
     // database list stored in result.databases
     var databasesList = result.databases;
@@ -53,14 +53,13 @@ async function createListing(dbName, collection, newListing) {
   //  collection -> name of database collection (string)
   //  newListing -> JSON document of the new database listing
   console.log(newListing);
-  mongoose.connection.dbName = dbName;
 
   try {
     const Model = mongoose.model(collection, Schemas[collection]);
     var doc = new Model(newListing);
     doc.save();
     console.log("Created Listing with _id: ", doc._id);
-    return doc;
+    return doc._id;
   } catch {
     console.log("Could not create document");
     return false;
@@ -68,25 +67,29 @@ async function createListing(dbName, collection, newListing) {
 }
 
 
-async function findOneListingByKeyValue(dbName, collection, listingKey) {
+async function findOneListingByKeyValue(dbName, collection, listingQuery, listingKey) {
   // returns document if it was found, if not returns false.
   // Parameters:
   //  dbName -> name of database (string)
   //  collection -> name of database collection (string)
   //  listingKey -> ObjectId of listing (can be String, Number, or Object)
-  mongoose.connection.dbName = dbName;
 
   const Model = mongoose.model(collection, Schemas[collection]);
-  Model.findById(listingKey, function (err, doc) {
-    if (err) {
-      console.log(err);
-      return false;
-    } else {
-      console.log("Found document matching key: ", listingKey);
-      return doc;
+  
 
+  try {
+    result = await Model.findOne({[listingKey]: listingQuery})
+    if (result == null) {
+      console.log(`No document found with key matching ${listingQuery}`);
+      return {};
+    } else {
+      console.log(`Found document with key matching ${listingQuery}`);
+      return result;
     }
-  });
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
 }
 
 async function updateListingByKey(
@@ -103,23 +106,15 @@ async function updateListingByKey(
   //  listingKey -> ObjectId of listing (can be String, Number, or Object)
   //  updatedListing -> JSON document to update listing with
   //  doUpsert -> If true, will create the document if it is not found. Default is false.
-  mongoose.connection.dbName = dbName;
 
   const Model = mongoose.model(collection, Schemas[collection]);
-  Model.findByIdandUpdate(
-    listingKey,
-    updatedListing,
-    (options.upsert = doUpsert),
-    function (err, doc) {
-      if (err) {
-        console.log(err);
-        return false;
-      } else {
-        console.log("Updated document matching key: ", listingKey);
-        return doc;
-      }
-    }
-  );
+  try {
+    result = await Model.updateOne({_id: listingKey}, updatedListing, {upsert: doUpsert})
+    console.log(`Updated ${result.modifiedCount} document(s).`);
+    
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function deleteListingByKey(dbName, collection, listingKey) {
@@ -128,18 +123,15 @@ async function deleteListingByKey(dbName, collection, listingKey) {
   //  dbName -> name of database (string)
   //  collection -> name of database collection (string)
   //  listingKey -> ObjectId of listing (can be String, Number, or Object)
-  mongoose.connection.dbName = dbName;
 
   const Model = mongoose.model(collection, Schemas[collection]);
-  Model.findByIdandDelete(listingKey, function (err, doc) {
-    if (err) {
-      console.log(err);
-      return false;
-    } else {
-      console.log("Deleted document matching key: ", listingKey);
-      return true;
-    }
-  });
+  try {
+    result = await Model.deleteOne({_id: listingKey})
+    console.log(`Deleted ${result.deletedCount} document(s).`);
+    
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 async function closeConnection() {

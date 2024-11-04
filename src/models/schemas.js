@@ -38,7 +38,7 @@ const reviewSchema = new mongoose.Schema({
     Verbose: Boolean,
     Media: {
         type: Map,
-        of: Mixed
+        of: []
     }
 });
 
