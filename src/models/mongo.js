@@ -6,7 +6,7 @@ var Admin = mongoose.mongo.Admin;
 // Importing Schemas
 const accountSchema = require('../models/accountSchema');
 
-startConnection().catch(err => console.log(err));
+//startConnection().catch(err => console.log(err));
 
 async function startConnection() {
     /**
@@ -90,15 +90,16 @@ async function createListing(dbName, collection, newListing) {
     
 }
 
-async function findOneListingByKeyValue(dbName, collection, nameOfListing) {
-    const result = await client.db(dbName).collection(collection).findOne({ _id: new ObjectId(nameOfListing) });
+async function findOneListingByKeyValue(dbName, collection, nameOfListing, keyName) {
+    console.log(`Keyname: '${keyName}'`);
+    const result = await client.db(dbName).collection(collection).findOne({ [keyName]: nameOfListing });
 
     if (result) {
         console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
         return (result)
     } else {
         console.log(`No listings found with the name '${nameOfListing}'`);
-        return (undefined)
+        return ({})
     }
 }
 /*
