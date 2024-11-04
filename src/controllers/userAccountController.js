@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const mongo = require('../models/mongo');
 
 module.exports = {
@@ -16,7 +17,7 @@ module.exports = {
             if (confirmation_id == false) {
                 response_body = {
                     isValid: false,
-                    id: 403
+                    _id: 403
                 }
                 json_message = JSON.stringify(response_body);
 
@@ -28,7 +29,7 @@ module.exports = {
             } else {
                 response_body = {
                     isValid: true,
-                    id: confirmation_id
+                    _id: confirmation_id
                 }
                 json_message = JSON.stringify(response_body);
 
@@ -41,7 +42,7 @@ module.exports = {
         });
     },
 
-    
+
 
     // PUT Methods
     editAccountDetails: (req, res) => {
@@ -57,7 +58,7 @@ module.exports = {
 
             const userId = req.query.userId;
             await mongo.updateListingByKey("route_mngt", "users", userId, reqBody);
-            
+
             json_message = JSON.stringify(response_body);
 
             res.writeHead(200, { // Writing Response
@@ -75,42 +76,21 @@ module.exports = {
         await mongo.deleteListingByKey("route_mngt", "users", userId);
 
         json_message = JSON.stringify(response_body);
-        console.log();
 
-        req.on('data', function (chunk) { // reading the request into a var.
-            reqBody += chunk.toString();
+        res.writeHead(200, { // Writing Response
+            'Content-Type': 'application/json'
         });
+        res.write(JSON.stringify(response_body));
+        res.end();
 
-        req.on('end', async () => {
-            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
-            response_body = {};
-            var confirmation = await mongo.deleteListingByKey("route_mngt", "users", reqBody._id);
-            if (confirmation == false) {
-                response_body = {
-                    success: false,
-                }
-            } else {
-                response_body = {
-                    success: true,
-                }
-            }
-            
-            json_message = JSON.stringify(response_body);
-
-            res.writeHead(200, { // Writing Response
-                'Content-Type': 'application/json'
-            });
-            res.write(JSON.stringify(response_body));
-            res.end();
-        });
     },
 
     // GET Methods
     //Perhaps more realistically, get list of users from username search. May need reworked
-    getUserIdFromUserName: async (req, res) => { 
+    getUserIdFromUserName: async (req, res) => {
         const userName = req.query.userName;
         var response_body;
-        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userName) //Needs custom search field, get this implemented
+        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userName, "username") //Needs custom search field, get this implemented
 
         json_message = JSON.stringify(response_body);
 
@@ -121,10 +101,10 @@ module.exports = {
         res.end();
     },
     //Gets information to be used when displaying a review. User name, profile picture, and display name.
-    getRoutePacketFromID: async(req, res) => {
+    getRoutePacketFromID: async (req, res) => {
         const userId = req.query.userId;
         var response_body;
-        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId) //Needs custom DB call
+        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId, "_id") //Needs custom DB call
 
         json_message = JSON.stringify(response_body);
 
@@ -139,7 +119,7 @@ module.exports = {
     getForumPacketFromID: async (req, res) => {
         const userId = req.query.userId;
         var response_body;
-        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId) //Needs custom DB call
+        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId, "_id") //Needs custom DB call
 
         json_message = JSON.stringify(response_body);
 
@@ -153,7 +133,7 @@ module.exports = {
     getSettingsFromID: async (req, res) => {
         const userId = req.query.userId;
         var response_body;
-        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId) //Needs custom DB call
+        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId, "_id") //Needs custom DB call
 
         json_message = JSON.stringify(response_body);
 

@@ -6,6 +6,7 @@ var Admin = mongoose.mongo.Admin;
 // Importing Schemas
 const Schemas = require("./schemas");
 
+
 async function startConnection() {
   /**
    * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
@@ -66,6 +67,7 @@ async function createListing(dbName, collection, newListing) {
   }
 }
 
+
 async function findOneListingByKeyValue(dbName, collection, listingKey) {
   // returns document if it was found, if not returns false.
   // Parameters:
@@ -82,6 +84,7 @@ async function findOneListingByKeyValue(dbName, collection, listingKey) {
     } else {
       console.log("Found document matching key: ", listingKey);
       return doc;
+
     }
   });
 }
