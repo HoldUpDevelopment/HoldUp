@@ -160,6 +160,25 @@ async function deleteListingByKey(dbName, collection, listingKey) {
   }
 }
 
+async function getRoutePacketFromUserId(dbName, collection, userId) {
+  // Returns a json object with the User's username, displayname, and pfp. Returns 404 if not found
+  // Parameters:
+  //  dbName -> name of database (string)
+  //  collection -> name of database collection (string)
+  //  userId -> ObjectId of User (can be String, Number, or Object)
+
+  const Model = mongoose.model('User', Schemas.users);
+  try {
+    result = Model.findById(userId, `displayname username`)
+    result.push({pfp: ""});
+    console.log(`Found user with id ${userId}`);
+    return result;
+  } catch {
+    console.log(err);
+    return 404;
+  }
+}
+
 async function closeConnection() {
   // Essentially the same as the standard mongo function.
   console.log(`Closing Connection to ${mongoose.connection}`);
@@ -174,5 +193,6 @@ module.exports = {
   findManyListingsByKeyValue: findManyListingsByKeyValue,
   updateListingByKey: updateListingByKey,
   deleteListingByKey: deleteListingByKey,
+  getRoutePacketFromUserId: getRoutePacketFromUserId,
   closeConnection: closeConnection,
 };
