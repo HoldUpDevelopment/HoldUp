@@ -96,21 +96,11 @@ module.exports = {
     // GET Methods
     getAnnouncementDetails: async (req, res) => {
         const query = req.query.announcementId
+        var response_body;
+        response_body = await mongo.findOneListingByKeyValue("route_mngt", "announcements", announcementId, "_id") //Needs custom search field, get this implemented
 
-        response_body = {};
-        var result = await mongo.findOneListingByKeyValue("route_mngt", "announcements", query);
-        
-        if (result == undefined) {
-            response_body = {
-                isValid: false,
-                id: 403
-            }
-        } else {
-            response_body = result;
-        }
-        
         json_message = JSON.stringify(response_body);
-    
+
         res.writeHead(200, {
             'Content-Type': 'application/json'
         });

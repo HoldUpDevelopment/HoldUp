@@ -190,9 +190,9 @@ module.exports = {
         const isArchived = req.query.isArchived;
         var response_body;
         if (isArchived === 'true') {
-            response_body = await mongo.findOneListingByKeyValue("route_mngt", "archived_routes", routeId)
+            response_body = await mongo.findOneListingByKeyValue("route_mngt", "archived_routes", routeId, "_id")
         } else {
-            response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", routeId)
+            response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", routeId, "_id")
         }
         
         json_message = JSON.stringify(response_body);
@@ -218,7 +218,7 @@ module.exports = {
     //Check the excel for details
     getRouteMapData: async (req, res) => {
         const routeId = req.query.routeId;
-        var response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", routeId); //Needs custom DB call
+        var response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", routeId, "_id"); //Needs custom DB call
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
@@ -230,7 +230,7 @@ module.exports = {
     //Check the excel for details
     getAuthorRoutes: async (req, res) => {
         const authorId = req.query.authorId;
-        var response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", authorId); //Needs custom DB call
+        var response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", authorId, "Authors"); //Needs custom DB call
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {

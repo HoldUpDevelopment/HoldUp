@@ -96,21 +96,11 @@ module.exports = {
     // GET Methods
     getReviewDetails: async (req, res) => {
         const query = req.query.reviewId
-
-        response_body = {};
-        var result = await mongo.findOneListingByKeyValue("route_mngt", "reviews", query);
-        
-        if (result == undefined) {
-            response_body = {
-                isValid: false,
-                id: 403
-            }
-        } else {
-            response_body = result;
-        }
+        var response_body;
+        response_body = await mongo.findOneListingByKeyValue("route_mngt", "reviews", reviewId, "_id") //Needs custom search field, get this implemented
 
         json_message = JSON.stringify(response_body);
-    
+
         res.writeHead(200, {
             'Content-Type': 'application/json'
         });
