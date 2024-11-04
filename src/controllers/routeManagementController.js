@@ -230,7 +230,7 @@ module.exports = {
     //Check the excel for details
     getAuthorRoutes: async (req, res) => {
         const authorId = req.query.authorId;
-        var response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", authorId, "Authors"); //Needs custom DB call
+        var response_body = await mongo.findManyListingsByKeyValue("route_mngt", "live_routes", authorId, "Authors"); //Needs custom DB call
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {

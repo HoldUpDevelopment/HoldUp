@@ -68,11 +68,12 @@ async function createListing(dbName, collection, newListing) {
 
 
 async function findOneListingByKeyValue(dbName, collection, listingQuery, listingKey) {
-  // returns document if it was found, if not returns false.
+  // returns a document if it if found in the cluster, if not returns an empty list.
   // Parameters:
   //  dbName -> name of database (string)
   //  collection -> name of database collection (string)
-  //  listingKey -> ObjectId of listing (can be String, Number, or Object)
+  //  listingQuery -> The search key
+  //  listingKey -> name of parameter to search by (String)
 
   const Model = mongoose.model(collection, Schemas[collection]);
   
@@ -91,6 +92,31 @@ async function findOneListingByKeyValue(dbName, collection, listingQuery, listin
     return {};
   }
 }
+
+async function findManyListingsByKeyValue(dbName, collection, listingQuery, listingKey) {
+  // returns the list of documents it finds in the cluster, if not returns an empty list.
+  // Parameters:
+  //  dbName -> name of database (string)
+  //  collection -> name of database collection (string)
+  //  listingQuery -> The search key
+  //  listingKey -> name of parameter to search by (String)
+
+  const Model = mongoose.model(collection, Schemas[collection]);
+  try {
+    result = await Model.findMany({[listingKey]: listingQuery})
+    if (result == null) {
+      console.log(`No documents found with key matching ${listingQuery}`);
+      return {};
+    } else {
+      console.log(`Found ${result.length} documents with key matching ${listingQuery}`);
+      return result;
+    }
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+}
+
 
 async function updateListingByKey(
   dbName,
@@ -145,6 +171,7 @@ module.exports = {
   listDatabases: listDatabases,
   createListing: createListing,
   findOneListingByKeyValue: findOneListingByKeyValue,
+  findManyListingsByKeyValue: findManyListingsByKeyValue,
   updateListingByKey: updateListingByKey,
   deleteListingByKey: deleteListingByKey,
   closeConnection: closeConnection,
