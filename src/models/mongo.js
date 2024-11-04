@@ -1,203 +1,159 @@
-const {MongoClient, Collection, ObjectId} = require('mongodb');
-const mongoose = require('mongoose');
+const { MongoClient, Collection } = require("mongodb");
+const mongoose = require("mongoose");
 var client;
 var Admin = mongoose.mongo.Admin;
 
 // Importing Schemas
-const accountSchema = require('../models/accountSchema');
+const Schemas = require("./schemas");
 
-//startConnection().catch(err => console.log(err));
 
 async function startConnection() {
-    /**
-     * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
-     * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
-     */
-    const uri = "mongodb+srv://ian:TTN6oSvbr3Aj36io@holdupcluster0.cn20z.mongodb.net/?retryWrites=true&w=majority&appName=HoldUpCluster0";
-
-    //await mongoose.connect(uri);
-    
-    try {
-        client = new MongoClient(uri);
-        await client.connect();
-        console.log(`Connected to ${uri}`);
-
-        //Output databases
-        listDatabases();
-    } catch (e) {
-        console.error(e);
-    }
-    
+  /**
+   * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
+   * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
+   */
+  const uri =
+    "mongodb+srv://ian:TTN6oSvbr3Aj36io@holdupcluster0.cn20z.mongodb.net/?retryWrites=true&w=majority&appName=HoldUpCluster0";
+  try {
+    await mongoose.connect(uri);
+    //return true;
+  } catch {
+    //return false;
+  }
 }
 
 async function listDatabases() {
-    /*
+  /*
     Mongoose doesn't seem to have any methods for directly getting the Databases list from the connection, so I 
     am using "Mongoose.mongo.admin" to use a list databases function I found here. It should work the same as before.
         - Bryan
     */
+  // returns a list of databases (should be {gyms, test, route_mngt})
 
-    // new Admin(mongoose.db).listDatabases(function (err, result) {
-    //     console.log('listDatabases succeeded');
-    //     // database list stored in result.databases
-    //     var databasesList = result.databases;
-    //     console.log("Databases:");
-    //     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-    // });
-    databasesList = await client.db().admin().listDatabases();
- 
+  new Admin(mongoose.db).listDatabases(function (err, result) {
+    console.log("listDatabases succeeded");
+    // database list stored in result.databases
+    var databasesList = result.databases;
     console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-};
+    databasesList.databases.forEach((db) => console.log(` - ${db.name}`));
+  });
+}
 
-
-//Post 
+//Post
 async function createListing(dbName, collection, newListing) {
-    /*
+  /*
     The way this i sset up is that th eswitch statement switches on the name of the collection
     provided. If it is a valid collection, it attempts to create a document in that collection.
     If not, it uses the switch default and outputs that the collection name is incorrect.
     Currently I am unsure if this is handling errors correctly, but it does create documents.
         - Bryan
     */
-    console.log(newListing);
-    // mongoose.connection.dbName = dbName; // Sets the database used by the mongoose connection
+  // Parameters:
+  //  dbName -> name of database (string)
+  //  collection -> name of database collection (string)
+  //  newListing -> JSON document of the new database listing
+  console.log(newListing);
+  mongoose.connection.dbName = dbName;
 
-    // switch (collection) {
-    //     case "accounts":
-    //         const Account = mongoose.model('Account', accountSchema.accountSchema);
-    //         const doc = new Account(newListing);
-    //         await doc.save();
-    //         console.log('New listing created: ', doc);
-    //         return doc._id;
-    //     default:
-    //         console.log('Collection not recognized in src/models/mongo.js');
-    //         return false;
-    // }
-
-
-    
-    console.log(newListing);
-    try{
-        const result = await client.db(dbName).collection(collection).insertOne(newListing);
-        console.log(`New listing created with the following id: ${result.insertedId}`);
-
-        return result.insertedId;
-    }catch (e){
-        console.error(e);
-        return false;
-    }
-    
+  try {
+    const Model = mongoose.model(collection, Schemas[collection]);
+    var doc = new Model(newListing);
+    doc.save();
+    console.log("Created Listing with _id: ", doc._id);
+    return doc;
+  } catch {
+    console.log("Could not create document");
+    return false;
+  }
 }
 
-async function findOneListingByKeyValue(dbName, collection, nameOfListing, keyName) {
-    console.log(`Keyname: '${keyName}'`);
-    const result = await client.db(dbName).collection(collection).findOne({ [keyName]: nameOfListing });
 
-    if (result) {
-        console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
-        return (result)
+async function findOneListingByKeyValue(dbName, collection, listingKey) {
+  // returns document if it was found, if not returns false.
+  // Parameters:
+  //  dbName -> name of database (string)
+  //  collection -> name of database collection (string)
+  //  listingKey -> ObjectId of listing (can be String, Number, or Object)
+  mongoose.connection.dbName = dbName;
+
+  const Model = mongoose.model(collection, Schemas[collection]);
+  Model.findById(listingKey, function (err, doc) {
+    if (err) {
+      console.log(err);
+      return false;
     } else {
-        console.log(`No listings found with the name '${nameOfListing}'`);
-        return ({})
-    }
-}
-/*
-async function updateListingByKey(dbName, collection, listingKey, updatedListing, doUpsert) {
-    const result = await client.db(dbName).collection(collection)
-                        .updateOne({ _id: new ObjectId(listingKey) }, { $set: updatedListing }, {upsert: doUpsert});
-    
+      console.log("Found document matching key: ", listingKey);
+      return doc;
 
-    console.log(`${result.matchedCount} document(s) matched the query criteria.`);
-    console.log(`${result.modifiedCount} document(s) was/were updated.`);
-    if (result.matchedCount != 0 && result.modifiedCount != 0){
-        return true;
-    }else{
-        return false;
     }
+  });
 }
 
+async function updateListingByKey(
+  dbName,
+  collection,
+  listingKey,
+  updatedListing,
+  doUpsert = false
+) {
+  // returns updated document if successful; returns false if unsuccessful.
+  // Parameters:
+  //  dbName -> name of database (string)
+  //  collection -> name of database collection (string)
+  //  listingKey -> ObjectId of listing (can be String, Number, or Object)
+  //  updatedListing -> JSON document to update listing with
+  //  doUpsert -> If true, will create the document if it is not found. Default is false.
+  mongoose.connection.dbName = dbName;
 
-
-async function deleteListingByKey(dbName, collection, listingKey) {
-    const result = await client.db(dbName).collection(collection)
-            .deleteOne({ _id: new ObjectId(listingKey) });
-    console.log(`${result.deletedCount} document(s) was/were deleted.`);
-    if (result.deletedCount == 0) {
+  const Model = mongoose.model(collection, Schemas[collection]);
+  Model.findByIdandUpdate(
+    listingKey,
+    updatedListing,
+    (options.upsert = doUpsert),
+    function (err, doc) {
+      if (err) {
+        console.log(err);
         return false;
-    } else {
-        return true;
+      } else {
+        console.log("Updated document matching key: ", listingKey);
+        return doc;
+      }
     }
-*/
-
-async function updateListingByKey(dbName, collection, listingKey, updatedListing, doUpsert) {
-    mongoose.connection.dbName = dbName;
-
-    // switch (collection) {
-    //     case "accounts":
-    //         const Account = mongoose.model('Account', accountSchema.accountSchema);
-    //         Account.findById(nameOfListing, function (err, doc) {
-    //             if (err) {
-    //                 console.log(err);
-    //             } else {
-    //                 console.log("Found document matching key: ", nameOfListing);
-    //                 return doc;
-    //             }
-    //         });
-    // }
-    
-    
-    const result = await client.db("route_mngt").collection("users")
-        .updateOne({
-            _id: new ObjectId(listingKey)
-        }, {
-            $set: updatedListing
-        });
-
-    console.log(`${result.matchedCount} document(s) matched the query criteria.`);
-    console.log(`${result.modifiedCount} document(s) was/were updated.`);
-    
+  );
 }
 
 async function deleteListingByKey(dbName, collection, listingKey) {
-    // mongoose.connection.dbName = dbName;
+  // Returns true if listing is deleted, false if error occurred.
+  // Parameters:
+  //  dbName -> name of database (string)
+  //  collection -> name of database collection (string)
+  //  listingKey -> ObjectId of listing (can be String, Number, or Object)
+  mongoose.connection.dbName = dbName;
 
-    // switch (collection) {
-    //     case "accounts":
-    //         const Account = mongoose.model('Account', accountSchema.accountSchema);
-    //         Account.findById(nameOfListing, function (err, doc) {
-    //             if (err) {
-    //                 console.log(err);
-    //             } else {
-    //                 console.log("Found document matching key: ", nameOfListing);
-    //                 return doc;
-    //             }
-    //         });
-
-    // }
-
-    
-    const result = await client.db("route_mngt").collection("users")
-            .deleteOne({ _id: new ObjectId(listingKey) });
-    console.log(`${result.deletedCount} document(s) was/were deleted.`);
-    
-
+  const Model = mongoose.model(collection, Schemas[collection]);
+  Model.findByIdandDelete(listingKey, function (err, doc) {
+    if (err) {
+      console.log(err);
+      return false;
+    } else {
+      console.log("Deleted document matching key: ", listingKey);
+      return true;
+    }
+  });
 }
 
 async function closeConnection() {
-    // Essentially the same as the standard mongo function.
-    // console.log(`Closing Connection to ${mongoose.connection}`);
-    // await mongoose.connection.close();
-    console.log(`Closing Connection to ${client}`);
-    await client.close();
+  // Essentially the same as the standard mongo function.
+  console.log(`Closing Connection to ${mongoose.connection}`);
+  await mongoose.connection.close();
 }
 
 module.exports = {
-    startConnection: startConnection,
-    listDatabases: listDatabases,
-    createListing: createListing,
-    findOneListingByKeyValue: findOneListingByKeyValue,
-    updateListingByKey: updateListingByKey,
-    deleteListingByKey: deleteListingByKey,
-    closeConnection: closeConnection
-}
+  startConnection: startConnection,
+  listDatabases: listDatabases,
+  createListing: createListing,
+  findOneListingByKeyValue: findOneListingByKeyValue,
+  updateListingByKey: updateListingByKey,
+  deleteListingByKey: deleteListingByKey,
+  closeConnection: closeConnection,
+};
