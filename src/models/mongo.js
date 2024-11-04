@@ -173,7 +173,7 @@ async function getRoutePacketFromUserId(dbName, collection, userId) {
     result.push({pfp: ""});
     console.log(`Found user with id ${userId}`);
     return result;
-  } catch {
+  } catch (err) {
     console.log(err);
     return 404;
   }
