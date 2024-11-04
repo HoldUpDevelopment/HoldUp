@@ -42,24 +42,7 @@ const reviewSchema = new mongoose.Schema({
     }
 });
 
-const liveRouteSchema = new mongoose.Schema({
-    Name: String,
-    Authors: {
-        type: Map,
-        of: String
-    },
-    CreationDate: Date,
-    Description: String,
-    Grade: Number,
-    Location: {
-        type: Map,
-        of: String
-    },
-    Type: Number,
-    Visibility: Boolean
-});
-
-const archiveRouteSchema = new mongoose.Schema({
+const routeSchema = new mongoose.Schema({
     Name: String,
     Authors: {
         type: Map,
@@ -88,8 +71,8 @@ const announcementSchema = new mongoose.Schema({
 module.exports = {
     accounts: accountSchema,
     announcements: announcementSchema,
-    archived_routes: archiveRouteSchema,
-    live_routes: liveRouteSchema,
+    archived_routes: routeSchema,
+    live_routes: routeSchema,
     reviews: reviewSchema,
     users: userSchema
 };

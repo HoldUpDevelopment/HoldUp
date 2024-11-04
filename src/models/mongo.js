@@ -4,9 +4,7 @@ var client;
 var Admin = mongoose.mongo.Admin;
 
 // Importing Schemas
-const Schemas = require("./Schemas");
-
-startConnection().catch((err) => console.log(err));
+const Schemas = require("./schemas");
 
 async function startConnection() {
   /**
@@ -17,9 +15,9 @@ async function startConnection() {
     "mongodb+srv://ian:TTN6oSvbr3Aj36io@holdupcluster0.cn20z.mongodb.net/?retryWrites=true&w=majority&appName=HoldUpCluster0";
   try {
     await mongoose.connect(uri);
-    return true;
+    //return true;
   } catch {
-    return false;
+    //return false;
   }
 }
 
@@ -57,7 +55,7 @@ async function createListing(dbName, collection, newListing) {
   mongoose.connection.dbName = dbName;
 
   try {
-    const Model = mongoose.model('accounts', Schemas[collection]);
+    const Model = mongoose.model(collection, Schemas[collection]);
     var doc = new Model(newListing);
     doc.save();
     console.log("Created Listing with _id: ", doc._id);
@@ -93,7 +91,7 @@ async function updateListingByKey(
   collection,
   listingKey,
   updatedListing,
-  doUpsert
+  doUpsert = false
 ) {
   // returns updated document if successful; returns false if unsuccessful.
   // Parameters:
