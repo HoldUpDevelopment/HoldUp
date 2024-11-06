@@ -6,6 +6,11 @@ var Admin = mongoose.mongo.Admin;
 // Importing Schemas
 const Schemas = require("./schemas");
 
+// Database connections;
+var routedb;
+var testdb;
+var gymdb;
+
 
 async function startConnection() {
   /**
@@ -15,7 +20,10 @@ async function startConnection() {
   const uri =
     "mongodb+srv://ian:TTN6oSvbr3Aj36io@holdupcluster0.cn20z.mongodb.net/?retryWrites=true&w=majority&appName=HoldUpCluster0";
   try {
-    await mongoose.connect(uri, {dbName: "route_mngt"});
+    routedb = await mongoose.createConnection(uri, {dbName: "route_mngt"}).asPromise();
+    testdb = await mongoose.createConnection(uri, {dbName: "test"}).asPromise();
+    gymdb = await mongoose.createConnection(uri, {dbName: "gyms"}).asPromise();
+
     //listDatabases();
     //return true;
   } catch {
@@ -53,9 +61,10 @@ async function createListing(dbName, collection, newListing) {
   //  collection -> name of database collection (string)
   //  newListing -> JSON document of the new database listing
   console.log(newListing);
+  var db = withDb(dbName);
 
   try {
-    const Model = mongoose.model(collection, Schemas[collection]);
+    const Model = db.model(collection, Schemas[collection]);
     var doc = new Model(newListing);
     doc.save();
     console.log("Created Listing with _id: ", doc._id);
@@ -74,8 +83,9 @@ async function findOneListingByKeyValue(dbName, collection, listingQuery, listin
   //  collection -> name of database collection (string)
   //  listingQuery -> The search key
   //  listingKey -> name of parameter to search by (String)
+  var db = withDb(dbName);
 
-  const Model = mongoose.model(collection, Schemas[collection]);
+  const Model = db.model(collection, Schemas[collection]);
   
 
   try {
@@ -101,7 +111,9 @@ async function findManyListingsByKeyValue(dbName, collection, listingQuery, list
   //  listingQuery -> The search key
   //  listingKey -> name of parameter to search by (String)
 
-  const Model = mongoose.model(collection, Schemas[collection]);
+  var db = withDb(dbName);
+
+  const Model = db.model(collection, Schemas[collection]);
   try {
     result = await Model.findMany({[listingKey]: listingQuery})
     if (result == null) {
@@ -133,7 +145,9 @@ async function updateListingByKey(
   //  updatedListing -> JSON document to update listing with
   //  doUpsert -> If true, will create the document if it is not found. Default is false.
 
-  const Model = mongoose.model(collection, Schemas[collection]);
+  var db = withDb(dbName);
+
+  const Model = db.model(collection, Schemas[collection]);
   try {
     result = await Model.updateOne({_id: listingKey}, updatedListing, {upsert: doUpsert})
     console.log(`Updated ${result.modifiedCount} document(s).`);
@@ -150,7 +164,9 @@ async function deleteListingByKey(dbName, collection, listingKey) {
   //  collection -> name of database collection (string)
   //  listingKey -> ObjectId of listing (can be String, Number, or Object)
 
-  const Model = mongoose.model(collection, Schemas[collection]);
+  var db = withDb(dbName);
+
+  const Model = db.model(collection, Schemas[collection]);
   try {
     result = await Model.deleteOne({_id: listingKey})
     console.log(`Deleted ${result.deletedCount} document(s).`);
@@ -167,7 +183,9 @@ async function getRoutePacketFromUserId(dbName, collection, userId) {
   //  collection -> name of database collection (string)
   //  userId -> ObjectId of User (can be String, Number, or Object)
 
-  const Model = mongoose.model('User', Schemas.users);
+  var db = withDb(dbName);
+
+  const Model = db.model('User', Schemas.users);
   try {
     result = Model.findById(userId, `displayname username`)
     result.push({pfp: ""});
@@ -181,8 +199,26 @@ async function getRoutePacketFromUserId(dbName, collection, userId) {
 
 async function closeConnection() {
   // Essentially the same as the standard mongo function.
-  console.log(`Closing Connection to ${mongoose.connection}`);
-  await mongoose.connection.close();
+  console.log(`Closing Connection to ${testdb.connection}, ${routedb.connection}, and ${gymdb.connection}`);
+  await testdb.connection.close();
+  await routedb.connection.close();
+  await gymdb.connection.close();
+}
+
+async function withDb(dbName) {
+  switch(dbName) {
+    case 'test':
+      return testdb;
+      break;
+    case 'route-mngt':
+      return routedb;
+      break;
+    case 'gyms':
+      return gymdb;
+      break;
+    default:
+      return routedb;
+  }
 }
 
 module.exports = {
