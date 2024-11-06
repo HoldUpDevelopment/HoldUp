@@ -169,9 +169,11 @@ async function getRoutePacketFromUserId(dbName, collection, userId) {
 
   const Model = mongoose.model('User', Schemas.users);
   try {
-    result = Model.findById(userId, `displayname username`)
-    result.push({pfp: ""});
+    result = Model.findById(userId, `displayname username`);
+    result = JSON.stringify(result);
+    //result["pfp"] = "";
     console.log(`Found user with id ${userId}`);
+    console.log(result);
     return result;
   } catch (err) {
     console.log(err);
