@@ -201,6 +201,27 @@ async function getRoutePacketFromUserId(dbName, collection, userId) {
   }
 }
 
+async function getFieldFromListingById(dbName, collection, listingQuery, searchKey) {
+  // Returns a json object with the supplied listing's "searchKey".
+  // Parameters:
+  //  dbName -> name of database (string)
+  //  collection -> name of database collection (string)
+  //  listingQuerey -> the _id of the listing you are searching
+  //  searchKey -> the field of the document you want to access. (e.g. "username")
+
+  mongoose.connection.useDb(dbName);
+
+  const Model = mongoose.model(collection, Schemas[collection]);
+  try {
+    result = await Model.findOne({_id: listingQuery}, searchKey).lean();
+    console.log(`Found document with id ${listingQuery}`);
+    return(result);
+  } catch (err) {
+    console.log(err);
+    return 404;
+  }
+}
+
 async function closeConnection() {
   // Essentially the same as the standard mongo function.
   console.log(`Closing Connection to ${testdb.connection}, ${routedb.connection}, and ${gymdb.connection}`);
@@ -218,5 +239,6 @@ module.exports = {
   updateListingByKey: updateListingByKey,
   deleteListingByKey: deleteListingByKey,
   getRoutePacketFromUserId: getRoutePacketFromUserId,
-  closeConnection: closeConnection,
+  getFieldFromListingById: getFieldFromListingById,
+  closeConnection: closeConnection
 };
