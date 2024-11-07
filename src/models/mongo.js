@@ -221,6 +221,27 @@ async function getFieldFromListingById(dbName, collection, listingQuery, searchK
   }
 }
 
+async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
+  // Returns document id if it was found, if not returns 404
+  // Parameters:
+  //  dbName -> name of database (string)
+  //  collection -> name of database collection (string)
+  //  listingQuery -> value used to find document
+  //  listingKey -> key used with query value
+
+  mongoose.connection.useDb(dbName);
+
+  const Model = mongoose.model(collection, Schemas[collection]);
+  try {
+    result = await Model.findOne({[listingKey]: listingQuery})
+    console.log(`Found document with key matching ${listingQuery}`);
+    return result._id;
+  } catch (err) {
+    console.log(err);
+    return 404;
+  }
+}
+
 async function closeConnection() {
   // Essentially the same as the standard mongo function.
   console.log(`Closing Connection to ${testdb.connection}, ${routedb.connection}, and ${gymdb.connection}`);
@@ -239,5 +260,6 @@ module.exports = {
   deleteListingByKey: deleteListingByKey,
   getRoutePacketFromUserId: getRoutePacketFromUserId,
   getFieldFromListingById: getFieldFromListingById,
+  getIdByKeyValue: getIdByKeyValue,
   closeConnection: closeConnection
 };
