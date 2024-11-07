@@ -218,7 +218,7 @@ module.exports = {
     //Check the excel for details
     getRouteMapData: async (req, res) => {
         const routeId = req.query.routeId;
-        var response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", routeId, "_id"); //Needs custom DB call
+        var response_body = await mongo.getFieldFromListingById("route_mngt", "live_routes", routeId, "Location"); //Needs custom DB call
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {

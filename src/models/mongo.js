@@ -64,6 +64,7 @@ async function createListing(dbName, collection, newListing) {
   try {
     const Model = mongoose.model(collection, Schemas[collection]);
     var doc = new Model(newListing);
+    console.log(doc);
     doc.save();
     console.log("Created Listing with _id: ", doc._id);
     return doc._id;
@@ -211,6 +212,7 @@ async function getFieldFromListingById(dbName, collection, listingQuery, searchK
   const Model = mongoose.model(collection, Schemas[collection]);
   try {
     result = await Model.findOne({_id: listingQuery}, searchKey);
+    console.log(result);
     console.log(`Found document with id ${listingQuery}`);
     return(result);
   } catch (err) {

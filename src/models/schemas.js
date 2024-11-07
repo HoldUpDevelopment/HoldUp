@@ -48,8 +48,8 @@ const reviewSchema = new mongoose.Schema({
 const routeSchema = new mongoose.Schema({
     Name: String,
     Authors: {
-        type: Map,
-        of: String
+        type: [String],
+        default: []
     },
     CreationDate: {
         type: Date,
@@ -58,8 +58,14 @@ const routeSchema = new mongoose.Schema({
     Description: String,
     Grade: Number,
     Location: {
-        x: Number,
-        y: Number
+        x: {
+            type: Number,
+            default: 0
+        },
+        y: {
+            type: Number,
+            default: 0
+        }
     },
     Type: Number,
     Visibility: Boolean
