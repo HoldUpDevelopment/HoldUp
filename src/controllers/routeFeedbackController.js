@@ -95,7 +95,7 @@ module.exports = {
 
     // GET Methods
     getReviewDetails: async (req, res) => {
-        const query = req.query.reviewId
+        const reviewId = req.query.reviewId
         var response_body;
         response_body = await mongo.findOneListingByKeyValue("route_mngt", "reviews", reviewId, "_id") //Needs custom search field, get this implemented
 
