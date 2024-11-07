@@ -210,7 +210,7 @@ async function getFieldFromListingById(dbName, collection, listingQuery, searchK
 
   const Model = mongoose.model(collection, Schemas[collection]);
   try {
-    result = await Model.findOne({_id: listingQuery}, searchKey).lean();
+    result = await Model.findOne({_id: listingQuery}, searchKey);
     console.log(`Found document with id ${listingQuery}`);
     return(result);
   } catch (err) {

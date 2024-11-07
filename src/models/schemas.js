@@ -33,7 +33,10 @@ const reviewSchema = new mongoose.Schema({
     Body: String,
     RouteId: Number,
     Author: String,
-    CreationDate: Date,
+    CreationDate: {
+        type: Date,
+        default: Date.now
+    },
     Rating: Number,
     Verbose: Boolean,
     Media: {
@@ -48,12 +51,15 @@ const routeSchema = new mongoose.Schema({
         type: Map,
         of: String
     },
-    CreationDate: Date,
+    CreationDate: {
+        type: Date,
+        default: Date.now
+    },
     Description: String,
     Grade: Number,
     Location: {
-        type: Map,
-        of: String
+        x: Number,
+        y: Number
     },
     Type: Number,
     Visibility: Boolean
@@ -63,7 +69,10 @@ const announcementSchema = new mongoose.Schema({
     Title: String,
     Author: String,
     Body: String,
-    CreationDate: Date,
+    CreationDate: {
+        type: Date,
+        default: Date.now
+    },
     ExpirationDate: Date,
     ForumLink: String
 });
