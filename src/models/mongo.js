@@ -188,11 +188,15 @@ async function getRoutePacketFromUserId(dbName, collection, userId) {
   const Model = db.model('User', Schemas.users);
   try {
     result = Model.findById(userId, `displayname username`);
-    result = JSON.stringify(result);
-    //result["pfp"] = "";
+
+    returnBody = {}
+    returnBody["username"] = result.username;
+    returnBody["displayname"] = result.displayname;
+    returnBody["pfp"] = "";
+    
     console.log(`Found user with id ${userId}`);
-    console.log(result);
-    return result;
+    console.log(returnBody);
+    return returnBody;
   } catch (err) {
     console.log(err);
     return 404;
