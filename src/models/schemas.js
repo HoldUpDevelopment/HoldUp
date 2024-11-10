@@ -24,7 +24,8 @@ const userSchema = new mongoose.Schema({
     password: String,
     settings: {
         type: Map,
-        of: []
+        of: [],
+        default: {}
     }
 });
 
