@@ -241,6 +241,24 @@ async function getFieldFromListingById(dbName, collection, listingQuery, searchK
   }
 }
 
+async function getUserSettingsById(userId) {
+  // Returns a user's settings map object given their user ID.
+  // Parameters:
+  //  userId -> ObjectId of User (can be String, Number, or Object)
+
+  mongoose.connection.useDb('route-mngt');
+
+  const Model = mongoose.model('Users', Schemas.users);
+  try {
+    result = await Model.findById(userId, 'settings');
+    console.log(`Found user with id ${userId}`);
+    console.log(result);
+  } catch (err) {
+    console.log(err);
+    return 404;
+  }
+}
+
 async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
   // Returns document id if it was found, if not returns 404
   // Parameters:
@@ -281,6 +299,7 @@ module.exports = {
   deleteListingByKey: deleteListingByKey,
   getRoutePacketFromUserId: getRoutePacketFromUserId,
   getForumPacketFromUserId: getForumPacketFromUserId,
+  getUserSettingsById: getUserSettingsById,
   getFieldFromListingById: getFieldFromListingById,
   getIdByKeyValue: getIdByKeyValue,
   closeConnection: closeConnection
