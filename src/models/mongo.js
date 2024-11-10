@@ -175,14 +175,12 @@ async function deleteListingByKey(dbName, collection, listingKey) {
   }
 }
 
-async function getRoutePacketFromUserId(dbName, collection, userId) {
+async function getRoutePacketFromUserId(userId) {
   // Returns a json object with the User's username, displayname, and pfp. Returns 404 if not found
   // Parameters:
-  //  dbName -> name of database (string)
-  //  collection -> name of database collection (string)
   //  userId -> ObjectId of User (can be String, Number, or Object)
 
-  mongoose.connection.useDb(dbName);
+  mongoose.connection.useDb('route-mngt');
 
   const Model = mongoose.model('User', Schemas.users);
   try {
@@ -192,6 +190,28 @@ async function getRoutePacketFromUserId(dbName, collection, userId) {
     
     console.log(`Found user with id ${userId}`);
     
+    return result;
+  } catch (err) {
+    console.log(err);
+    return 404;
+  }
+}
+
+async function getForumPacketFromUserId(userId) {
+  // Returns a json object with the User's username and pfp. Returns 404 if not found
+  // Parameters:
+  //  userId -> ObjectId of User (can be String, Number, or Object)
+
+  mongoose.connection.useDb('route-mngt');
+
+  const Model = mongoose.model('User', Schemas.users);
+  try {
+    result = await Model.findById(userId, `username`).lean();
+    //returnBody
+    result["pfp"]="";
+    
+    console.log(`Found user with id ${userId}`);
+
     return result;
   } catch (err) {
     console.log(err);
@@ -242,6 +262,7 @@ async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
   }
 }
 
+
 async function closeConnection() {
   // Essentially the same as the standard mongo function.
   console.log(`Closing Connection to ${testdb.connection}, ${routedb.connection}, and ${gymdb.connection}`);
@@ -259,6 +280,7 @@ module.exports = {
   updateListingByKey: updateListingByKey,
   deleteListingByKey: deleteListingByKey,
   getRoutePacketFromUserId: getRoutePacketFromUserId,
+  getForumPacketFromUserId: getForumPacketFromUserId,
   getFieldFromListingById: getFieldFromListingById,
   getIdByKeyValue: getIdByKeyValue,
   closeConnection: closeConnection
