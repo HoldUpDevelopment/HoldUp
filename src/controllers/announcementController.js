@@ -95,7 +95,7 @@ module.exports = {
 
     // GET Methods
     getAnnouncementDetails: async (req, res) => {
-        const query = req.query.announcementId
+        const announcementId = req.query.announcementId
         var response_body;
         response_body = await mongo.findOneListingByKeyValue("route_mngt", "announcements", announcementId, "_id") //Needs custom search field, get this implemented
 

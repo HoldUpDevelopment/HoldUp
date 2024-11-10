@@ -89,8 +89,8 @@ module.exports = {
     //Perhaps more realistically, get list of users from username search. May need reworked
     getUserIdFromUserName: async (req, res) => {
         const userName = req.query.userName;
-        var response_body;
-        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userName, "username") //Needs custom search field, get this implemented
+        var response_body = {};
+        response_body["_id"] = await mongo.getIdByKeyValue("route_mngt", "users", userName, "username") //Needs custom search field, get this implemented
 
         json_message = JSON.stringify(response_body);
 
@@ -104,22 +104,31 @@ module.exports = {
     getRoutePacketFromID: async (req, res) => {
         const userId = req.query.userId;
         var response_body;
-        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId, "_id") //Needs custom DB call
+        response_body = await mongo.getRoutePacketFromUserId(userId)
+        if (response_body == 404) {
+            json_message = JSON.stringify(response_body);
 
-        json_message = JSON.stringify(response_body);
+            res.writeHead(404, {
+                'Content-Type': 'text'
+            });
+            res.write(`User with id \'${userId}\' was not found`);
+            res.end();
+        } else {
+            json_message = JSON.stringify(response_body);
 
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
-        });
-        res.write(JSON.stringify(response_body));
-        res.end();
+            res.writeHead(200, {
+                'Content-Type': 'application/json'
+            });
+            res.write(JSON.stringify(response_body));
+            res.end();
+        }
     },
     //Gets information to be used when displaying a review. User name and profile picture.
     //Maybe internally call the same search filter that getRoutePacketFromID does, and then just send a document with the first two values.
     getForumPacketFromID: async (req, res) => {
         const userId = req.query.userId;
         var response_body;
-        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId, "_id") //Needs custom DB call
+        response_body = await mongo.getForumPacketFromUserId(userId) //Needs custom DB call
 
         json_message = JSON.stringify(response_body);
 
@@ -133,7 +142,7 @@ module.exports = {
     getSettingsFromID: async (req, res) => {
         const userId = req.query.userId;
         var response_body;
-        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId, "_id") //Needs custom DB call
+        response_body = await mongo.getUserSettingsById(userId) //Needs custom DB call
 
         json_message = JSON.stringify(response_body);
 

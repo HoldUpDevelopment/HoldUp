@@ -24,7 +24,8 @@ const userSchema = new mongoose.Schema({
     password: String,
     settings: {
         type: Map,
-        of: String
+        of: [],
+        default: {}
     }
 });
 
@@ -33,7 +34,10 @@ const reviewSchema = new mongoose.Schema({
     Body: String,
     RouteId: Number,
     Author: String,
-    CreationDate: Date,
+    CreationDate: {
+        type: Date,
+        default: Date.now
+    },
     Rating: Number,
     Verbose: Boolean,
     Media: {
@@ -45,15 +49,24 @@ const reviewSchema = new mongoose.Schema({
 const routeSchema = new mongoose.Schema({
     Name: String,
     Authors: {
-        type: Map,
-        of: String
+        type: [String],
+        default: []
     },
-    CreationDate: Date,
+    CreationDate: {
+        type: Date,
+        default: Date.now
+    },
     Description: String,
     Grade: Number,
     Location: {
-        type: Map,
-        of: String
+        x: {
+            type: Number,
+            default: 0
+        },
+        y: {
+            type: Number,
+            default: 0
+        }
     },
     Type: Number,
     Visibility: Boolean
@@ -63,7 +76,10 @@ const announcementSchema = new mongoose.Schema({
     Title: String,
     Author: String,
     Body: String,
-    CreationDate: Date,
+    CreationDate: {
+        type: Date,
+        default: Date.now
+    },
     ExpirationDate: Date,
     ForumLink: String
 });

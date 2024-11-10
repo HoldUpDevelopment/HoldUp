@@ -54,7 +54,9 @@ module.exports = {
             response_body = {};
             status_code = 0;
 
-            var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", reqBody.routeid)
+            var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", reqBody.routeid, "_id");
+            route_payload = JSON.parse(JSON.stringify(route_payload));
+            delete route_payload["__v"];
             var confirmation_id = await mongo.createListing("route_mngt", "archived_routes", route_payload); //reqBody should have the object id of the live route
             await mongo.deleteListingByKey("route_mngt", "live_routes", reqBody.routeid);
 
@@ -93,7 +95,9 @@ module.exports = {
             response_body = {};
             status_code = 0;
 
-            var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "archived_routes", reqBody.routeid)
+            var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "archived_routes", reqBody.routeid, "_id")
+            route_payload = JSON.parse(JSON.stringify(route_payload));
+            delete route_payload["__v"];
             var confirmation_id = await mongo.createListing("route_mngt", "live_routes", route_payload); //reqBody should have the object id of the live route
             await mongo.deleteListingByKey("route_mngt", "archived_routes", reqBody.routeid);
 
@@ -172,7 +176,7 @@ module.exports = {
         const routeId = req.query.routeId;
 
         response_body = {};
-        await mongo.deleteListingByKey("route_mngt", "archive_routes", routeId);
+        await mongo.deleteListingByKey("route_mngt", "archived_routes", routeId);
 
         json_message = JSON.stringify(response_body);
         console.log();
@@ -218,7 +222,7 @@ module.exports = {
     //Check the excel for details
     getRouteMapData: async (req, res) => {
         const routeId = req.query.routeId;
-        var response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", routeId, "_id"); //Needs custom DB call
+        var response_body = await mongo.getFieldFromListingById("route_mngt", "live_routes", routeId, "Location"); //Needs custom DB call
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
@@ -230,7 +234,7 @@ module.exports = {
     //Check the excel for details
     getAuthorRoutes: async (req, res) => {
         const authorId = req.query.authorId;
-        var response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", authorId, "Authors"); //Needs custom DB call
+        var response_body = await mongo.findManyListingsByKeyValue("route_mngt", "live_routes", authorId, "Authors"); //Needs custom DB call
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
