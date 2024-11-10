@@ -142,7 +142,7 @@ module.exports = {
     getSettingsFromID: async (req, res) => {
         const userId = req.query.userId;
         var response_body;
-        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId, "_id") //Needs custom DB call
+        response_body = await mongo.getUserSettingsById(userId) //Needs custom DB call
 
         json_message = JSON.stringify(response_body);
 

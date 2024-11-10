@@ -1,4 +1,4 @@
-const { MongoClient, Collection } = require("mongodb");
+const { MongoClient, Collection, MongoErrorLabel } = require("mongodb");
 const mongoose = require("mongoose");
 var client;
 var Admin = mongoose.mongo.Admin;
@@ -251,8 +251,11 @@ async function getUserSettingsById(userId) {
   const Model = mongoose.model('Users', Schemas.users);
   try {
     result = await Model.findById(userId, 'settings');
+    if (result == null) {
+      throw new mongoose.Error.DocumentNotFoundError(userId);
+    }
     console.log(`Found user with id ${userId}`);
-    console.log(result);
+    return result;
   } catch (err) {
     console.log(err);
     return 404;
