@@ -104,7 +104,7 @@ module.exports = {
     getRoutePacketFromID: async (req, res) => {
         const userId = req.query.userId;
         var response_body;
-        response_body = await mongo.getRoutePacketFromUserId("route_mngt", "users", userId) //Needs custom DB call
+        response_body = await mongo.getRoutePacketFromUserId(userId)
         if (response_body == 404) {
             json_message = JSON.stringify(response_body);
 
@@ -128,7 +128,7 @@ module.exports = {
     getForumPacketFromID: async (req, res) => {
         const userId = req.query.userId;
         var response_body;
-        response_body = await mongo.findOneListingByKeyValue("route_mngt", "users", userId, "_id") //Needs custom DB call
+        response_body = await mongo.getForumPacketFromUserId(userId) //Needs custom DB call
 
         json_message = JSON.stringify(response_body);
 
