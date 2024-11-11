@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - My Express Website</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <header class="p-3 bg-secondary border-bottom">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a class="d-flex align-items-center mb-2 mb-lg-0 fs-5 link-light link-opacity-50-hover fw-normal text-decoration-none"
+          href="/">
+          Return
+        </a>
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        </ul>
+        <div class="text-end">
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <a class="d-flex align-items-center mb-2 mb-lg-0 m-2 link-light link-opacity-50-hover fw-normal fs-5 text-decoration-none"
+              href="#">
+              Contact
+            </a>
+            <div>
+            </div>
+            <a class="d-flex align-items-center mb-2 mb-lg-0 m-2 link-light link-opacity-50-hover fw-normal fs-5 text-decoration-none"
+              href="#">
+              About Us
+            </a>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+      <div class="col-lg-7 text-center text-lg-start">
+        <h1 class="display-4 fw-bold lh-1 mb-3">Welcome to HoldUp!</h1>
+        <p class="col-lg-10 fs-4">Creating meaningful connections between gyms and climbers</p>
+        <p class="col-lg-10 fs-5">Create an account to start making reviews, interacting with community members, and
+          connecting with route setters!</p>
+      </div>
+      <div class="col-md-10 mx-auto col-lg-5">
+        <h1 class="display-6 fw-bold lh-1 mb-3">Log in to your account</h1>
+        <form class="p-4 p-md-5 border rounded-3 bg-light">
+          <row>
+            <div class="col-md-12 align-items-center text-center">
+              <a class="btn btn-lg btn-google btn-block text-uppercase btn-outline-secondary" href="#">
+                <img src="https://img.icons8.com/color/16/000000/google-logo.png">
+                Login with Google
+              </a>
+            </div>
+          </row>
+
+          <hr class="my-4">
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <label for="floatingInput">Email address</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+          </div>
+          <div class="checkbox mb-3">
+            <label>
+              <input type="checkbox" value="remember-me"> Remember me
+            </label>
+          </div>
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+          <hr class="my-4">
+          <small class="text-muted">Dont have an account? </small><a class="link-primary link-opacity-75-hover" href="">Sign Up</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

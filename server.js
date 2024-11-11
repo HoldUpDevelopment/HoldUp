@@ -5,7 +5,7 @@ const hostname = '127.0.0.1'; //Localhost
 const port = 3000;
 
 //Routes
-const homePageRoutes = require('./src/routes/homePage');
+const webRouting = require('./src/routes/routeIndex');
 const imageRoutes = require('./src/routes/image');
 const userAccountRoutes = require('./src/routes/userAccountManagement');
 const routeManagementRoutes = require('./src/routes/routeManagement');
@@ -20,7 +20,7 @@ const mongo = require('./src/models/mongo');
 
 const server = express();
 server.use(favicon('./public/favicon.ico')); 
-server.use('/', homePageRoutes);
+server.use('/', webRouting);
 server.use('/images', imageRoutes);
 server.use('/user', userAccountRoutes);
 server.use('/route', routeManagementRoutes);

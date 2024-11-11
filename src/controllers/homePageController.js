@@ -1,9 +1,18 @@
+var root = 'public/views';
+
 module.exports = {
     homepageView: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/html');
-        res.sendFile('Home.html', {
-            root: 'public/'
+        res.sendFile('index.html', {
+            root: root
+        })
+    },
+    stylesheet: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/css');
+        res.sendFile('styles.css', {
+            root: root
         })
     }
 }
