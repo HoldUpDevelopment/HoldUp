@@ -91,8 +91,23 @@ module.exports = {
         const userName = req.query.userName;
         var response_body = {};
         response_body["_id"] = await mongo.getIdByKeyValue("route_mngt", "users", userName, "username") //Needs custom search field, get this implemented
-
+        
         json_message = JSON.stringify(response_body);
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
+        });
+        res.write(JSON.stringify(response_body));
+        res.end();
+    },
+    //getUserIdFromUserName but for Email
+    getUserIdFromEmail: async (req, res) => {
+        const email = req.query.email;
+        var response_body = {};
+        response_body["_id"] = await mongo.getIdByKeyValue("route_mngt", "users", email, "email") //Needs custom search field, get this implemented
+        
+        json_message = JSON.stringify(response_body);
+        console.log(json_message);
 
         res.writeHead(200, {
             'Content-Type': 'application/json'

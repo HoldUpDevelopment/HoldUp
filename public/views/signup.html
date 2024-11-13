@@ -12,24 +12,23 @@
 
 <body>
   <!-- HEADER -->
-  <header class="p-3 bg-secondary border-bottom">
+  <header class="fixed-top p-3 bg-black ">
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a class="d-flex align-items-center mb-2 mb-lg-0 fs-5 link-light link-opacity-50-hover fw-normal text-decoration-none"
-          href="/">
-          Return
+        <a class="d-flex align-items-center me-3 mb-lg-2 fw-bold link-light fs-3 text-decoration-none" href="/">
+          HoldUp
         </a>
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
         </ul>
         <div class="text-end">
           <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <a class="d-flex align-items-center mb-2 mb-lg-0 m-2 link-light link-opacity-50-hover fw-normal fs-5 text-decoration-none"
+            <a class="d-flex align-items-center mb-2 mb-lg-0 me-2 link-light link-opacity-50-hover fw-normal fs-5 text-decoration-none"
               href="#">
               Contact
             </a>
             <div>
             </div>
-            <a class="d-flex align-items-center mb-2 mb-lg-0 m-2 link-light link-opacity-50-hover fw-normal fs-5 text-decoration-none"
+            <a class="d-flex align-items-center mb-2 mb-lg-0 ms-2 link-light link-opacity-50-hover fw-normal fs-5 text-decoration-none"
               href="#">
               About Us
             </a>
@@ -40,78 +39,100 @@
   </header>
 
   <!-- PAGE BODY -->
-  <div class="container col-xl-10 col-xxl-8 px-4 py-5">
-    <div class="row align-items-center g-lg-5 py-5">
-      <!-- Hero Text -->
-      <div class="col-lg-7 text-center text-lg-start">
-        <h1 class="display-4 fw-bold lh-1 mb-3">Join a network of climbing gyms across the world!</h1>
-        <p class="col-lg-10 fs-5">Create an account to start making reviews, interacting with community members, and
-          connecting with route setters</p>
-      </div>
+  <div id="background" class="container-bg">
+    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+      <div class="row align-items-top g-lg-5 py-5">
+        <!-- Hero Text -->
+        <div class="col-lg-7 text-center text-lg-start">
+          <div class="p-2"></div>
+          <div class="p-5"></div>
+          <h1 class="display-4 fw-bold lh-1 mb-3">Join a network of climbing gyms across the world!</h1>
+          <p class="col-lg-10 fs-5">Create an account to start making reviews, interacting with community members, and
+            connecting with route setters</p>
+        </div>
 
-      <!-- Form Column -->
-      <div class="col-md-10 mx-auto col-lg-5">
-        <h1 class="display-6 fw-bold text-center lh-1 mb-3">Create an Account</h1>
-        <form class="p-4 p-md-5 border rounded-3 bg-light needs-validation" id="signup-form" novalidate>
+        <!-- Form Column -->
+        <div class="col-md-10 mx-auto col-lg-5">
+          <div class="p-3"></div>
+          <h1 class="display-6 fw-bold text-center lh-1 mb-3">Create an Account</h1>
+          <form class="p-4 p-md-5 border rounded-3 bg-light needs-validation" id="signup-form" novalidate>
 
-          <!-- Google Button -->
-          <row>
-            <div class="col-md-12 align-items-center text-center">
-              <a class="btn btn-lg btn-google btn-block fw-bold btn-primary" href="#">
-                <img src="https://img.icons8.com/color/16/000000/google-logo.png">
-                Signup with Google
-              </a>
-            </div>
-          </row>
-
-          <hr class="my-4">
-          <!-- Email -->
-          <div class="form-floating mb-3">
-            <input type="email" class="form-control form-validator" id="email-input" placeholder="name@example.com" required>
-            <label for="email-input">Email address</label>
-          </div>
-
-          <!-- Username -->
-          <div class="form-floating mb-3">
-            <input type="email" class="form-control form-validator" id="username-input" placeholder="Username" required>
-            <label for="username-input">Username</label>
-          </div>
-
-          <!-- Password -->
-          <div class="form-floating has-validation mb-3">
-            <input type="password" class="form-control form-validator" id="password-input" aria-label="password" placeholder="Password" required>
-            <label for="password-input">Password</label>
-            <div class="invalid-feedback">Invalid password</div>
-            
-            <!-- Password Alert -->
-          </div>
-
-          <!-- Re-enter Password -->
-          <div class="form-floating mb-3">
-            <input type="password" class="form-control form-validator" id="check-password-input" aria-label="re-password" placeholder="Re-enter Password" required>
-            <label for="check-password-input">Re-enter Password</label>
-            <div class="invalid-feedback">✗ Passwords do not match</div>
-            <div class="valid-feedback">✓ Passwords match</div> 
-          </div>
-
-          <!-- TOC -->
-          <div class="checkbox mb-3">
-            <label>
-              <input type="checkbox" class="form-validator" id="tocCheckbox" value="toc" required> I agree to the 
-              <a class="link-primary link-opacity-75-hover" href="login">Terms and Conditions</a>
-              <div class="invalid-feedback">
-                You must agree before creating an account
+            <!-- Google Button -->
+            <row>
+              <div class="col-md-12 align-items-center text-center">
+                <a class="btn btn-lg btn-google btn-block fw-bold btn-primary" href="#">
+                  <img src="https://img.icons8.com/color/16/000000/google-logo.png">
+                  Signup with Google
+                </a>
               </div>
-            </label>
-          </div>
+            </row>
 
-          <!-- Submit -->
-          <button class="w-100 btn btn-lg btn-primary" type="submit">Signup</button>
+            <hr class="my-4">
+            <!-- Email -->
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control form-validator" id="email-input" placeholder="name@example.com"
+                required>
+              <label for="email-input">Email address</label>
+              <div class="invalid-feedback fw-bold" id="email-input-warning">
+                Enter a valid Email address
+                <div class="fw-normal">(valid@email.com)</div>
+              </div>
 
-          <hr class="my-4">
-          <!-- Login Prompt -->
-          <small class="text-muted">Already have an account? </small><a class="link-primary link-opacity-75-hover" href="login">Login</a>
-        </form>
+            </div>
+
+            <!-- Username -->
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control form-validator" id="username-input" placeholder="Username"
+                required>
+              <label for="username-input">Username</label>
+              <div class="invalid-feedback fw-bold" id="username-input-warning">
+                Username must be:
+                <div class="fw-normal">4-20 characters long,</div>
+                <div class="fw-normal">Only contain letters, numbers, dots, or underscores,</div>
+                <div class="fw-normal">Can not start or end with a dot or underscore,</div>
+                <div class="fw-normal">Can not have consecutive dots or zeros</div>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-floating has-validation mb-3">
+              <input type="password" class="form-control form-validator" id="password-input" aria-label="password"
+                placeholder="Password" required>
+              <label for="password-input">Password</label>
+              <div class="invalid-feedback">Invalid password</div>
+
+              <!-- Password Alert -->
+            </div>
+
+            <!-- Re-enter Password -->
+            <div class="form-floating mb-3">
+              <input type="password" class="form-control form-validator" id="check-password-input"
+                aria-label="re-password" placeholder="Re-enter Password" required>
+              <label for="check-password-input">Re-enter Password</label>
+              <div class="invalid-feedback">✗ Passwords do not match</div>
+              <div class="valid-feedback">✓ Passwords match</div>
+            </div>
+
+            <!-- TOC -->
+            <div class="checkbox mb-3">
+              <label>
+                <input type="checkbox" class="form-validator" id="tocCheckbox" value="toc" required> I agree to the
+                <a class="link-primary link-opacity-75-hover" href="login">Terms and Conditions</a>
+                <div class="invalid-feedback">
+                  You must agree before creating an account
+                </div>
+              </label>
+            </div>
+
+            <!-- Submit -->
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Signup</button>
+
+            <hr class="my-4">
+            <!-- Login Prompt -->
+            <small class="text-muted">Already have an account? </small><a class="link-primary link-opacity-75-hover"
+              href="login">Login</a>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -121,5 +142,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/signup.js"></script>
 </body>
-</html>
 
+</html>
