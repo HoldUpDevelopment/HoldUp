@@ -12,5 +12,12 @@ module.exports = {
         res.sendFile('signup.html', {
             root: 'public/views/'
         })
+    },
+    signupJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('signup.js', {
+            root: 'public/js/'
+        })
     }
 }
