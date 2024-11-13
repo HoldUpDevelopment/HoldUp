@@ -8,6 +8,13 @@ module.exports = {
             root: root
         })
     },
+    dashboardView: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/html');
+        res.sendFile('newHome.html', {
+            root: root
+        })
+    },
     stylesheet: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/css');
