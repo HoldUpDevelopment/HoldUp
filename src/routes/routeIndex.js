@@ -1,7 +1,6 @@
 const express = require('express');
 const homePageController = require('../controllers/homePageController');
 const loginFormController = require('../controllers/loginFormController');
-const loginFormController = require('../controllers/loginFormController');
 
 const router = express.Router();
 router.get('/', homePageController.homepageView);
