@@ -275,6 +275,9 @@ async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
   const Model = mongoose.model(collection, Schemas[collection]);
   try {
     result = await Model.findOne({[listingKey]: listingQuery})
+    if (result == null) {
+      throw new mongoose.Error.DocumentNotFoundError(listingQuery);
+    }
     console.log(`Found document with key matching ${listingQuery}`);
     return result._id;
   } catch (err) {

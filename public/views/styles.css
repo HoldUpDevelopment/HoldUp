@@ -5,13 +5,14 @@
 :root {
     --bs-body-bg: var(--bs-gray-100);
 }
+body{
+    min-height: 100vh;
+}
 .container-bg {
-    background-image: url('images/ascend.png');
+    /* background-image: url('images/ascend.png'); */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.85),rgba(255, 255, 255, 0)), url('images/ascend.png');
     background-size: cover;
-    height: 100%;
-    overflow-y: hidden;
-
-    
+    min-height: 100vh;
 }
 .fill { 
     min-height: 100%;

@@ -6,6 +6,7 @@ router.post('/createAccount', userAccountController.createAccount);
 router.delete('/deleteAccount', userAccountController.deleteAccount);
 router.put('/editAccountDetails', userAccountController.editAccountDetails);
 router.get('/getUserIdFromUserName', userAccountController.getUserIdFromUserName);
+router.get('/getUserIdFromEmail', userAccountController.getUserIdFromEmail);
 router.get('/getRoutePacketFromID', userAccountController.getRoutePacketFromID);
 router.get('/getForumPacketFromID', userAccountController.getForumPacketFromID);
 router.get('/getSettingsFromID', userAccountController.getSettingsFromID);

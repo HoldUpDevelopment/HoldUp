@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HoldUp - Login</title>
+  <title>HoldUp - Signup</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <link rel="stylesheet" href="../styles.css">
@@ -46,14 +46,15 @@
         <div class="col-lg-7 text-center text-lg-start">
           <div class="p-2"></div>
           <div class="p-5"></div>
-          <h1 class="display-4 fw-bold lh-1 mb-3">Welcome to HoldUp!</h1>
-          <p class="col-lg-10 fs-5">Creating meaningful connections between gyms and climbers</p>
+          <h1 class="display-4 fw-bold lh-1 mb-3">Join a network of climbing gyms across the world!</h1>
+          <p class="col-lg-10 fs-5">Create an account to start making reviews, interacting with community members, and
+            connecting with route setters</p>
         </div>
 
         <!-- Form Column -->
         <div class="col-md-10 mx-auto col-lg-5">
           <div class="p-3"></div>
-          <h1 class="display-6 fw-bold text-center lh-1 mb-3">Login to your Account</h1>
+          <h1 class="display-6 fw-bold text-center lh-1 mb-3">Create an Account</h1>
           <form class="p-4 p-md-5 border rounded-3 bg-light needs-validation" id="signup-form" novalidate>
 
             <!-- Google Button -->
@@ -61,19 +62,35 @@
               <div class="col-md-12 align-items-center text-center">
                 <a class="btn btn-lg btn-google btn-block fw-bold btn-outline-primary" href="#">
                   <img src="https://img.icons8.com/?size=20&id=6VY1AI_1I8pJ&format=png&color=000000" class="mb-1">
-                  Login with Google
+                  Signup with Google
                 </a>
               </div>
             </row>
 
             <hr class="my-4">
+            <!-- Email -->
+            <div class="form-floating mb-3">
+              <input type="email" class="form-control form-validator" id="email-input" placeholder="name@example.com"
+                required>
+              <label for="email-input">Email address</label>
+              <div class="invalid-feedback fw-bold" id="email-input-warning">
+                Enter a valid Email address
+                <div class="fw-normal">(valid@email.com)</div>
+              </div>
+
+            </div>
+
             <!-- Username -->
             <div class="form-floating mb-3">
               <input type="text" class="form-control form-validator" id="username-input" placeholder="Username"
                 required>
-              <label for="username-input">Username or Email</label>
+              <label for="username-input">Username</label>
               <div class="invalid-feedback fw-bold" id="username-input-warning">
-                Please enter a valid username or password
+                Username must be:
+                <div class="fw-normal">4-20 characters long,</div>
+                <div class="fw-normal">Only contain letters, numbers, dots, or underscores,</div>
+                <div class="fw-normal">Can not start or end with a dot or underscore,</div>
+                <div class="fw-normal">Can not have consecutive dots or zeros</div>
               </div>
             </div>
 
@@ -87,21 +104,34 @@
               <!-- Password Alert -->
             </div>
 
+            <!-- Re-enter Password -->
+            <div class="form-floating mb-3">
+              <input type="password" class="form-control form-validator" id="check-password-input"
+                aria-label="re-password" placeholder="Re-enter Password" required>
+              <label for="check-password-input">Re-enter Password</label>
+              <div class="invalid-feedback">✗ Passwords do not match</div>
+              <div class="valid-feedback">✓ Passwords match</div>
+            </div>
+
             <!-- TOC -->
             <div class="checkbox mb-3">
               <label>
-                <input type="checkbox" class="form-validator" id="tocCheckbox" value="toc" required> Remember me
+                <input type="checkbox" class="form-validator" id="tocCheckbox" value="toc" required> I agree to the
+                <a class="link-primary link-opacity-75-hover" href="login">Terms and Conditions</a>
+                <div class="invalid-feedback">
+                  You must agree before creating an account
+                </div>
               </label>
             </div>
 
             <!-- Submit -->
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Signup</button>
 
             <hr class="my-4">
             <!-- Login Prompt -->
             <div class="d-flex justify-content-center align-items-center">
-              <small class="text-muted me-1">Don't have an account? </small><a class="link-primary link-opacity-75-hover"
-              href="signup">Create an Account</a>
+              <small class="text-muted me-1">Already have an account? </small><a class="link-primary link-opacity-75-hover"
+                href="login">Login</a>
             </div>
           </form>
         </div>
@@ -112,6 +142,7 @@
   <!--Scripts-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/signup.js"></script>
 </body>
 
 </html>
