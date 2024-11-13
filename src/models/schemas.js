@@ -21,7 +21,15 @@ const userSchema = new mongoose.Schema({
     displayname: String,
     fullname: String,
     email: String,
-    password: String,
+    password: {
+        type: String,
+        validate: {
+            validator: function(v) {
+                // Validate Here
+                return (true);
+            }
+        }
+    },
     gyms: {
         type: [String],
         default: []
