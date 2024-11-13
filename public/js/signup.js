@@ -8,6 +8,10 @@ var usernameHtmlDefault = `Username must be:
 var emailHtmlDefault = `Enter a valid Email address
               <div class="fw-normal">(valid@email.com)</div>`;
 
+var submitSpinner = `<div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+                </div>`;
+
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
@@ -64,11 +68,11 @@ async function validateEmail(valRef) {
     var passedChecks = true;
     if ($("#email-input").val() == "") { //check if there is anything
         $("#email-input-warning").html("<div class=\"fw-normal\">* This field is required</div>");
-            $("#username-input").addClass('is-invalid');
-            $("#email-input").removeClass('is-valid');
-            valRef.isValid = false;
-            passedChecks = false;
-    }else if (!emailIsValid($("#email-input").val()) && passedChecks) { //check Regex
+        $("#username-input").addClass('is-invalid');
+        $("#email-input").removeClass('is-valid');
+        valRef.isValid = false;
+        passedChecks = false;
+    } else if (!emailIsValid($("#email-input").val()) && passedChecks) { //check Regex
         $("#email-input").addClass('is-invalid');
         $("#email-input").removeClass('is-valid');
         $("#email-input-warning").html(emailHtmlDefault);
@@ -95,11 +99,11 @@ async function validateUsername(valRef) {
     var passedChecks = true;
     if ($("#username-input").val() == "") { //check if there is anything
         $("#username-input-warning").html("<div class=\"fw-normal\">* This field is required</div>");
-            $("#username-input").addClass('is-invalid');
-            $("#username-input").removeClass('is-valid');
-            valRef.isValid = false;
-            passedChecks = false;
-    }else if (!usernameIsValid($("#username-input").val()) && passedChecks) { //check Regex
+        $("#username-input").addClass('is-invalid');
+        $("#username-input").removeClass('is-valid');
+        valRef.isValid = false;
+        passedChecks = false;
+    } else if (!usernameIsValid($("#username-input").val()) && passedChecks) { //check Regex
         $("#username-input").addClass('is-invalid');
         $("#username-input").removeClass('is-valid');
         $("#username-input-warning").html(usernameHtmlDefault);
@@ -150,6 +154,22 @@ function passwordFieldChanged(form) {
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
+async function submitData() {
+    var email = $("#email-input").val();
+    var username = $("#username-input").val();
+    var password = $("#password-input").val();
+    var requestBody = {
+        username: username,
+        email: email,
+        password: password,
+    }
+    //Change signup text to a spinner
+    $("#submit-button").html(submitSpinner);
+}
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
 //Runs the code on the page
 (() => {
     'use strict'
@@ -159,7 +179,7 @@ function passwordFieldChanged(form) {
     const formFields = document.querySelectorAll('.form-validator');
     //Sign Up Form Submission
     var form = document.getElementById("signup-form");//This is using JQuery functionality. Jquery must be loaded into the HTML for it to compile
-    form.addEventListener('submit', event => { //Submit event listener for form
+    form.addEventListener('submit', async event => { //Submit event listener for form
         console.log(`${form.id} was submitted`);
 
         var validityReference = { isValid: true };
@@ -180,8 +200,11 @@ function passwordFieldChanged(form) {
             console.log("NOT VALID");
             event.preventDefault();
             event.stopPropagation();
+        } else {
+            alert("successful");
+            //await submitData();
+            //event.preventDefault();
         }
-
         //form.classList.add('was-validated');
     }, false)
 
