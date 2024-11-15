@@ -43,7 +43,6 @@ module.exports = {
         });
     },
     signup: async (req, res) => { //signup form submission
-        const { body } = req;
         const email = req.body.email;
         const username = req.body.username;
         const password = req.body.password;
