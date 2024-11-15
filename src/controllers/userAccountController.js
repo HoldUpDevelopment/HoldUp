@@ -44,7 +44,6 @@ module.exports = {
     },
     signup: async (req, res) => { //signup form submission
         const { body } = req;
-        console.log(body);
         const email = req.body.email;
         const username = req.body.username;
         const password = req.body.password;
@@ -54,14 +53,14 @@ module.exports = {
         hashed = await hash.createHash(password);
         
         //Ensure that this username and email are not registered in the database
-        const userDoc = await mongo.getIdByKeyValue("route_mngt", "users", username, "username");
-        const emailDoc = await mongo.getIdByKeyValue("route_mngt", "users", email, "email");
+        const userDoc = await mongo.getIdByKeyValue("route_mngt", "users", username, "username"); //username
+        const emailDoc = await mongo.getIdByKeyValue("route_mngt", "users", email, "email"); //email
 
         //If they are both unused, create a new user!
         var success = false;
         if (userDoc == 404 && emailDoc == 404) {
             success = true;
-            
+
         }
 
         res.writeHead(200, {
