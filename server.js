@@ -25,7 +25,7 @@ server.use(favicon('./public/favicon.ico'));
 server.use('/', webRouting);
 server.use('/images', imageRoutes);
 server.use('/user', userAccountRoutes);
-server.use('/api/user', middle, userAccountRoutes);
+server.use('/api/user', middle, userAccountRoutes); //Users the urlencoded middleware for parsing x-www-application-formdata request body.
 server.use('/route', routeManagementRoutes);
 server.use('/feedback', routeFeedbackRoutes);
 server.use('/announcements', announcementRoutes);
