@@ -16,19 +16,23 @@ const accountSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema({
     username: {
-        type: String
-    },
-    displayname: String,
-    fullname: String,
-    email: String,
-    password: {
         type: String,
-        validate: {
-            validator: function(v) {
-                // Validate Here
-                return (true);
-            }
-        }
+        match: /^(?=[a-zA-Z0-9._-]{4,20}$)(?!.*[_.-]{2})[^_.-].*[^_.-]$/,
+        unique: true
+    },
+    email: {
+        type: String,
+        match: /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])/,
+        unique: true
+    },
+    password: String,
+    displayname: {
+        type: String,
+        default: ""
+    },
+    fullname: {
+        type: String,
+        default: ""
     },
     gyms: {
         type: [String],
@@ -37,7 +41,7 @@ const userSchema = new mongoose.Schema({
     settings: {
         profile_picture: {
             type: String,
-            default: "apple-touch-icon.png",
+            default: "",
             alias: 'pfp'
         },
         notifications: { // Might be better to create a separate schema
@@ -73,6 +77,8 @@ const userSchema = new mongoose.Schema({
             default: "en"
         }
     }
+}, {
+    collation: {locale: 'en', strength: 2}
 });
 
 const reviewSchema = new mongoose.Schema({

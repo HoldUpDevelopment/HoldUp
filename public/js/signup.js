@@ -197,8 +197,8 @@ async function submitData(formdata) {
             }
         })
         validateTOC(validityReference);
-        validateEmail(validityReference);
-        validateUsername(validityReference);
+        await validateEmail(validityReference);
+        await validateUsername(validityReference);
 
         if (!validityReference.isValid) {
             console.log("NOT VALID");
@@ -210,7 +210,8 @@ async function submitData(formdata) {
             const urlEncoded = new URLSearchParams(formData).toString();
             
             await submitData(urlEncoded);
-            alert("successful");
+            alert("Account successfully created!");
+            window.location.href = `${origin}/account/login`; //Navigate to the login page!
         }
         //form.classList.add('was-validated');
     }, false)

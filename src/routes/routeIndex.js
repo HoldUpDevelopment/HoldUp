@@ -9,6 +9,7 @@ router.get('/dashboard', homePageController.dashboardView);
 router.get('/account/login', loginFormController.loginView);
 router.get('/account/signup', loginFormController.signupView);
 router.get('/js/signup.js', loginFormController.signupJS);
+router.get('/js/login.js', loginFormController.loginJS);
 
 
 module.exports = router;

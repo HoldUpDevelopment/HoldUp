@@ -51,14 +51,15 @@ async function createListing(dbName, collection, newListing) {
 
   try {
     const Model = mongoose.model(collection, Schemas[collection]);
-    var doc = new Model(newListing);
+    console.log("hi");
+    console.log(newListing);
+    var doc = await new Model(newListing).save().then().catch(); //Catch key indexing errors in asynchronous calls.
     console.log(doc);
-    doc.save();
     console.log("Created Listing with _id: ", doc._id);
     return doc._id;
-  } catch {
-    console.log("Could not create document");
-    return false;
+  } catch (err) {
+    console.log(err);
+    throw err;
   }
 }
 

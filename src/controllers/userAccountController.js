@@ -50,23 +50,34 @@ module.exports = {
 
         //Secure the password for the database
         hashed = await hash.createHash(password);
-        
-        //Ensure that this username and email are not registered in the database
-        const userDoc = await mongo.getIdByKeyValue("route_mngt", "users", username, "username"); //username
-        const emailDoc = await mongo.getIdByKeyValue("route_mngt", "users", email, "email"); //email
 
-        //If they are both unused, create a new user!
-        var success = false;
-        if (userDoc == 404 && emailDoc == 404) {
-            success = true;
+        //Create a document with the required fields: email, username, password
+        const docu = {}
+        docu.email = email;
+        docu.username = username;
+        docu.password = hashed;
 
+        console.log(docu);
+
+        //Attempt to create a user
+        try {
+            const newID = await mongo.createListing("route_mngt", "users", docu);
+            console.log(`Created user with ID: ${newID}`);
+
+            //Success
+            res.writeHead(200, {
+                'Content-Type': 'text/plain'
+            });
+            res.write("Account Created Successfully");
+            res.end();
+        } catch (err) {
+            //Fail
+            res.writeHead(500, {
+                'Content-Type': 'text/plain'
+            });
+            res.write("Failed");
+            res.end();
         }
-
-        res.writeHead(200, {
-            'Content-Type': 'text/plain'
-        });
-        res.write("Account Created Successfully");
-        res.end();
     },
     // PUT Methods
     editAccountDetails: (req, res) => {
@@ -110,6 +121,56 @@ module.exports = {
     },
 
     // GET Methods
+    login: async (req, res) => {
+        console.log("Received");
+        var isEmail = false;
+        const userIdentifier = req.query.userIdentifier
+        const password = req.query.password;
+
+        const userObject = await mongo.findOneListingByKeyValue("route_mngt", "users", userIdentifier, (isEmail === true) ? "email" : "username");
+        
+        try {
+            var isCorrect
+            if (userObject != {}) {
+                console.log("Hello")
+                isCorrect = await hash.verifyPassword(password, userObject["password"]);
+            } else {
+                console.log(userObject);
+                throw new Error; //User not found
+            }
+
+            if (isCorrect) {
+                console.log("Password and internal hash are validated!");
+                var response_body = {
+                    userID: userObject._id,
+                    session: "valid i guess"
+                }
+
+                res.writeHead(200, {
+                    'Content-Type': 'application/json'
+                });
+                res.write(JSON.stringify(response_body));
+                res.end();
+            } else {
+                console.log("Password and internal hash are not validated!");
+                res.writeHead(401, {
+                    'Content-Type': 'text/plain'
+                });
+                res.write("Incorrect password");
+                res.end();
+            }
+        } catch (err) {
+            console.log(err);
+            console.log(`User with identifer '${userIdentifier}' not found in database.`);
+
+            //Fail
+            res.writeHead(404, {
+                'Content-Type': 'text/plain'
+            });
+            res.write("Username not found");
+            res.end();
+        }
+    },
     //Perhaps more realistically, get list of users from username search. May need reworked
     getUserIdFromUserName: async (req, res) => {
         const userName = req.query.userName;

@@ -6,6 +6,7 @@ router.post('/createAccount', userAccountController.createAccount); //Deprecated
 router.post('/signup', userAccountController.signup);
 router.delete('/deleteAccount', userAccountController.deleteAccount);
 router.put('/editAccountDetails', userAccountController.editAccountDetails);
+router.get('/login', userAccountController.login);
 router.get('/getUserIdFromUserName', userAccountController.getUserIdFromUserName);
 router.get('/getUserIdFromEmail', userAccountController.getUserIdFromEmail);
 router.get('/getRoutePacketFromID', userAccountController.getRoutePacketFromID);
