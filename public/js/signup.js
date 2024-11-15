@@ -15,21 +15,32 @@ var submitSpinner = `<div class="spinner-border text-light" role="status">
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
-
+const {
+    host, hostname, href, origin, pathname, port, protocol, search
+  } = window.location
 //Perhaps secure this with API keys in the future!!!!
 //HTTP Requests
 async function usernameHTTP(username) {
     var xmlHttp = new XMLHttpRequest();
-    await xmlHttp.open("GET", `http://127.0.0.1:3000/user/getUserIdFromUserName?userName=${username}`, false); // false for synchronous request
+    await xmlHttp.open("GET", `${origin}/user/getUserIdFromUserName?userName=${username}`, false); // false for synchronous request
     xmlHttp.send(null);
     return JSON.parse(xmlHttp.responseText);
 }
 
 async function emailHTTP(email) {
     var xmlHttp = new XMLHttpRequest();
-    await xmlHttp.open("GET", `http://127.0.0.1:3000/user/getUserIdFromEmail?email=${email}`, false); // false for synchronous request
+    await xmlHttp.open("GET", `${origin}/user/getUserIdFromEmail?email=${email}`, false); // false for synchronous request
     xmlHttp.send(null);
     return JSON.parse(xmlHttp.responseText);
+}
+
+async function submitFormHTTP(body) {
+    var xmlHttp = new XMLHttpRequest();
+    
+    await xmlHttp.open("POST", `${origin}/api/user/signup`, false); // false for synchronous request
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.send(body);
+    return xmlHttp.responseText;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -154,17 +165,13 @@ function passwordFieldChanged(form) {
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
-async function submitData() {
-    var email = $("#email-input").val();
-    var username = $("#username-input").val();
-    var password = $("#password-input").val();
-    var requestBody = {
-        username: username,
-        email: email,
-        password: password,
-    }
-    //Change signup text to a spinner
+async function submitData(formdata) {
     $("#submit-button").html(submitSpinner);
+
+    //Submit the data
+    console.log("Sending...");
+    var response = await submitFormHTTP(formdata);
+    console.log(response);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -180,12 +187,9 @@ async function submitData() {
     //Sign Up Form Submission
     var form = document.getElementById("signup-form");//This is using JQuery functionality. Jquery must be loaded into the HTML for it to compile
     form.addEventListener('submit', async event => { //Submit event listener for form
-        console.log(`${form.id} was submitted`);
-
         var validityReference = { isValid: true };
         Array.from(formFields).forEach(field => {
             if (field.value == "") {
-                console.log(field.id);
                 field.classList.add('is-invalid');
             }
             if (field.classList.contains('is-invalid')) {
@@ -201,9 +205,12 @@ async function submitData() {
             event.preventDefault();
             event.stopPropagation();
         } else {
+            event.preventDefault();
+            const formData = new FormData(document.getElementById("signup-form"));
+            const urlEncoded = new URLSearchParams(formData).toString();
+            
+            await submitData(urlEncoded);
             alert("successful");
-            //await submitData();
-            //event.preventDefault();
         }
         //form.classList.add('was-validated');
     }, false)
@@ -226,7 +233,6 @@ async function submitData() {
     //Email listener
     var emailField = document.getElementById("email-input");
     emailField.addEventListener("change", event => {
-        console.log("Changed email field");
         if (emailField.classList.contains('is-invalid') && emailIsValid($("#email-input").val())) {
             $("#email-input").removeClass("is-invalid");
         }
@@ -235,7 +241,6 @@ async function submitData() {
     //Username listener
     var userField = document.getElementById("username-input");
     userField.addEventListener("change", event => {
-        console.log("Changed username field");
         if (userField.classList.contains('is-invalid') && usernameIsValid($("#username-input").val())) {
             $("#username-input").removeClass("is-invalid");
         }

@@ -17,12 +17,15 @@ const forumManagementRoutes = require('./src/routes/forumManagement');
 //Mongo
 const mongo = require('./src/models/mongo');
 
+//middleware
+middle = express.urlencoded({ extended: true });
 
 const server = express();
 server.use(favicon('./public/favicon.ico')); 
 server.use('/', webRouting);
 server.use('/images', imageRoutes);
 server.use('/user', userAccountRoutes);
+server.use('/api/user', middle, userAccountRoutes);
 server.use('/route', routeManagementRoutes);
 server.use('/feedback', routeFeedbackRoutes);
 server.use('/announcements', announcementRoutes);

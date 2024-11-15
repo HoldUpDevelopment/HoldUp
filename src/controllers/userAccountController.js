@@ -1,9 +1,10 @@
-const { ObjectId } = require('mongodb');
+//const { ObjectId } = require('mongodb');
 const mongo = require('../models/mongo');
+const hash = require('../models/hash');
 
 module.exports = {
     // POST Methods
-    createAccount: (req, res) => {
+    createAccount: (req, res) => { //deprecated
         var reqBody = '';
 
         req.on('data', function (chunk) { // reading the request into a var.
@@ -41,9 +42,34 @@ module.exports = {
             }
         });
     },
+    signup: async (req, res) => { //signup form submission
+        const { body } = req;
+        console.log(body);
+        const email = req.body.email;
+        const username = req.body.username;
+        const password = req.body.password;
+        console.log(`${email}, ${username}, ${password}`);
 
+        //Secure the password for the database
+        hashed = await hash.createHash(password);
+        
+        //Ensure that this username and email are not registered in the database
+        const userDoc = await mongo.getIdByKeyValue("route_mngt", "users", username, "username");
+        const emailDoc = await mongo.getIdByKeyValue("route_mngt", "users", email, "email");
 
+        //If they are both unused, create a new user!
+        var success = false;
+        if (userDoc == 404 && emailDoc == 404) {
+            success = true;
+            
+        }
 
+        res.writeHead(200, {
+            'Content-Type': 'text/plain'
+        });
+        res.write("Account Created Successfully");
+        res.end();
+    },
     // PUT Methods
     editAccountDetails: (req, res) => {
         var reqBody = '';
@@ -90,7 +116,7 @@ module.exports = {
     getUserIdFromUserName: async (req, res) => {
         const userName = req.query.userName;
         var response_body = {};
-        response_body["_id"] = await mongo.getIdByKeyValue("route_mngt", "users", userName, "username") //Needs custom search field, get this implemented
+        response_body["_id"] = await mongo.getIdByKeyValue("route_mngt", "users", userName, "username");
         
         json_message = JSON.stringify(response_body);
 
@@ -104,7 +130,7 @@ module.exports = {
     getUserIdFromEmail: async (req, res) => {
         const email = req.query.email;
         var response_body = {};
-        response_body["_id"] = await mongo.getIdByKeyValue("route_mngt", "users", email, "email") //Needs custom search field, get this implemented
+        response_body["_id"] = await mongo.getIdByKeyValue("route_mngt", "users", email, "email");
         
         json_message = JSON.stringify(response_body);
         console.log(json_message);
