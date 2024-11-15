@@ -23,7 +23,7 @@ module.exports = {
     signupJS: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/javascript');
-        res.sendFile('signup.js', {
+        res.sendFile('signup.min.js', {
             root: 'public/js/'
         })
     }
