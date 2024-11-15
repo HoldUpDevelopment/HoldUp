@@ -21,11 +21,57 @@ const userSchema = new mongoose.Schema({
     displayname: String,
     fullname: String,
     email: String,
-    password: String,
+    password: {
+        type: String,
+        validate: {
+            validator: function(v) {
+                // Validate Here
+                return (true);
+            }
+        }
+    },
+    gyms: {
+        type: [String],
+        default: []
+    },
     settings: {
-        type: Map,
-        of: [],
-        default: {}
+        profile_picture: {
+            type: String,
+            default: "apple-touch-icon.png",
+            alias: 'pfp'
+        },
+        notifications: { // Might be better to create a separate schema
+            activities: {// if we start adding more settings.
+                type: Boolean,
+                default: true
+            },
+            announcements: {
+                type: Boolean,
+                default: true
+            }
+        },
+        theme: {
+            type: String,
+            enum: {
+                values: ["light", "dark"],
+                message: `{VALUE} is not supported`
+            },
+            default: "light"
+        },
+        accessibility: {
+            high_contrast: {
+                type: Boolean,
+                default: false
+            },
+            large_text: {
+                type: Boolean,
+                default: false
+            }
+        },
+        language: {
+            type: String,
+            default: "en"
+        }
     }
 });
 
