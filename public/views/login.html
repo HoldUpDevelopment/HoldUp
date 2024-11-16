@@ -40,7 +40,7 @@
 
   <!-- PAGE BODY -->
   <div id="background" class="container-bg">
-    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="container col-xl-10 col-xxl-8 px-4 py-5 fade" id="Hero">
       <div class="row align-items-top g-lg-5 py-5">
         <!-- Hero Text -->
         <div class="col-lg-7 text-center text-lg-start">
@@ -54,7 +54,7 @@
         <div class="col-md-10 mx-auto col-lg-5">
           <div class="p-3"></div>
           <h1 class="display-6 fw-bold text-center lh-1 mb-3">Login to your Account</h1>
-          <form class="p-4 p-md-5 border rounded-3 bg-light needs-validation" id="signup-form" novalidate>
+          <form class="p-4 p-md-5 border rounded-3 bg-light needs-validation" id="login-form" novalidate>
 
             <!-- Google Button -->
             <row>
@@ -110,8 +110,17 @@
   </div>
 
   <!--Scripts-->
+  <script>
+    // Add the 'show' class to trigger the Bootstrap fade-in effect on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('Hero');
+      form.classList.add('show');
+    });
+  </script>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/login.js"></script>
 </body>
 
 </html>

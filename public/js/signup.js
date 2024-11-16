@@ -8,24 +8,39 @@ var usernameHtmlDefault = `Username must be:
 var emailHtmlDefault = `Enter a valid Email address
               <div class="fw-normal">(valid@email.com)</div>`;
 
+var submitSpinner = `<div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+                </div>`;
+
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
-
+const {
+    host, hostname, href, origin, pathname, port, protocol, search
+  } = window.location
 //Perhaps secure this with API keys in the future!!!!
 //HTTP Requests
 async function usernameHTTP(username) {
     var xmlHttp = new XMLHttpRequest();
-    await xmlHttp.open("GET", `http://127.0.0.1:3000/user/getUserIdFromUserName?userName=${username}`, false); // false for synchronous request
+    await xmlHttp.open("GET", `${origin}/user/getUserIdFromUserName?userName=${username}`, false); // false for synchronous request
     xmlHttp.send(null);
     return JSON.parse(xmlHttp.responseText);
 }
 
 async function emailHTTP(email) {
     var xmlHttp = new XMLHttpRequest();
-    await xmlHttp.open("GET", `http://127.0.0.1:3000/user/getUserIdFromEmail?email=${email}`, false); // false for synchronous request
+    await xmlHttp.open("GET", `${origin}/user/getUserIdFromEmail?email=${email}`, false); // false for synchronous request
     xmlHttp.send(null);
     return JSON.parse(xmlHttp.responseText);
+}
+
+async function submitFormHTTP(body) {
+    var xmlHttp = new XMLHttpRequest();
+    
+    await xmlHttp.open("POST", `${origin}/api/user/signup`, false); // false for synchronous request
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.send(body);
+    return xmlHttp.responseText;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -64,11 +79,11 @@ async function validateEmail(valRef) {
     var passedChecks = true;
     if ($("#email-input").val() == "") { //check if there is anything
         $("#email-input-warning").html("<div class=\"fw-normal\">* This field is required</div>");
-            $("#username-input").addClass('is-invalid');
-            $("#email-input").removeClass('is-valid');
-            valRef.isValid = false;
-            passedChecks = false;
-    }else if (!emailIsValid($("#email-input").val()) && passedChecks) { //check Regex
+        $("#username-input").addClass('is-invalid');
+        $("#email-input").removeClass('is-valid');
+        valRef.isValid = false;
+        passedChecks = false;
+    } else if (!emailIsValid($("#email-input").val()) && passedChecks) { //check Regex
         $("#email-input").addClass('is-invalid');
         $("#email-input").removeClass('is-valid');
         $("#email-input-warning").html(emailHtmlDefault);
@@ -95,11 +110,11 @@ async function validateUsername(valRef) {
     var passedChecks = true;
     if ($("#username-input").val() == "") { //check if there is anything
         $("#username-input-warning").html("<div class=\"fw-normal\">* This field is required</div>");
-            $("#username-input").addClass('is-invalid');
-            $("#username-input").removeClass('is-valid');
-            valRef.isValid = false;
-            passedChecks = false;
-    }else if (!usernameIsValid($("#username-input").val()) && passedChecks) { //check Regex
+        $("#username-input").addClass('is-invalid');
+        $("#username-input").removeClass('is-valid');
+        valRef.isValid = false;
+        passedChecks = false;
+    } else if (!usernameIsValid($("#username-input").val()) && passedChecks) { //check Regex
         $("#username-input").addClass('is-invalid');
         $("#username-input").removeClass('is-valid');
         $("#username-input-warning").html(usernameHtmlDefault);
@@ -150,6 +165,18 @@ function passwordFieldChanged(form) {
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
+async function submitData(formdata) {
+    $("#submit-button").html(submitSpinner);
+
+    //Submit the data
+    console.log("Sending...");
+    var response = await submitFormHTTP(formdata);
+    console.log(response);
+}
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
 //Runs the code on the page
 (() => {
     'use strict'
@@ -159,13 +186,10 @@ function passwordFieldChanged(form) {
     const formFields = document.querySelectorAll('.form-validator');
     //Sign Up Form Submission
     var form = document.getElementById("signup-form");//This is using JQuery functionality. Jquery must be loaded into the HTML for it to compile
-    form.addEventListener('submit', event => { //Submit event listener for form
-        console.log(`${form.id} was submitted`);
-
+    form.addEventListener('submit', async event => { //Submit event listener for form
         var validityReference = { isValid: true };
         Array.from(formFields).forEach(field => {
             if (field.value == "") {
-                console.log(field.id);
                 field.classList.add('is-invalid');
             }
             if (field.classList.contains('is-invalid')) {
@@ -173,15 +197,22 @@ function passwordFieldChanged(form) {
             }
         })
         validateTOC(validityReference);
-        validateEmail(validityReference);
-        validateUsername(validityReference);
+        await validateEmail(validityReference);
+        await validateUsername(validityReference);
 
         if (!validityReference.isValid) {
             console.log("NOT VALID");
             event.preventDefault();
             event.stopPropagation();
+        } else {
+            event.preventDefault();
+            const formData = new FormData(document.getElementById("signup-form"));
+            const urlEncoded = new URLSearchParams(formData).toString();
+            
+            await submitData(urlEncoded);
+            alert("Account successfully created!");
+            window.location.href = `${origin}/account/login`; //Navigate to the login page!
         }
-
         //form.classList.add('was-validated');
     }, false)
 
@@ -203,7 +234,6 @@ function passwordFieldChanged(form) {
     //Email listener
     var emailField = document.getElementById("email-input");
     emailField.addEventListener("change", event => {
-        console.log("Changed email field");
         if (emailField.classList.contains('is-invalid') && emailIsValid($("#email-input").val())) {
             $("#email-input").removeClass("is-invalid");
         }
@@ -212,7 +242,6 @@ function passwordFieldChanged(form) {
     //Username listener
     var userField = document.getElementById("username-input");
     userField.addEventListener("change", event => {
-        console.log("Changed username field");
         if (userField.classList.contains('is-invalid') && usernameIsValid($("#username-input").val())) {
             $("#username-input").removeClass("is-invalid");
         }
