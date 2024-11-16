@@ -5,6 +5,13 @@ var submitSpinner = `<div class="spinner-border text-light" role="status">
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
 
+function setJwtToken(token) {
+    sessionStorage.setItem("jwt", token);
+}
+
+//////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+
 async function loginHTTP(username, password) {
     var xmlHttp = new XMLHttpRequest();
     await xmlHttp.open("POST", `${origin}/api/user/login`, false); // false for synchronous request
@@ -21,9 +28,10 @@ async function loginHTTP(username, password) {
 
 async function submitLogin(validityReference) {
     $("#submit-button").html(submitSpinner);
-    var loginRequest = await loginHTTP($("#username-input").val(), $("#password-input").val());
+    const response = await loginHTTP($("#username-input").val(), $("#password-input").val());
+    const body = JSON.parse(response.body);
 
-    if (loginRequest.status == 201) { //Success
+    if (response.status == 201) { //Success
         validityReference.isValid = true;
 
         //Bootstrap form styling
@@ -31,15 +39,20 @@ async function submitLogin(validityReference) {
         $("#username-input").removeClass('is-invalid');
         $("#password-input").addClass('is-valid');
         $("#username-input").addClass('is-valid');
-        console.log(JSON.parse(loginRequest.body).message);
-    } else if (loginRequest.status == 401) { //Authentification failed
+        console.log(body.message);
+
+        //Token
+        const { token } = body;
+        setJwtToken(token);
+
+    } else if (response.status == 401) { //Authentification failed
         validityReference.isValid = false;
 
         //Bootstrap form styling
         $("#submit-button").html(`Login`);
         $("#username-input").addClass('is-invalid');
         $("#password-input").addClass('is-invalid');
-        console.log(JSON.parse(loginRequest.body).error);
+        console.log(body.error);
     }
 }
 

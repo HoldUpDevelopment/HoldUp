@@ -18,16 +18,63 @@ async function verifyPassword(incoming, stored) {
     return passwordMatched = await bcrypt.compare(incoming, stored);
 }
 
+//Performs a regex on a string, determining whether it is an email address or not.
 function isEmail(string) {
     return /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])/.test(string);
 }
 
+//Generates a JWT and returns it.
+//https://hasura.io/blog/best-practices-of-using-jwt-with-graphql
 function signUser(userID) {
-    const token = jwt.sign();
+    const token = jwt.sign({ userID: userID }, secret, { expiresIn: '1m' });
+    console.log(`Token generated for '${userID}'`);
+    return token;
+}
+
+//Validates the given JWT information
+function verifyToken(token) {
+    // invalid token - synchronous
+    try {
+        const decoded = jwt.verify(token, secret);
+        return { success: true, data: decoded };
+    } catch (err) {
+        // err
+        return { success: false, error: err.message };
+    }
+}
+
+//Authentification
+/*
+Use this authentification when needing to use userId to perform actions in the request controller
+Example:
+    const { userID } = auth.authenticate(req, res);
+    if (!userID) return;
+*/
+function authenticateRequest(req, res) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        res.status(401).json({ error: "Unauthorized" });
+        res.end();
+        return false
+    }
+
+    const result = verifyToken(token);
+
+    if (!result.success) {
+        res.status(403).json({ error: result.error });
+        res.end();
+        return false
+    }
+
+    return result.data;
 }
 
 module.exports = {
     createHash: createHash,
     verifyPassword: verifyPassword,
     isEmail: isEmail,
+    signUser: signUser,
+    authenticate: authenticateRequest,
 }

@@ -85,9 +85,9 @@ module.exports = {
                 console.log("Password and internal hash are validated!");
 
                 //JWT
-                
+                const token = auth.signUser(userObject._id);
 
-                res.status(201).json({message: "Login successful", token: ""});
+                res.status(201).json({message: "Login successful", token: token});
             } else {
                 console.log("Password and internal hash are not validated!");
                 res.status(401).json({error: "Authentification failed"});
