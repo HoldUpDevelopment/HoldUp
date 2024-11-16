@@ -44,7 +44,7 @@ module.exports = {
     },
     signup: async (req, res) => { //signup form submission
         //Body
-        const {email, username, password} = req.body;
+        const { email, username, password } = req.body;
         console.log(`${email}, ${username}, ${password}`);
 
         //Secure the password for the database
@@ -61,9 +61,9 @@ module.exports = {
         try {
             const newID = await mongo.createListing("route_mngt", "users", docu);
             console.log(`Created user with ID: ${newID}`);
-            res.status(201).json({message: "User registered successfully"});
+            res.status(201).json({ message: "User registered successfully" });
         } catch (err) {
-            res.status(500).json({error: "Registration failed"});
+            res.status(500).json({ error: "Registration failed" });
         }
     },
     login: async (req, res) => {
@@ -87,15 +87,15 @@ module.exports = {
                 //JWT
                 const token = auth.signUser(userObject._id);
 
-                res.status(201).json({message: "Login successful", token: token});
+                res.status(201).json({ message: "Login successful", token: token });
             } else {
                 console.log("Password and internal hash are not validated!");
-                res.status(401).json({error: "Authentification failed"});
+                res.status(401).json({ error: "Authentification failed" });
             }
         } catch (err) {
             console.log(err);
             console.log(`User with identifer '${userIdentifier}' not found in database.`);
-            res.status(401).json({error: "Authentification failed"});
+            res.status(401).json({ error: "Authentification failed" });
         }
     },
 
@@ -141,13 +141,13 @@ module.exports = {
     },
 
     // GET Methods
-    
+
     //Perhaps more realistically, get list of users from username search. May need reworked
     getUserIdFromUserName: async (req, res) => {
         const userName = req.query.userName;
         var response_body = {};
         response_body["_id"] = await mongo.getIdByKeyValue("route_mngt", "users", userName, "username");
-        
+
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
@@ -161,7 +161,7 @@ module.exports = {
         const email = req.query.email;
         var response_body = {};
         response_body["_id"] = await mongo.getIdByKeyValue("route_mngt", "users", email, "email");
-        
+
         json_message = JSON.stringify(response_body);
         console.log(json_message);
 
@@ -210,10 +210,13 @@ module.exports = {
         res.end();
     },
     //Send back the settings document in the users data
-    getSettingsFromID: async (req, res) => {
-        const userId = req.query.userId;
+    getUserSettings: async (req, res) => {
+        const { userID } = auth.authorize(req, res);
+        if (!userID) return;
+
         var response_body;
-        response_body = await mongo.getUserSettingsById(userId) //Needs custom DB call
+        console.log(userID);
+        response_body = await mongo.getUserSettingsById(userID) //Needs custom DB call
 
         json_message = JSON.stringify(response_body);
 
@@ -228,7 +231,7 @@ module.exports = {
         const userId = req.query.userId;
         var response_body = {};
         response_body = await mongo.getEmailByUserId(userId)
-        
+
         json_message = JSON.stringify(response_body);
         console.log(json_message);
 

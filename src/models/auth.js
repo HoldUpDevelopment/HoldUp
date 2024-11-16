@@ -26,12 +26,17 @@ function isEmail(string) {
 //Generates a JWT and returns it.
 //https://hasura.io/blog/best-practices-of-using-jwt-with-graphql
 function signUser(userID) {
-    const token = jwt.sign({ userID: userID }, secret, { expiresIn: '1m' });
+    const token = jwt.sign({ userID: userID }, secret, { expiresIn: '15m' });
     console.log(`Token generated for '${userID}'`);
     return token;
 }
 
 //Validates the given JWT information
+/**
+ * @name verifyToken
+ * @param { jwt } token A JWT token with a complete header and payload
+ * @returns { object } the success and data or an error if success is `false`
+ */
 function verifyToken(token) {
     // invalid token - synchronous
     try {
@@ -43,14 +48,21 @@ function verifyToken(token) {
     }
 }
 
-//Authentification
-/*
-Use this authentification when needing to use userId to perform actions in the request controller
-Example:
-    const { userID } = auth.authenticate(req, res);
-    if (!userID) return;
-*/
-function authenticateRequest(req, res) {
+//Authorization
+/**
+ * @name authorize
+ * @param { HTTPRequest } req The request object of the given HTTP method
+ * @param { HTTPResponse } res The response object of the given HTTP method
+ * @returns { object } A JSON object containing the userID and userRole.
+ * @description
+ * `authorize` validates the jwt token passed in the Authorization header of the given http request.
+ * Use this authorization when needing to use userId to perform actions in the request controller
+ * 
+ * Example:
+    `js const { userID } = auth.authorize(req, res);
+    if (!userID) return;`
+ */
+function authorizeRequest(req, res) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -61,7 +73,6 @@ function authenticateRequest(req, res) {
     }
 
     const result = verifyToken(token);
-
     if (!result.success) {
         res.status(403).json({ error: result.error });
         res.end();
@@ -71,10 +82,13 @@ function authenticateRequest(req, res) {
     return result.data;
 }
 
+/**
+ * Provides functionality for both Authentification and Authorization.
+ */
 module.exports = {
     createHash: createHash,
     verifyPassword: verifyPassword,
     isEmail: isEmail,
     signUser: signUser,
-    authenticate: authenticateRequest,
+    authorize: authorizeRequest,
 }

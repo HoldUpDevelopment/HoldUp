@@ -23,14 +23,15 @@ function getCookie(cname) {
 
 async function userInfoHTTP(userId) {
     var xmlHttp = new XMLHttpRequest();
-    await xmlHttp.open("GET", `${origin}/user/getRoutePacketFromID`, false); // false for synchronous request
+    await xmlHttp.open("GET", `${origin}/user/getRoutePacketFromID?userId=${userId}`, false); // false for synchronous request
     //xmlHttp.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem('jwt')}`); //Use this when needing to perform user session actions
     xmlHttp.send(null);
     return JSON.parse(xmlHttp.responseText);
 }
 async function settingsHTTP(userId) {
     var xmlHttp = new XMLHttpRequest();
-    await xmlHttp.open("GET", `${origin}/user/getSettingsFromID?userId=${userId}`, false); // false for synchronous request
+    await xmlHttp.open("GET", `${origin}/user/getUserSettings`, false); // false for synchronous request
+    xmlHttp.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem('jwt')}`);
     xmlHttp.send(null);
     return JSON.parse(xmlHttp.responseText);
 }

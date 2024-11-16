@@ -11,7 +11,7 @@ router.get('/getUserIdFromUserName', userAccountController.getUserIdFromUserName
 router.get('/getUserIdFromEmail', userAccountController.getUserIdFromEmail);
 router.get('/getRoutePacketFromID', userAccountController.getRoutePacketFromID);
 router.get('/getForumPacketFromID', userAccountController.getForumPacketFromID);
-router.get('/getSettingsFromID', userAccountController.getSettingsFromID);
+router.get('/getUserSettings', userAccountController.getUserSettings);
 router.get('/getEmailFromID', userAccountController.getEmailFromID);
 
 module.exports = router;
