@@ -166,5 +166,20 @@ module.exports = {
         });
         res.write(JSON.stringify(response_body));
         res.end();
-    }
+    },
+    //Gets email for the given id
+    getEmailFromID: async (req, res) => {
+        const userId = req.query.userId;
+        var response_body = {};
+        response_body = await mongo.getEmailByUserId(userId)
+        
+        json_message = JSON.stringify(response_body);
+        console.log(json_message);
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
+        });
+        res.write(JSON.stringify(response_body));
+        res.end();
+    },
 }

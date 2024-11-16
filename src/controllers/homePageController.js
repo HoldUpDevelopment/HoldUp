@@ -11,7 +11,7 @@ module.exports = {
     dashboardView: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/html');
-        res.sendFile('newHome.html', {
+        res.sendFile('dashboard.html', {
             root: root
         })
     },

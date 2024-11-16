@@ -286,6 +286,27 @@ async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
   }
 }
 
+async function getEmailByUserId(userId) {
+  // Returns a user's email string given their user ID.
+  // Parameters:
+  //  userId -> ObjectId of User (can be String, Number, or Object)
+
+  mongoose.connection.useDb('route-mngt');
+
+  const Model = mongoose.model('Users', Schemas.users);
+  try {
+    result = await Model.findById(userId, 'email');
+    if (result == null) {
+      throw new mongoose.Error.DocumentNotFoundError(userId);
+    }
+    console.log(`Found user with id ${userId}`);
+    return result;
+  } catch (err) {
+    console.log(err);
+    return 404;
+  }
+}
+
 
 async function closeConnection() {
   // Essentially the same as the standard mongo function.
@@ -308,5 +329,6 @@ module.exports = {
   getUserSettingsById: getUserSettingsById,
   getFieldFromListingById: getFieldFromListingById,
   getIdByKeyValue: getIdByKeyValue,
+  getEmailByUserId: getEmailByUserId,
   closeConnection: closeConnection
 };

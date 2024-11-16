@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .profile-info {
+      margin-left: 20px;
+    }
+    .settings-box {
+      margin-top: 20px;
+      width: 100%;
+      max-width: 600px;
+    }
+    .sidebar {
+      height: 100vh;
+      background-color: #f8f9fa;
+      padding: 20px;
+      position: fixed;
+    }
+    .main-content {
+      margin-left: 220px; /* Sidebar width + margin */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="fixed-top p-3 bg-black ">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a class="d-flex align-items-center me-3 mb-lg-2 fw-bold link-light fs-3 text-decoration-none" href="/">
+          HoldUp
+        </a>
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        </ul>
+        <div class="text-end">
+          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+            <a class="d-flex align-items-center mb-2 mb-lg-0 me-2 link-light link-opacity-50-hover fw-normal fs-5 text-decoration-none"
+              href="#">
+              Contact
+            </a>
+            <div>
+            </div>
+            <a class="d-flex align-items-center mb-2 mb-lg-0 ms-2 link-light link-opacity-50-hover fw-normal fs-5 text-decoration-none"
+              href="#">
+              About Us
+            </a>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav class="col-md-3 col-lg-2 sidebar text-bg-dark">
+        <div class="p-5"></div>
+        <h5>Menu</h5>
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active text-white" href="#">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Settings</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Notifications</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Help</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Logout</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="p-5"></div>
+      <main class="main-content col-md-9 col-lg-10">
+        <div class="row mb-4 text-center">
+          <div class="col-12 d-flex align-items-center justify-content-center">
+            <!-- Profile Picture -->
+            <img src="https://via.placeholder.com/100" alt="Profile Picture" class="profile-pic">
+
+            <!-- Name and Email -->
+            <div class="profile-info text-left">
+              <h4 id="username">John Doe</h4>
+              <p id="email">johndoe@example.com</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Settings List -->
+        <div class="settings-box">
+          <h5>User Settings</h5>
+          <ul class="list-group" id="settingsList">
+            <!--<li class="list-group-item">Change Password</li>
+            <li class="list-group-item">Privacy Settings</li>
+            <li class="list-group-item">Notification Preferences</li>
+            <li class="list-group-item">Account Security</li>-->
+          </ul>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!--Scripts-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/dashboard.js"></script>
+</body>
+</html>

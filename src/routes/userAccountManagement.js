@@ -10,6 +10,7 @@ router.get('/getUserIdFromEmail', userAccountController.getUserIdFromEmail);
 router.get('/getRoutePacketFromID', userAccountController.getRoutePacketFromID);
 router.get('/getForumPacketFromID', userAccountController.getForumPacketFromID);
 router.get('/getSettingsFromID', userAccountController.getSettingsFromID);
+router.get('/getEmailFromID', userAccountController.getEmailFromID);
 
 module.exports = router;
 
