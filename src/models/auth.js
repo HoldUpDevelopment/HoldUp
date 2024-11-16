@@ -25,6 +25,8 @@ function isEmail(string) {
 
 //Generates a JWT and returns it.
 //https://hasura.io/blog/best-practices-of-using-jwt-with-graphql
+//Potential idea to look into
+//https://www.reddit.com/r/node/comments/17conpk/comment/k5u4hfs/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
 function signUser(userID) {
     const token = jwt.sign({ userID: userID }, secret, { expiresIn: '15m' });
     console.log(`Token generated for '${userID}'`);
