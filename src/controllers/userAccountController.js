@@ -1,6 +1,6 @@
 //const { ObjectId } = require('mongodb');
 const mongo = require('../models/mongo');
-const hash = require('../models/hash');
+const auth = require('../models/auth');
 
 module.exports = {
     // POST Methods
@@ -43,42 +43,62 @@ module.exports = {
         });
     },
     signup: async (req, res) => { //signup form submission
-        const email = req.body.email;
-        const username = req.body.username;
-        const password = req.body.password;
+        //Body
+        const {email, username, password} = req.body;
         console.log(`${email}, ${username}, ${password}`);
 
         //Secure the password for the database
-        hashed = await hash.createHash(password);
+        hashed = await auth.createHash(password);
 
         //Create a document with the required fields: email, username, password
-        const docu = {}
-        docu.email = email;
-        docu.username = username;
-        docu.password = hashed;
-
-        console.log(docu);
+        const docu = {
+            email: email,
+            username: username,
+            password: hashed
+        }
 
         //Attempt to create a user
         try {
             const newID = await mongo.createListing("route_mngt", "users", docu);
             console.log(`Created user with ID: ${newID}`);
-
-            //Success
-            res.writeHead(200, {
-                'Content-Type': 'text/plain'
-            });
-            res.write("Account Created Successfully");
-            res.end();
+            res.status(201).json({message: "User registered successfully"});
         } catch (err) {
-            //Fail
-            res.writeHead(500, {
-                'Content-Type': 'text/plain'
-            });
-            res.write("Failed");
-            res.end();
+            res.status(500).json({error: "Registration failed"});
         }
     },
+    login: async (req, res) => {
+        console.log("Received");
+        const { userIdentifier, password } = req.body;
+
+        //Retrieve user data
+        const userObject = await mongo.findOneListingByKeyValue("route_mngt", "users", userIdentifier, (auth.isEmail(userIdentifier)) ? "email" : "username");
+        try {
+            var isCorrect;
+            if (userObject != {}) {
+                isCorrect = await auth.verifyPassword(password, userObject["password"]);
+            } else {
+                console.log(userObject);
+                throw new Error; //User not found
+            }
+
+            if (isCorrect) {
+                console.log("Password and internal hash are validated!");
+
+                //JWT
+                
+
+                res.status(201).json({message: "Login successful", token: ""});
+            } else {
+                console.log("Password and internal hash are not validated!");
+                res.status(401).json({error: "Authentification failed"});
+            }
+        } catch (err) {
+            console.log(err);
+            console.log(`User with identifer '${userIdentifier}' not found in database.`);
+            res.status(401).json({error: "Authentification failed"});
+        }
+    },
+
     // PUT Methods
     editAccountDetails: (req, res) => {
         var reqBody = '';
@@ -121,56 +141,7 @@ module.exports = {
     },
 
     // GET Methods
-    login: async (req, res) => {
-        console.log("Received");
-        var isEmail = false;
-        const userIdentifier = req.query.userIdentifier
-        const password = req.query.password;
-
-        const userObject = await mongo.findOneListingByKeyValue("route_mngt", "users", userIdentifier, (isEmail === true) ? "email" : "username");
-        
-        try {
-            var isCorrect
-            if (userObject != {}) {
-                console.log("Hello")
-                isCorrect = await hash.verifyPassword(password, userObject["password"]);
-            } else {
-                console.log(userObject);
-                throw new Error; //User not found
-            }
-
-            if (isCorrect) {
-                console.log("Password and internal hash are validated!");
-                var response_body = {
-                    userID: userObject._id,
-                    session: "valid i guess"
-                }
-
-                res.writeHead(200, {
-                    'Content-Type': 'application/json'
-                });
-                res.write(JSON.stringify(response_body));
-                res.end();
-            } else {
-                console.log("Password and internal hash are not validated!");
-                res.writeHead(401, {
-                    'Content-Type': 'text/plain'
-                });
-                res.write("Incorrect password");
-                res.end();
-            }
-        } catch (err) {
-            console.log(err);
-            console.log(`User with identifer '${userIdentifier}' not found in database.`);
-
-            //Fail
-            res.writeHead(404, {
-                'Content-Type': 'text/plain'
-            });
-            res.write("Username not found");
-            res.end();
-        }
-    },
+    
     //Perhaps more realistically, get list of users from username search. May need reworked
     getUserIdFromUserName: async (req, res) => {
         const userName = req.query.userName;

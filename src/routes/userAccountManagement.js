@@ -3,10 +3,10 @@ const userAccountController = require('../controllers/userAccountController');
 
 const router = express.Router();
 router.post('/createAccount', userAccountController.createAccount); //Deprecated
-router.post('/signup', userAccountController.signup);
+router.post('/signup', userAccountController.signup); //Uses urlencoded middleware
+router.post('/login', express.json(), userAccountController.login); //Uses json middleware
 router.delete('/deleteAccount', userAccountController.deleteAccount);
 router.put('/editAccountDetails', userAccountController.editAccountDetails);
-router.get('/login', userAccountController.login);
 router.get('/getUserIdFromUserName', userAccountController.getUserIdFromUserName);
 router.get('/getUserIdFromEmail', userAccountController.getUserIdFromEmail);
 router.get('/getRoutePacketFromID', userAccountController.getRoutePacketFromID);
