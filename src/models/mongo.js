@@ -6,10 +6,8 @@ var Admin = mongoose.mongo.Admin;
 // Importing Schemas
 const Schemas = require("./schemas");
 
-// Database connections;
-var routedb;
-var testdb;
-var gymdb;
+// Model Dictionary
+var Models = {};
 
 // Initializes connection to MongoDB through Mongoose.
 async function startConnection() {
@@ -23,6 +21,12 @@ async function startConnection() {
     await mongoose.connect(uri, {dbName: "route_mngt"});
     //listDatabases();
     //return true;
+    Models["users"] = mongoose.model("users", Schemas.users);
+    Models["announcements"] = mongoose.model("announcements", Schemas.announcements);
+    Models["reviews"] = mongoose.model("reviews", Schemas.reviews);
+    Models["live_routes"] = mongoose.model("live_routes", Schemas.live_routes);
+    Models["archived_routes"] = mongoose.model("archived_routes", Schemas.archived_routes);
+    Models["accounts"] = mongoose.model("accounts", Schemas.accounts);
   } catch {
     //return false;
     console.log(`did not create database connections`);
@@ -50,7 +54,7 @@ async function createListing(dbName, collection, newListing) {
   mongoose.connection.useDb(dbName);
 
   try {
-    const Model = mongoose.model(collection, Schemas[collection]);
+    const Model = Models[collection];
     console.log("hi");
     console.log(newListing);
     var doc = await new Model(newListing).save().then().catch(); //Catch key indexing errors in asynchronous calls.
@@ -72,7 +76,7 @@ async function createListing(dbName, collection, newListing) {
 async function findOneListingByKeyValue(dbName, collection, listingQuery, listingKey) {
   mongoose.connection.useDb(dbName);
 
-  const Model = mongoose.model(collection, Schemas[collection]);
+  const Model = Models[collection];
   
 
   try {
@@ -99,7 +103,7 @@ async function findOneListingByKeyValue(dbName, collection, listingQuery, listin
 async function findManyListingsByKeyValue(dbName, collection, listingQuery, listingKey) {
   mongoose.connection.useDb(dbName);
 
-  const Model = mongoose.model(collection, Schemas[collection]);
+  const Model = Models[collection];
   try {
     result = await Model.findMany({[listingKey]: listingQuery})
     if (result == null) {
@@ -131,7 +135,7 @@ async function updateListingByKey(
 ) {
   mongoose.connection.useDb(dbName);
 
-  const Model = mongoose.model(collection, Schemas[collection]);
+  const Model = Models[collection];
   try {
     result = await Model.updateOne({_id: listingKey}, updatedListing, {upsert: doUpsert})
     console.log(`Updated ${result.modifiedCount} document(s).`);
@@ -149,7 +153,7 @@ async function updateListingByKey(
 async function deleteListingByKey(dbName, collection, listingKey) {
   mongoose.connection.useDb(dbName);
 
-  const Model = mongoose.model(collection, Schemas[collection]);
+  const Model = Models[collection];
   try {
     result = await Model.deleteOne({_id: listingKey})
     console.log(`Deleted ${result.deletedCount} document(s).`);
@@ -165,7 +169,7 @@ async function deleteListingByKey(dbName, collection, listingKey) {
 async function getRoutePacketFromUserId(userId) {
   mongoose.connection.useDb('route-mngt');
 
-  const Model = mongoose.model('User', Schemas.users);
+  const Model = Models["users"];
   try {
     result = await Model.findById(userId, `displayname username`).lean();
     //returnBody
@@ -186,7 +190,7 @@ async function getRoutePacketFromUserId(userId) {
 async function getForumPacketFromUserId(userId) {
   mongoose.connection.useDb('route-mngt');
 
-  const Model = mongoose.model('User', Schemas.users);
+  const Model = Models["users"];
   try {
     result = await Model.findById(userId, `username`).lean();
     //returnBody
@@ -210,7 +214,7 @@ async function getForumPacketFromUserId(userId) {
 async function getFieldFromListingById(dbName, collection, listingQuery, searchKey) {
   mongoose.connection.useDb(dbName);
 
-  const Model = mongoose.model(collection, Schemas[collection]);
+  const Model = Models[collection];
   try {
     result = await Model.findOne({_id: listingQuery}, searchKey);
     console.log(result);
@@ -228,7 +232,7 @@ async function getFieldFromListingById(dbName, collection, listingQuery, searchK
 async function getUserSettingsById(userId) {
   mongoose.connection.useDb('route-mngt');
 
-  const Model = mongoose.model('Users', Schemas.users);
+  const Model = Models["users"];
   try {
     result = await Model.findById(userId, 'settings');
     if (result == null) {
@@ -251,7 +255,7 @@ async function getUserSettingsById(userId) {
 async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
   mongoose.connection.useDb(dbName);
 
-  const Model = mongoose.model(collection, Schemas[collection]);
+  const Model = Models[collection];
   try {
     result = await Model.findOne({[listingKey]: listingQuery})
     if (result == null) {
@@ -272,7 +276,7 @@ async function getEmailByUserId(userId) {
 
   mongoose.connection.useDb('route-mngt');
 
-  const Model = mongoose.model('Users', Schemas.users);
+  const Model = Models["users"];
   try {
     result = await Model.findById(userId, 'email');
     if (result == null) {
