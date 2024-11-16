@@ -14,7 +14,7 @@ function setJwtToken(token) {
 
 async function loginHTTP(username, password) {
     var xmlHttp = new XMLHttpRequest();
-    await xmlHttp.open("POST", `${origin}/api/user/login`, false); // false for synchronous request
+    await xmlHttp.open("POST", `${origin}/api/auth/login`, false); // false for synchronous request
     xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlHttp.send(JSON.stringify({userIdentifier: username, password: password}));
     return {

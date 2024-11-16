@@ -37,7 +37,7 @@ async function emailHTTP(email) {
 async function submitFormHTTP(body) {
     var xmlHttp = new XMLHttpRequest();
     
-    await xmlHttp.open("POST", `${origin}/api/user/signup`, false); // false for synchronous request
+    await xmlHttp.open("POST", `${origin}/api/auth/signup`, false); // false for synchronous request
     xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xmlHttp.send(body);
     return xmlHttp.responseText;

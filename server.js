@@ -12,20 +12,18 @@ const routeManagementRoutes = require('./src/routes/routeManagement');
 const routeFeedbackRoutes = require('./src/routes/routeFeedback');
 const announcementRoutes = require('./src/routes/announcements');
 const forumManagementRoutes = require('./src/routes/forumManagement');
+const authRoutes = require('./src/routes/authRoutes');
 
 //Models
 //Mongo
 const mongo = require('./src/models/mongo');
-
-//middleware
-middle = express.urlencoded({ extended: true });
 
 const server = express();
 server.use(favicon('./public/favicon.ico')); 
 server.use('/', webRouting);
 server.use('/images', imageRoutes);
 server.use('/user', userAccountRoutes);
-server.use('/api/user', middle, userAccountRoutes); //Users the urlencoded middleware for parsing x-www-application-formdata request body.
+server.use('/api/auth', authRoutes); 
 server.use('/route', routeManagementRoutes);
 server.use('/feedback', routeFeedbackRoutes);
 server.use('/announcements', announcementRoutes);
