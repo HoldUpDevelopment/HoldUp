@@ -10,6 +10,9 @@ const Schemas = require("./schemas");
 var Models = {};
 
 // Initializes connection to MongoDB through Mongoose.
+/**
+ * @description Initializes connection to mongoDB and initializes mongoose models.
+ */
 async function startConnection() {
   /**
    * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
@@ -33,6 +36,9 @@ async function startConnection() {
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
 // returns a list of databases (should be {gyms, test, route_mngt})
 async function listDatabases() {
   new Admin(mongoose.connection.db).listDatabases(function (err, result) {
@@ -44,11 +50,16 @@ async function listDatabases() {
   });
 }
 
-// Post
-// Parameters:
-//  dbName -> name of database (string)
-//  collection -> name of database collection (string)
-//  newListing -> JSON document of the new database listing
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Creates and uploads the supplied document to the mongoDB 
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {JSON} newListing JSON document containing the new database listing
+ * @returns The document's `_id`. If creation was unsucessful, returns an error message.
+ */
 async function createListing(dbName, collection, newListing) {
   console.log(newListing);
   mongoose.connection.useDb(dbName);
@@ -67,12 +78,17 @@ async function createListing(dbName, collection, newListing) {
   }
 }
 
-// returns a document if it if found in the cluster, if not returns an empty list.
-// Parameters:
-//  dbName -> name of database (string)
-//  collection -> name of database collection (string)
-//  listingQuery -> The search key
-//  listingKey -> name of parameter to search by (String)
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Searches for a document in the mongoDB by a specified key/value pair.
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {String} listingQuery the value of the listing you are serching
+ * @param {String} listingKey name of key to search by
+ * @returns A mongoose document. If unsucessful, returns an empty set.
+ */
 async function findOneListingByKeyValue(dbName, collection, listingQuery, listingKey) {
   mongoose.connection.useDb(dbName);
 
@@ -94,12 +110,17 @@ async function findOneListingByKeyValue(dbName, collection, listingQuery, listin
   }
 }
 
-// returns the list of documents it finds in the cluster, if not returns an empty list.
-// Parameters:
-//  dbName -> name of database (string)
-//  collection -> name of database collection (string)
-//  listingQuery -> The search key
-//  listingKey -> name of parameter to search by (String)
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Searches for multiple document in the mongoDB matching the specified key/value pair.
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {String} listingQuery the value of the listing you are serching
+ * @param {String} listingKey name of key to search by
+ * @returns A set of mongoose document. If unsucessful, returns an empty set.
+ */
 async function findManyListingsByKeyValue(dbName, collection, listingQuery, listingKey) {
   mongoose.connection.useDb(dbName);
 
@@ -119,13 +140,18 @@ async function findManyListingsByKeyValue(dbName, collection, listingQuery, list
     }
 }
 
-// returns updated document if successful; returns false if unsuccessful.
-// Parameters:
-//  dbName -> name of database (string)
-//  collection -> name of database collection (string)
-//  listingKey -> ObjectId of listing (can be String, Number, or Object)
-//  updatedListing -> JSON document to update listing with
-//  doUpsert -> If true, will create the document if it is not found. Default is false.
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Updates a document in the mongoDB.
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {String|Number|ObjectId} listingKey the `_id` property of the listing being updated
+ * @param {JSON} updatedListing A document containing the updated information
+ * @param {Boolean} doUpsert If true, creates a listing with the specified information 
+ * if no document was not found. The default is `false`.
+ */
 async function updateListingByKey(
   dbName,
   collection,
@@ -145,11 +171,15 @@ async function updateListingByKey(
   }
 }
 
-// Returns true if listing is deleted, false if error occurred.
-// Parameters:
-//  dbName -> name of database (string)
-//  collection -> name of database collection (string)
-//  listingKey -> ObjectId of listing (can be String, Number, or Object)
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @descripton Deletes a document in the mongoDB.
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {String|Number|ObjectId} listingKey the `_id` property of the listing being deleted
+ */
 async function deleteListingByKey(dbName, collection, listingKey) {
   mongoose.connection.useDb(dbName);
 
@@ -163,9 +193,15 @@ async function deleteListingByKey(dbName, collection, listingKey) {
   }
 }
 
-// Returns a json object with the User's username, displayname, and pfp. Returns 404 if not found
-// Parameters:
-//  userId -> ObjectId of User (can be String, Number, or Object)
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Gets a User's username, displayname, and profile picture.
+ * @param {String|Number|ObjectId} userId the `_id` property of the user being searched
+ * @returns Returns a JSON with the specified user's `username`, `displayname`, and `pfp`.
+ * If no matching user was found, returns `404`.
+ */
 async function getRoutePacketFromUserId(userId) {
   mongoose.connection.useDb('route-mngt');
 
@@ -184,9 +220,15 @@ async function getRoutePacketFromUserId(userId) {
   }
 }
 
-// Returns a json object with the User's username and pfp. Returns 404 if not found
-// Parameters:
-//  userId -> ObjectId of User (can be String, Number, or Object)
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Gets a User's username and profile picture.
+ * @param {String|Number|ObjectId} userId the `_id` property of the user being searched
+ * @returns Returns a JSON with the specified user's `username` and `pfp`.
+ * If no matching user was found, returns `404`.
+ */
 async function getForumPacketFromUserId(userId) {
   mongoose.connection.useDb('route-mngt');
 
@@ -205,12 +247,17 @@ async function getForumPacketFromUserId(userId) {
   }
 }
 
-// Returns a json object with the supplied listing's "searchKey".
-// Parameters:
-//  dbName -> name of database (string)
-//  collection -> name of database collection (string)
-//  listingQuerey -> the _id of the listing you are searching
-//  searchKey -> the field of the document you want to access. (e.g. "username")
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {String|Number|ObjectId} listingQuery the `_id` of the document you want to search
+ * @param {String} searchKey the name of the key field you want to retrieve (EX: email)
+ * @returns JSON object with the supplied listing's `searchKey`.
+ * Returns `404` if no document matching `listingQuery` was not found.
+ */
 async function getFieldFromListingById(dbName, collection, listingQuery, searchKey) {
   mongoose.connection.useDb(dbName);
 
@@ -226,9 +273,15 @@ async function getFieldFromListingById(dbName, collection, listingQuery, searchK
   }
 }
 
-// Returns a user's settings map object given their user ID.
-// Parameters:
-//  userId -> ObjectId of User (can be String, Number, or Object)
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Searches the mongoDB for a user's settings.
+ * @param {String|Number|ObjectId} userId the `_id` property of the user being searched
+ * @returns {Object} Returns a user's `settings` given their `_id`. 
+ * Returns `404` if the user was not found
+ */
 async function getUserSettingsById(userId) {
   mongoose.connection.useDb('route-mngt');
 
@@ -246,12 +299,18 @@ async function getUserSettingsById(userId) {
   }
 }
 
-// Returns document ObjectID if it was found, if not returns 404
-// Parameters:
-//  dbName -> name of database (string)
-//  collection -> name of database collection (string)
-//  listingQuery -> value used to find document (EX: 'fakeBryan')
-//  listingKey -> key used with query value (EX: username)
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Searches the mongoDB for a document matching the provided key/value
+ * pair, and returns its `_id`.
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {String} listingQuery value used to find document (EX: `fakeBryan`)
+ * @param {String} listingKey key used with query value (EX: `username`)
+ * @returns Returns a document's `_id` if it was found, if not returns `404`.
+ */
 async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
   mongoose.connection.useDb(dbName);
 
@@ -269,11 +328,15 @@ async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
   }
 }
 
-async function getEmailByUserId(userId) {
-  // Returns a user's email string given their user ID.
-  // Parameters:
-  //  userId -> ObjectId of User (can be String, Number, or Object)
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @description Searches the mongoDB for a user and returns its `email`.
+ * @param {String|Number|ObjectId} userId the `_id` property of the user being searched
+ * @returns Returns a user's `email` if it was found, if not returns `404`.
+ */
+async function getEmailByUserId(userId) {
   mongoose.connection.useDb('route-mngt');
 
   const Model = Models["users"];
@@ -290,7 +353,12 @@ async function getEmailByUserId(userId) {
   }
 }
 
-// Closes Mongoose connection
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Closes the connection to the mongoDB.
+ */
 async function closeConnection() {
   // Essentially the same as the standard mongo function.
   console.log(`Closing Connection to ${mongoose.connection}.`);
