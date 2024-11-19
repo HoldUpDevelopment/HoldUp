@@ -84,6 +84,22 @@ function authorizeRequest(req, res) {
     return result.data;
 }
 
+async function retrieveUserID(req, res) {
+    const { userID } = authorizeRequest(req, res);
+    if (!userID) return;
+
+    var response_body;
+    response_body = {_id: userID} //Needs custom DB call
+
+    json_message = JSON.stringify(response_body);
+
+    res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    res.write(JSON.stringify(response_body));
+    res.end();
+}
+
 /**
  * Provides functionality for both Authentification and Authorization.
  */
@@ -93,4 +109,5 @@ module.exports = {
     isEmail: isEmail,
     signUser: signUser,
     authorize: authorizeRequest,
+    retrieveUserID: retrieveUserID
 }
