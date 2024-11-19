@@ -211,7 +211,7 @@ module.exports = {
     },
     //Send back the settings document in the users data
     getUserSettings: async (req, res) => {
-        const { userID } = auth.authorize(req, res);
+        const { userID } = auth.authorize(req, res); //user Authentification; retrieve userID
         if (!userID) return;
 
         var response_body;
