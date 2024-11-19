@@ -26,7 +26,7 @@ async function startConnection() {
    * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
    */
   const uri =
-    "mongodb+srv://ian:TTN6oSvbr3Aj36io@holdupcluster0.cn20z.mongodb.net/?retryWrites=true&w=majority&appName=HoldUpCluster0";
+    `mongodb+srv://${process.env.MONGO_SECRET}@holdupcluster0.cn20z.mongodb.net/?retryWrites=true&w=majority&appName=HoldUpCluster0`;
   try {
     await mongoose.connect(uri, {dbName: "route_mngt"});
     //listDatabases();
