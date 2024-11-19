@@ -9,6 +9,13 @@ const Schemas = require("./schemas");
 // Model Dictionary
 var Models = {};
 
+Models["users"] = mongoose.model("users", Schemas.users);
+Models["announcements"] = mongoose.model("announcements", Schemas.announcements);
+Models["reviews"] = mongoose.model("reviews", Schemas.reviews);
+Models["live_routes"] = mongoose.model("live_routes", Schemas.live_routes);
+Models["archived_routes"] = mongoose.model("archived_routes", Schemas.archived_routes);
+Models["accounts"] = mongoose.model("accounts", Schemas.accounts);
+
 // Initializes connection to MongoDB through Mongoose.
 /**
  * @description Initializes connection to mongoDB and initializes mongoose models.
@@ -24,12 +31,6 @@ async function startConnection() {
     await mongoose.connect(uri, {dbName: "route_mngt"});
     //listDatabases();
     //return true;
-    Models["users"] = new mongoose.model("users", Schemas.users);
-    Models["announcements"] = new mongoose.model("announcements", Schemas.announcements);
-    Models["reviews"] = new mongoose.model("reviews", Schemas.reviews);
-    Models["live_routes"] = new mongoose.model("live_routes", Schemas.live_routes);
-    Models["archived_routes"] = new mongoose.model("archived_routes", Schemas.archived_routes);
-    Models["accounts"] = new mongoose.model("accounts", Schemas.accounts);
   } catch {
     //return false;
     console.log(`did not create database connections`);
