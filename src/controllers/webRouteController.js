@@ -8,10 +8,10 @@ module.exports = {
             root: root
         })
     },
-    dashboardView: (req, res) => {
+    settingsView: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/html');
-        res.sendFile('dashboard.html', {
+        res.sendFile('usersettings.html', {
             root: root
         })
     },
