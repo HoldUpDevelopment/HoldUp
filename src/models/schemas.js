@@ -37,8 +37,12 @@ const userSchema = new mongoose.Schema({
         default: ""
     },
     gyms: {
-        type: [String],
-        default: []
+        type: Map,
+        of: String,
+        enum: {
+            values: ["owner", "admin", "route-setter", "member", "non-member"],
+            message: `{VALUE} is not a valid role`
+        }
     },
     settings: {
         profile_picture: {
