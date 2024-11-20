@@ -115,8 +115,15 @@ const routeSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    Description: String,
-    Grade: Number,
+    Description: {
+        type: String,
+        default: "",
+        maxLength: 200
+    },
+    Grade: {
+        type: Number,
+        default: 0
+    },
     Location: {
         x: {
             type: Number,
@@ -127,20 +134,41 @@ const routeSchema = new mongoose.Schema({
             default: 0
         }
     },
-    Type: Number,
-    Visibility: Boolean
+    Type: {
+        type: Number, // 0 means boulder, 1 means sport
+        default: 0
+    },
+    Visibility: {
+        type: Boolean,
+        default: true
+    }
 });
 
 const announcementSchema = new mongoose.Schema({
-    Title: String,
-    Author: String,
-    Body: String,
+    Title: {
+        type: String,
+        default: ""
+    },
+    Author: {
+        type: String,
+        default: ""
+    },
+    Body: {
+        type: String,
+        default: ""
+    },
     CreationDate: {
         type: Date,
         default: Date.now
     },
-    ExpirationDate: Date,
-    ForumLink: String
+    ExpirationDate: {
+        type: Date,
+        default: "",
+    },
+    ForumLink: {
+        type: String,
+        default: ""
+    }
 });
 
 module.exports = {
