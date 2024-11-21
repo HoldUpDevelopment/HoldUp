@@ -21,6 +21,9 @@ function getCookie(cname) {
   return "";
 }
 
+var languages = ["en","fr","es","de"];
+var themes = ["light","dark"];
+
 async function userInfoHTTP(userId) {
   var xmlHttp = new XMLHttpRequest();
   await xmlHttp.open("GET", `${origin}/user/getRoutePacketFromID?userId=${userId}`, false); // false for synchronous request
@@ -28,9 +31,16 @@ async function userInfoHTTP(userId) {
   xmlHttp.send(null);
   return JSON.parse(xmlHttp.responseText);
 }
-async function settingsHTTP(userId) {
+async function getSettingsHTTP(userId) {
   var xmlHttp = new XMLHttpRequest();
   await xmlHttp.open("GET", `${origin}/user/getUserSettings`, false); // false for synchronous request
+  xmlHttp.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem('jwt')}`);
+  xmlHttp.send(null);
+  return JSON.parse(xmlHttp.responseText);
+}
+async function editSettingsHTTP(settings) {
+  var xmlHttp = new XMLHttpRequest();
+  await xmlHttp.open("GET", `${origin}/user/editUserDetails`, false); // false for synchronous request
   xmlHttp.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem('jwt')}`);
   xmlHttp.send(null);
   return JSON.parse(xmlHttp.responseText);
@@ -47,7 +57,7 @@ async function emailHTTP(userId) {
 
 async function decodeUserID() {
   var xmlHttp = new XMLHttpRequest();
-  await xmlHttp.open("GET", `${origin}/api/auth/grabUserId`, false); // false for synchronous request
+  await xmlHttp.open("GET", `${origin}/api/auth/grabPayload`, false); // false for synchronous request
   xmlHttp.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem('jwt')}`);
   xmlHttp.send(null);
   return JSON.parse(xmlHttp.responseText);
@@ -67,7 +77,7 @@ async function decodeUserID() {
     var usernameDisplay = document.getElementById("username");
     usernameDisplay.innerText = user_info.username;
 
-    var user_settings = await settingsHTTP(userId);
+    var user_settings = await getSettingsHTTP(userId);
     user_settings = user_settings.settings
 
     var user_email = await emailHTTP(userId);
@@ -87,6 +97,24 @@ async function decodeUserID() {
     }
     console.log(`Email cookie: ${email}`)
 
+    document.getElementById("save-button").addEventListener('submit', async event => {
+      var newSettings = {
+        notifications: {
+          activities: $("#settings-checkbox-activities").val(),
+          announcements: $("#settings-checkbox-announcements").val()
+        },
+        accessibility: {
+          high_contrast: $("#settings-checkbox-high_contrast").val(),
+          large_text: $("#settings-checkbox-large_text").val()
+        },
+        profile_picture: $("#settings-box-profile_picture").val(),
+        theme: $("#selectionMenu-theme").val(),
+        language: $("#selectionMenu-language").val()
+      }
+      console.log(newSettings);
+      //const response = await loginHTTP(newSettings);
+    });
+
     const iterate = (obj) => {
       const stack = [obj];
       while (stack?.length > 0) {
@@ -95,7 +123,43 @@ async function decodeUserID() {
           if (typeof currentObj[key] === 'object' && currentObj[key] !== null) {
             stack.push(currentObj[key]);
           } else {
-            $("#settingsList").append('<li class="list-group-item">' + key + '=' + currentObj[key] + '</li>');
+            if (typeof currentObj[key] === 'boolean'){
+              var checked = ``;
+              if (currentObj[key] == true){
+                checked = `checked`
+              }
+              var element = `
+              <div class="form-check mb-1">
+                <input type="checkbox" class="form-check-input" id="settings-checkbox-${key}" ${checked}>
+                <label for="settings-check-box">${key}</label>
+              </div>`;
+              $("#settingsList").append(element);
+            } else if (key == 'theme' || key == 'language'){
+                var optionsString = ``
+                if (key == 'theme'){
+                  themes.forEach((theme,index) => {
+                    optionsString = optionsString+`<option value="${index}">${theme}</option>`;
+                  });
+                } else if (key == 'language'){
+                  languages.forEach((language,index) => {
+                    optionsString = optionsString+`<option value="${index}">${language}</option>`;
+                  });
+                }
+                var element = `
+                <select class="form-select" id="selectionMenu-${key}">
+                  <option selected="">${key}</option>
+                  ${optionsString}
+                </select>`;
+                $("#settingsList").append(element);
+            } else{
+              var element = `
+              <div class="form-floating mb-1">
+                <input type="text" select multiple class="form-control form-validator" id="settings-box-${key}" placeholder="Setting1" required>
+                <label for="settings-box">${key}</label>
+              </div>`;
+              $("#settingsList").append(element);
+            }
+            $("#settingsList").append('<div class="p-1"></div>');
           }
         });
       }
