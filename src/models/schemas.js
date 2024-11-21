@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// accountSchema deprecated. Used for test database only.
 const accountSchema = new mongoose.Schema({
     username: {
         type: String
@@ -89,16 +90,34 @@ const userSchema = new mongoose.Schema({
 });
 
 const reviewSchema = new mongoose.Schema({
-    Title: String,
-    Body: String,
-    RouteId: Number,
-    Author: String,
+    Title: {
+        type: String,
+        default: ""
+    },
+    Body: {
+        type: String,
+        default: ""
+    },
+    RouteId: {
+        type: Number,
+        default: 0
+    },
+    Author: {
+        type: String,
+        default: ""
+    },
     CreationDate: {
         type: Date,
         default: Date.now
     },
-    Rating: Number,
-    Verbose: Boolean,
+    Rating: {
+        type: Number,
+        default: 5
+    },
+    Verbose: {
+        type: Boolean,
+        default: false
+    },
     Media: {
         type: Map,
         of: []
@@ -115,8 +134,15 @@ const routeSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    Description: String,
-    Grade: Number,
+    Description: {
+        type: String,
+        default: "",
+        maxLength: 200
+    },
+    Grade: {
+        type: Number,
+        default: 0
+    },
     Location: {
         x: {
             type: Number,
@@ -127,20 +153,61 @@ const routeSchema = new mongoose.Schema({
             default: 0
         }
     },
-    Type: Number,
-    Visibility: Boolean
+    Type: {
+        type: Number, // 0 means boulder, 1 means sport
+        default: 0
+    },
+    Visibility: {
+        type: Boolean,
+        default: true
+    }
 });
 
 const announcementSchema = new mongoose.Schema({
-    Title: String,
-    Author: String,
-    Body: String,
+    Title: {
+        type: String,
+        default: ""
+    },
+    Author: {
+        type: String,
+        default: ""
+    },
+    Body: {
+        type: String,
+        default: ""
+    },
     CreationDate: {
         type: Date,
         default: Date.now
     },
-    ExpirationDate: Date,
-    ForumLink: String
+    ExpirationDate: {
+        type: Date,
+        default: "",
+    },
+    ForumLink: {
+        type: String,
+        default: ""
+    }
+});
+
+const gymSchema = new mongoose.Schema({
+    Name: {
+        type: String,
+        default: ""
+    },
+    Admins: {
+        type: [String],
+        default: []
+    },
+    Routes: {
+        type: [String],
+        default: []
+    },
+    A: {
+        type: [String],
+        default: [],
+        alias: "Announcements"
+    }
 });
 
 module.exports = {
@@ -149,5 +216,6 @@ module.exports = {
     archived_routes: routeSchema,
     live_routes: routeSchema,
     reviews: reviewSchema,
-    users: userSchema
+    users: userSchema,
+    gyms: gymSchema
 };
