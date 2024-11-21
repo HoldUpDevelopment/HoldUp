@@ -4,8 +4,7 @@ var submitSpinner = `<div class="spinner-border text-light" role="status">
 
 //////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////
-
-function setJwtToken(token) {
+function setLoginData(token) {
     sessionStorage.setItem("jwt", token);
 }
 
@@ -42,8 +41,8 @@ async function submitLogin(validityReference) {
         console.log(body.message);
 
         //Token
-        const { token } = body;
-        setJwtToken(token);
+        const { token, username } = body;
+        setLoginData(token);
 
     } else if (response.status == 401) { //Authentification failed
         validityReference.isValid = false;
