@@ -97,7 +97,7 @@ async function decodeUserID() {
     }
     console.log(`Email cookie: ${email}`)
 
-    document.getElementById("save-button").addEventListener('submit', async event => {
+    document.getElementById("save-button").addEventListener('click', async event => {
       var newSettings = {
         notifications: {
           activities: $("#settings-checkbox-activities").val(),
