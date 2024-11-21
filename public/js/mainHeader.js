@@ -16,6 +16,8 @@ async function loginState() {
         const body = valid.json();
         state = true;
         return body;
+    } else {
+        return {role: 100}
     }
 }
 
