@@ -21,7 +21,7 @@ function getCookie(cname) {
   return "";
 }
 
-var languages = ["en","fr","es","de"];
+var languages = ["English","Français","Español","Deutsch"];
 var themes = ["light","dark"];
 
 async function userInfoHTTP(userId) {
@@ -100,16 +100,16 @@ async function decodeUserID() {
     document.getElementById("save-button").addEventListener('click', async event => {
       var newSettings = {
         notifications: {
-          activities: $("#settings-checkbox-activities").val(),
-          announcements: $("#settings-checkbox-announcements").val()
+          activities: $("#settings-checkbox-activities").is(':checked'),
+          announcements: $("#settings-checkbox-announcements").is(':checked')
         },
         accessibility: {
-          high_contrast: $("#settings-checkbox-high_contrast").val(),
-          large_text: $("#settings-checkbox-large_text").val()
+          high_contrast: $("#settings-checkbox-high_contrast").is(':checked'),
+          large_text: $("#settings-checkbox-large_text").is(':checked')
         },
         profile_picture: $("#settings-box-profile_picture").val(),
-        theme: $("#selectionMenu-theme").val(),
-        language: $("#selectionMenu-language").val()
+        theme: $("#selectionMenu-theme option:selected").text(),
+        language: $("#selectionMenu-language option:selected").text()
       }
       console.log(newSettings);
       //const response = await loginHTTP(newSettings);
@@ -151,6 +151,13 @@ async function decodeUserID() {
                   ${optionsString}
                 </select>`;
                 $("#settingsList").append(element);
+            } else if (key == 'profile_picture'){
+              var element = `
+              <div class="mb-1">
+                <label class="form-label" for="customFile">Profile Picture</label>
+                <input type="file" class="form-control" id="customFile">
+              </div>`;
+              $("#settingsList").append(element);
             } else{
               var element = `
               <div class="form-floating mb-1">
