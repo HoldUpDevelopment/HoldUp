@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// accountSchema deprecated. Used for test database only.
 const accountSchema = new mongoose.Schema({
     username: {
         type: String
@@ -89,16 +90,34 @@ const userSchema = new mongoose.Schema({
 });
 
 const reviewSchema = new mongoose.Schema({
-    Title: String,
-    Body: String,
-    RouteId: Number,
-    Author: String,
+    Title: {
+        type: String,
+        default: ""
+    },
+    Body: {
+        type: String,
+        default: ""
+    },
+    RouteId: {
+        type: Number,
+        default: 0
+    },
+    Author: {
+        type: String,
+        default: ""
+    },
     CreationDate: {
         type: Date,
         default: Date.now
     },
-    Rating: Number,
-    Verbose: Boolean,
+    Rating: {
+        type: Number,
+        default: 5
+    },
+    Verbose: {
+        type: Boolean,
+        default: false
+    },
     Media: {
         type: Map,
         of: []
