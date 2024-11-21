@@ -15,7 +15,7 @@ async function loginState() {
     if (valid.ok) {
         const body = valid.json();
         state = true;
-        return body._id;
+        return body;
     }
 }
 
@@ -23,12 +23,20 @@ async function loginState() {
     const loggedOutElements = document.querySelectorAll('.logged-out');
     const loggedInElements = document.querySelectorAll('.logged-in');
     
-    const UserId = await loginState();
+    const userPayload = await loginState();
+    const role = userPayload.role;
 
     if (state) {
         loggedInElements.forEach(element => {
             //Show elements
-            element.style.display = 'block';
+            
+            if (element.classList.contains("role-setter")) {
+                if (role <= 2) {
+                    element.style.display = 'block';
+                }
+            } else {
+                element.style.display = 'block';
+            }
         })
     } else {
         loggedOutElements.forEach(element => {
@@ -36,5 +44,7 @@ async function loginState() {
             element.style.display = 'block';
         })
     }
+
+    
 
 })()

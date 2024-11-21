@@ -28,8 +28,8 @@ function isEmail(string) {
 //https://hasura.io/blog/best-practices-of-using-jwt-with-graphql
 //Potential idea to look into
 //https://www.reddit.com/r/node/comments/17conpk/comment/k5u4hfs/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
-function signUser(userID) {
-    const token = jwt.sign({ userID: userID }, secret, { expiresIn: '15m' });
+function signUser(userID, userRole) {
+    const token = jwt.sign({ userID: userID, role: userRole}, secret, { expiresIn: '15m' });
     console.log(`Token generated for '${userID}'`);
     return token;
 }
@@ -85,12 +85,12 @@ function authorizeRequest(req, res) {
     return result.data;
 }
 
-async function retrieveUserID(req, res) {
-    const { userID } = authorizeRequest(req, res);
+async function retrievePayload(req, res) {
+    const { userID, role } = authorizeRequest(req, res);
     if (!userID) return;
 
     var response_body;
-    response_body = {_id: userID}
+    response_body = {_id: userID, role: role}
 
     json_message = JSON.stringify(response_body);
 
@@ -111,5 +111,5 @@ module.exports = {
     isEmail: isEmail,
     signUser: signUser,
     authorize: authorizeRequest,
-    retrieveUserID: retrieveUserID,
+    retrievePayload: retrievePayload,
 }
