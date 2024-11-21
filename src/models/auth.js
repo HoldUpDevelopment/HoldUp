@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongo = require('../models/mongo');
 
 const secret = process.env.JWT_SECRET;
 
@@ -89,7 +90,7 @@ async function retrieveUserID(req, res) {
     if (!userID) return;
 
     var response_body;
-    response_body = {_id: userID} //Needs custom DB call
+    response_body = {_id: userID}
 
     json_message = JSON.stringify(response_body);
 
@@ -100,6 +101,7 @@ async function retrieveUserID(req, res) {
     res.end();
 }
 
+
 /**
  * Provides functionality for both Authentification and Authorization.
  */
@@ -109,5 +111,5 @@ module.exports = {
     isEmail: isEmail,
     signUser: signUser,
     authorize: authorizeRequest,
-    retrieveUserID: retrieveUserID
+    retrieveUserID: retrieveUserID,
 }
