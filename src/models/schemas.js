@@ -190,11 +190,32 @@ const announcementSchema = new mongoose.Schema({
     }
 });
 
+const gymSchema = new mongoose.Schema({
+    Name: {
+        type: String,
+        default: ""
+    },
+    Admins: {
+        type: [String],
+        default: []
+    },
+    Routes: {
+        type: [String],
+        default: []
+    },
+    A: {
+        type: [String],
+        default: [],
+        alias: "Announcements"
+    }
+});
+
 module.exports = {
     accounts: accountSchema,
     announcements: announcementSchema,
     archived_routes: routeSchema,
     live_routes: routeSchema,
     reviews: reviewSchema,
-    users: userSchema
+    users: userSchema,
+    gyms: gymSchema
 };
