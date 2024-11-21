@@ -160,6 +160,10 @@ const routeSchema = new mongoose.Schema({
     Visibility: {
         type: Boolean,
         default: true
+    },
+    Reviews: {
+        type: [String],
+        default: []
     }
 });
 
@@ -190,6 +194,7 @@ const announcementSchema = new mongoose.Schema({
     }
 });
 
+//currently stored in the "holdup_gyms" db
 const gymSchema = new mongoose.Schema({
     Name: {
         type: String,
