@@ -6,7 +6,7 @@ const {
 var state = false;
 
 async function loginState() {
-    const valid = await fetch(`${origin}/api/auth/grabUserId`, {
+    const valid = await fetch(`${origin}/api/auth/grabPayload`, {
         method: 'GET',
         headers: {
             "Authorization": `Bearer ${sessionStorage.getItem('jwt')}`,
