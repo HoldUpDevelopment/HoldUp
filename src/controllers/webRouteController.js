@@ -15,6 +15,27 @@ module.exports = {
             root: root
         })
     },
+    dashboardView: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/html');
+        res.sendFile('dashboard.html', {
+            root: root
+        })
+    },
+    dashboardJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('dashboard.js', {
+            root: 'public/js/'
+        })
+    },
+    mainHeaderJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('mainHeader.js', {
+            root: 'public/js/'
+        })
+    },
     stylesheet: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/css');

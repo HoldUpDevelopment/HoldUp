@@ -1,7 +1,7 @@
 //const { ObjectId } = require('mongodb');
 const mongo = require('../models/mongo');
 const auth = require('../models/auth');
-
+const gym = "ascend";
 module.exports = {
     // POST Methods
     createAccount: (req, res) => { //deprecated
@@ -54,7 +54,10 @@ module.exports = {
         const docu = {
             email: email,
             username: username,
-            password: hashed
+            password: hashed,
+            gyms: {
+                [gym]: 4
+            }
         }
 
         //Attempt to create a user
@@ -85,7 +88,7 @@ module.exports = {
                 console.log("Password and internal hash are validated!");
 
                 //JWT
-                const token = auth.signUser(userObject._id);
+                const token = auth.signUser(userObject._id, userObject.gyms[gym]);
 
                 res.status(201).json({ message: "Login successful", token: token });
             } else {

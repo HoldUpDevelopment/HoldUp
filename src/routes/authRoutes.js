@@ -5,6 +5,6 @@ const auth = require('../models/auth');
 const router = express.Router();
 router.post('/signup', express.urlencoded({ extended: true }), userAccountController.signup); //Uses urlencoded middleware
 router.post('/login', express.json(), userAccountController.login); //Uses json middleware
-router.get('/grabUserId', auth.retrieveUserID)
+router.get('/grabPayload', auth.retrievePayload);
 
 module.exports = router;
