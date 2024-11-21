@@ -86,9 +86,8 @@ module.exports = {
 
             if (isCorrect) {
                 console.log("Password and internal hash are validated!");
-                console.log(userObject.gyms); //broken
                 //JWT
-                const token = auth.signUser(userObject._id, userObject.gyms[gym]);
+                const token = auth.signUser(userObject._id, userObject.gyms.get(gym));
 
                 res.status(201).json({ message: "Login successful", token: token });
             } else {
