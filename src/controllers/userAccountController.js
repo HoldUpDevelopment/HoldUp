@@ -102,28 +102,20 @@ module.exports = {
     },
 
     // PUT Methods
-    editAccountDetails: (req, res) => {
-        var reqBody = '';
+    editAccountDetails: async (req, res) => {
+        const { userID } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
 
-        req.on('data', function (chunk) { // reading the request into a var.
-            reqBody += chunk.toString();
+        response_body = {};
+        await mongo.updateListingByKey("route_mngt","users",userID,req.body);
+        
+        json_message = JSON.stringify(response_body);
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
         });
-
-        req.on('end', async () => {
-            reqBody = JSON.parse(reqBody); // converting the request into a JSON object\
-            var response_body = {};
-
-            const userId = req.query.userId;
-            await mongo.updateListingByKey("route_mngt", "users", userId, reqBody);
-
-            json_message = JSON.stringify(response_body);
-
-            res.writeHead(200, { // Writing Response
-                'Content-Type': 'application/json'
-            });
-            res.write(JSON.stringify(response_body));
-            res.end();
-        });
+        res.write(JSON.stringify(response_body));
+        res.end();
     },
 
     // DELETE Methods

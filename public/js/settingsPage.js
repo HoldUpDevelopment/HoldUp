@@ -40,9 +40,10 @@ async function getSettingsHTTP(userId) {
 }
 async function editSettingsHTTP(settings) {
   var xmlHttp = new XMLHttpRequest();
-  await xmlHttp.open("GET", `${origin}/user/editUserDetails`, false); // false for synchronous request
+  await xmlHttp.open("PUT", `${origin}/user/editAccountDetails`, false); // false for synchronous request
   xmlHttp.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem('jwt')}`);
-  xmlHttp.send(null);
+  xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xmlHttp.send(JSON.stringify(settings));
   return JSON.parse(xmlHttp.responseText);
 }
 async function emailHTTP(userId) {
@@ -99,20 +100,22 @@ async function decodeUserID() {
 
     document.getElementById("save-button").addEventListener('click', async event => {
       var newSettings = {
-        notifications: {
-          activities: $("#settings-checkbox-activities").is(':checked'),
-          announcements: $("#settings-checkbox-announcements").is(':checked')
-        },
-        accessibility: {
-          high_contrast: $("#settings-checkbox-high_contrast").is(':checked'),
-          large_text: $("#settings-checkbox-large_text").is(':checked')
-        },
-        profile_picture: $("#settings-box-profile_picture").val(),
-        theme: $("#selectionMenu-theme option:selected").text(),
-        language: $("#selectionMenu-language option:selected").text()
+        settings: {
+          notifications: {
+            activities: $("#settings-checkbox-activities").is(':checked'),
+            announcements: $("#settings-checkbox-announcements").is(':checked')
+          },
+          accessibility: {
+            high_contrast: $("#settings-checkbox-high_contrast").is(':checked'),
+            large_text: $("#settings-checkbox-large_text").is(':checked')
+          },
+          profile_picture: $("#settings-box-profile_picture").val(),
+          theme: $("#selectionMenu-theme option:selected").text(),
+          language: $("#selectionMenu-language option:selected").text()
+        }
       }
       console.log(newSettings);
-      //const response = await loginHTTP(newSettings);
+      const response = await editSettingsHTTP(newSettings);
     });
 
     const iterate = (obj) => {
@@ -154,8 +157,8 @@ async function decodeUserID() {
             } else if (key == 'profile_picture'){
               var element = `
               <div class="mb-1">
-                <label class="form-label" for="customFile">Profile Picture</label>
-                <input type="file" class="form-control" id="customFile">
+                <label class="form-label" for="settings-box-profile_picture">Profile Picture</label>
+                <input type="file" class="form-control" id="settings-box-profile_picture">
               </div>`;
               $("#settingsList").append(element);
             } else{
