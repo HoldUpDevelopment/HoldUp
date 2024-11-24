@@ -13,7 +13,7 @@
 <body>
 
   <!-- HEADER -->
-  <header class="fixed-top p-3 bg-black ">
+  <header class="p-3 bg-black fixed-top">
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <a class="d-flex align-items-center me-3 mb-lg-2 fw-bold link-light fs-3 text-decoration-none" href="/">
@@ -43,7 +43,7 @@
             <li>
               <hr class="dropdown-divider logged-in" style="display: none;">
             </li>
-            <li><a class="dropdown-item logged-in" style="display: none;" id="logoutButton"  href="#">Logout</a></li>
+            <li><a class="dropdown-item logged-in" style="display: none;" id="logoutButton" href="#">Logout</a></li>
             <script>
               //logout button
               document.getElementById('logoutButton').addEventListener('click', function () {
@@ -56,13 +56,42 @@
 
             <!--Logged out buttons-->
             <li><a class="dropdown-item logged-out" style="display: none;" href='../account/login'>Login</a></li>
-            <li><a class="dropdown-item logged-out" style="display: none;" href='../account/signup'>Create an Account</a></li>
+            <li><a class="dropdown-item logged-out" style="display: none;" href='../account/signup'>Create an
+                Account</a></li>
           </ul>
         </div>
       </div>
     </div>
   </header>
   <script src="../js/mainHeader.js"></script>
+
+  <!--Body-->
+  <div style="max-height: 100%;">
+    <div class="p-5 bg-secondary"></div>
+    <div class="row w-100">
+      <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-body-tertiary" style="width: 380px;">
+        <div class="list-group list-group-flush border-bottom scrollarea">
+          <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <strong class="mb-1">Route Name</strong>
+              <small>Route Date</small>
+            </div>
+            <div class="d-flex w-100 align-items-center justify-content-between">
+              <small class="grade fw-bold">Route Grade</small>
+              <small class="grade fw-normal">Route Type</small>
+            </div>
+          </a>
+          
+        </div>
+        
+      </div>
+      <div class="d-flex col routePageContainer ms-4 flex-column flex-grow-1" style="background-color: black;">
+          
+      </div>
+    </div>
+
+  </div>
+
 
 
   <!--Scripts-->
