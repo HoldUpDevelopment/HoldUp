@@ -200,9 +200,9 @@ async function getRouteInfo(
 ) {
   mongoose.connection.useDb("route-mngt");
 
-  const Model = Models["unarchived-routes"];
+  const Model = Models["live_routes"];
   try {
-    result = await Model.findOne({_id: routeId}, "Name CreationDate Grade Type")
+    result = await Model.findOne({_id: routeId}, `Name CreationDate Grade Type`)
     console.log(`Found document.`);
     return result;
   } catch (err) {
@@ -413,6 +413,7 @@ module.exports = {
   getListOfIDs: getListOfIDs,
   updateListingByKey: updateListingByKey,
   deleteListingByKey: deleteListingByKey,
+  getRouteInfo: getRouteInfo,
   getRoutePacketFromUserId: getRoutePacketFromUserId,
   getForumPacketFromUserId: getForumPacketFromUserId,
   getUserSettingsById: getUserSettingsById,

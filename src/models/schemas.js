@@ -148,6 +148,7 @@ const routeSchema = new mongoose.Schema({
     },
     Grade: {
         type: Number,
+        letter: String,
         default: 0
     },
     Location: {

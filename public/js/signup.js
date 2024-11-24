@@ -16,7 +16,7 @@ var submitSpinner = `<div class="spinner-border text-light" role="status">
 //////////////////////////////////////////////////////////////////
 
 const {
-    host, hostname, href, origin, pathname, port, protocol, search
+    host, hostname, href, origin, pathname, port, protocol, search: query
   } = window.location
 //Perhaps secure this with API keys in the future!!!!
 //HTTP Requests
