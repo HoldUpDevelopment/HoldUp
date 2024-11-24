@@ -88,7 +88,6 @@ function authorizeRequest(req, res) {
 async function retrievePayload(req, res) {
     const { userID, role } = authorizeRequest(req, res);
     if (!userID) return;
-    console.log(role);
     var response_body;
     response_body = {_id: userID, role: role}
 
