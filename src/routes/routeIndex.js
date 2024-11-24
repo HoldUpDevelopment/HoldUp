@@ -18,5 +18,6 @@ router.get('/js/settingsPage.js', settingsController.settingsJS);
 router.get('/js/dashboard.js', webRouteController.dashboardJS);
 router.get('/js/mainHeader.js', webRouteController.mainHeaderJS);
 router.get('/js/buildRouteList.js', webRouteController.buildRouteListJS);
+router.get('/js/buildAnnouncementList.js', webRouteController.buildAnnouncementListJS);
 
 module.exports = router;

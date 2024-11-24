@@ -11,4 +11,6 @@ router.delete('/deleteAnnouncement', announcementController.deleteAnnouncement);
 
 router.get('/getAnnouncementDetails', announcementController.getAnnouncementDetails);
 
+router.get('/getAnnouncementList', announcementController.getAnnouncementList);
+
 module.exports = router;

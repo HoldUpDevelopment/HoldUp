@@ -57,6 +57,13 @@ module.exports = {
             root: 'public/js/'
         })
     },
+    buildAnnouncementListJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('buildAnnouncementList.js', {
+            root: 'public/js/'
+        })
+    },
     stylesheet: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/css');

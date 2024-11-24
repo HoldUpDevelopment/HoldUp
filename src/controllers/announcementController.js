@@ -106,5 +106,9 @@ module.exports = {
         });
         res.write(JSON.stringify(response_body));
         res.end();
+    },
+    getAnnouncementList: async(req, res) => {
+        var response_body = await mongo.getListOfIDs("route_mngt", "announcements");
+        res.status(200).json({ message: "Successful", routes: response_body });
     }
 }
