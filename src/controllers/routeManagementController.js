@@ -189,6 +189,16 @@ module.exports = {
     },
 
     // GET Methods
+    getLiveRoutes: async(req, res) => {
+        var response_body = await mongo.getListOfIDs("route_mngt", "live_routes");
+        json_message = JSON.stringify(response_body);
+
+        res.writeHead(200, {
+            'Content-Type': 'application/json'
+        });
+        res.write(JSON.stringify(response_body));
+        res.end();
+    },
     getRouteDetails: async (req, res) => {
         const routeId = req.query.routeId;
         const isArchived = req.query.isArchived;

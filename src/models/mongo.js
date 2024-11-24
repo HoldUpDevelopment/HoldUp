@@ -141,6 +141,26 @@ async function findManyListingsByKeyValue(dbName, collection, listingQuery, list
     }
 }
 
+
+async function getListOfIDs(dbName, collection) {
+  mongoose.connection.useDb(dbName);
+
+  const Model = Models[collection];
+  try {
+    result = await Model.find({}, `_id`);
+    if (result == null) {
+      console.log(`No documents found in collection ${collection}`);
+      return {};
+    } else {
+      console.log(`Found ${result.length} documents in collection ${collection}`);
+      return result;
+    }
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -390,6 +410,7 @@ module.exports = {
   createListing: createListing,
   findOneListingByKeyValue: findOneListingByKeyValue,
   findManyListingsByKeyValue: findManyListingsByKeyValue,
+  getListOfIDs: getListOfIDs,
   updateListingByKey: updateListingByKey,
   deleteListingByKey: deleteListingByKey,
   getRoutePacketFromUserId: getRoutePacketFromUserId,
