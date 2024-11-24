@@ -1,7 +1,7 @@
 
 const {
     host, hostname, href, origin, pathname, port, protocol, search
-  } = window.location
+} = window.location
 
 var state = false;
 
@@ -17,21 +17,43 @@ async function loginState() {
         state = true;
         return body;
     } else {
-        return {role: 100}
+        return { role: 100 }
     }
 }
 
-(async () => {
+async function submitFormHTTP(body) {
+    var xmlHttp = new XMLHttpRequest();
+    
+    await xmlHttp.open("POST", `${origin}/route/createRoute`, false); // false for synchronous request
+    xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xmlHttp.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem('jwt')}`);
+    xmlHttp.send(body);
+    return {
+        status: xmlHttp.status,
+        body: xmlHttp.response
+    };
+}
+
+async function submitData(urlEncoded){
+    var response = await submitFormHTTP(urlEncoded);
+    console.log(response);
+    console.log(response.status);
+    if (response.status == 201) {
+        window.location.reload();
+    }
+}
+
+$(document).ready(async function () {
     const loggedOutElements = document.querySelectorAll('.logged-out');
     const loggedInElements = document.querySelectorAll('.logged-in');
-    
+
     const userPayload = await loginState();
     const role = userPayload.role;
 
     if (state) {
         loggedInElements.forEach(element => {
             //Show elements
-            
+
             if (element.classList.contains("role-setter")) {
                 if (role <= 2) {
                     element.style.display = 'block';
@@ -47,6 +69,16 @@ async function loginState() {
         })
     }
 
-    
+    $('#createRouteSubmit').unbind("click").on('click', async function (e) {
+        e.preventDefault();
+        console.log("submitting");
 
-})()
+        const formData = new FormData(document.getElementById("routeCreationForm"));
+        const urlEncoded = new URLSearchParams(formData).toString();
+
+        await submitData(urlEncoded);
+    })
+
+
+
+});

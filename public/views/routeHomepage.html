@@ -37,7 +37,7 @@
           </a>
           <ul class="dropdown-menu text-small">
             <!--Logged in buttons-->
-            <li><a class="dropdown-item logged-in role-setter" style="display: none;" href="#"> + New route</a></li>
+            <li><button type="button" data-bs-toggle="modal" data-bs-target="#createRoute" class="dropdown-item logged-in role-setter" style="display: none;"> + New route</button></li>
             <li><a class="dropdown-item logged-in" style="display: none;" href="#">Profile</a></li>
             <li><a class="dropdown-item logged-in" style="display: none;" href="../settings">Settings</a></li>
             <li>
@@ -63,35 +63,95 @@
       </div>
     </div>
   </header>
-  <script src="../js/mainHeader.js"></script>
+
+  <!-- Create Route Modal -->
+  <div class="modal fade" id="createRoute" tabindex="-1" aria-labelledby="createRoute" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="routeTitle">Create a new route</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="p-5 modal-body">
+          <form id="routeCreationForm">
+            <div class="mb-4">
+              <label class="form-label" for="settings-box-profile_picture">Route Image</label>
+              <input type="file" name="image" class="form-control" id="settings-box-profile_picture">
+            </div>
+
+            <div class="input-group mb-4">
+              <span for="route-name-field" class="input-group-text">Route Name</span>
+              <input type="text" name="name" class="form-control" id="route-name-field" aria-label="route type">
+            </div>
+            
+            
+            <div class="input-group mb-4">
+              <label class="input-group-text" for="inputGroupSelect01">Route Type</label>
+              <select class="form-select" name="type" id="inputGroupSelect01">
+                <option selected>Choose...</option>
+                <option value="1">Boulder</option>
+                <option value="2">Sport</option>
+              </select>
+            </div>
+            
+
+            <div class="input-group mb-4">
+              <span for="route-grade-field" class="input-group-text">Route Grade</span>
+              <input type="text" name="grade" class="form-control" id="route-name-field" aria-label="route grade">
+            </div>
+
+            <div class="input-group mb-4">
+              <span class="input-group-text">Route Description</span>
+              <textarea type="text" name="description" class="form-control" id="route-name-field" placeholder="Enter Description" aria-label="route name"></textarea>
+            </div>
+          
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="createRouteSubmit" class="btn btn-primary">Create Route</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 
   <!--Body-->
   <div class="container" style="max-height: 100%;">
     <div class="row w-100">
-      <div class="d-flex flex-column align-items-center flex-shrink-0 bg-body-tertiary" >
-        <div class="list-group w-50 list-group-flush border-bottom scrollarea h-100" id="routeList">
+      <div class="d-flex flex-column align-items-center flex-shrink-0 bg-body-tertiary">
+        <div class="list-group w-50 list-group-flush border-bottom scrollable h-100" id="routeList">
           <!--Route List Object-->
-          <a href="#" class=" list-group-item list-group-item-action py-3 lh-sm">
-            <div class="d-flex w-100 align-items-center justify-content-between">
-              <strong class="mb-1">Route Name</strong>
-              <small>Route Date</small>
-            </div>
-            <div class="d-flex w-100 align-items-center justify-content-between">
-              <small class="grade fw-bold">Route Grade</small>
-              <small class="grade fw-normal">Route Type</small>
-            </div>
-          </a>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="routeView" tabindex="-1" aria-labelledby="routeView" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="routeTitle">Route title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
 
 
-
   <!--Scripts-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/buildRouteList.js"></script>
+  <script src="../js/mainHeader.js"></script>
 </body>
 
 </html>

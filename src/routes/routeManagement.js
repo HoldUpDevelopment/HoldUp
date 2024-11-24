@@ -3,7 +3,7 @@ const routeManagementController = require('../controllers/routeManagementControl
 
 const router = express.Router();
 
-router.post('/createRoute', routeManagementController.createRoute);
+router.post('/createRoute', express.urlencoded({ extended: true }), routeManagementController.createRoute);
 router.post('/archiveRoute', routeManagementController.archiveRoute);
 router.post('/unarchiveRoute', routeManagementController.unarchiveRoute);
 
