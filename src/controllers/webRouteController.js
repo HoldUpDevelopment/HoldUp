@@ -29,6 +29,13 @@ module.exports = {
             root: root
         })
     },
+    routeListView: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/html');
+        res.sendFile('routeHomepage.html', {
+            root: root
+        })
+    },
     dashboardJS: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/javascript');
