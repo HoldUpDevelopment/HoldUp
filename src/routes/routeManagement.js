@@ -12,6 +12,7 @@ router.delete('/deleteArchiveRoute', routeManagementController.deleteArchiveRout
 
 router.put('/editRouteDetails', routeManagementController.editRouteDetails);
 
+router.get('/getLiveRoutes', routeManagementController.getLiveRoutes);
 router.get('/getRouteDetails', routeManagementController.getRouteDetails);
 router.get('/getRouteInfo', routeManagementController.getRouteInfo);
 router.get('/getRouteMapData', routeManagementController.getRouteMapData);

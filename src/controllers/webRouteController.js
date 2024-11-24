@@ -50,6 +50,13 @@ module.exports = {
             root: 'public/js/'
         })
     },
+    buildRouteListJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('buildRouteList.js', {
+            root: 'public/js/'
+        })
+    },
     stylesheet: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/css');
