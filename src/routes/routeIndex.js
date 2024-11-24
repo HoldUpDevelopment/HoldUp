@@ -8,6 +8,7 @@ router.get('/', webRouteController.homepageView);
 router.get('/styles.css', webRouteController.stylesheet);
 router.get('/settings', webRouteController.settingsView);
 router.get('/dashboard', webRouteController.dashboardView);
+router.get('/news', webRouteController.announcementView);
 router.get('/account/login', loginFormController.loginView);
 router.get('/account/signup', loginFormController.signupView);
 router.get('/js/signup.js', loginFormController.signupJS);

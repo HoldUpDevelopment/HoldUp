@@ -22,6 +22,13 @@ module.exports = {
             root: root
         })
     },
+    announcementView: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/html');
+        res.sendFile('announcements.html', {
+            root: root
+        })
+    },
     dashboardJS: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/javascript');
