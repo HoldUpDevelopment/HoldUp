@@ -191,13 +191,7 @@ module.exports = {
     // GET Methods
     getLiveRoutes: async(req, res) => {
         var response_body = await mongo.getListOfIDs("route_mngt", "live_routes");
-        json_message = JSON.stringify(response_body);
-
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
-        });
-        res.write(JSON.stringify(response_body));
-        res.end();
+        res.status(200).json({ message: "Successful", routes: response_body });
     },
     getRouteDetails: async (req, res) => {
         const routeId = req.query.routeId;
@@ -218,10 +212,10 @@ module.exports = {
         res.end();
     },
     getRouteInfo: (req, res) => { //May Be Obsolete
-        // const routeId = req.query.routeId;
-        // const isArchived = req.query.isArchived;
-        // var response_body;
-        // json_message = JSON.stringify(response_body);
+        const routeId = req.query.routeId;
+        const isArchived = req.query.isArchived;
+        //var response_body = ;
+        json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
              'Content-Type': 'application/json'
