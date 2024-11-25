@@ -64,6 +64,13 @@ module.exports = {
             root: 'public/js/'
         })
     },
+    announcementFormJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('announcementForm.js', {
+            root: 'public/js/'
+        })
+    },
     stylesheet: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/css');

@@ -116,6 +116,7 @@ async function decodeUserID() {
       }
       console.log(newSettings);
       const response = await editSettingsHTTP(newSettings);
+      alert("Settings successfully saved!");
     });
 
     const iterate = (obj) => {

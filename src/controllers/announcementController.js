@@ -1,38 +1,37 @@
 const mongo = require('../models/mongo');
+const auth = require('../models/auth');
 
 module.exports = {
     // POST Methods
-    createAnnouncement: (req, res) => {
-        var reqBody = '';
+    createAnnouncement: async (req, res) => {
+        
+        //auth
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
 
-        req.on('data', function (chunk) { // reading the request into a var.
-            reqBody += chunk.toString();
-        });
+        //Body
+        const { title, body } = req.body;
+        console.log(`${title}, ${body}`);
 
-        req.on('end', async () => {
-            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
-            response_body = {};
-            var confirmation_id = await mongo.createListing("route_mngt", "announcements", reqBody);
-            if (confirmation_id == false) {
-                response_body = {
-                    isValid: false,
-                    id: 403
-                }
-            } else {
-                response_body = {
-                    isValid: true,
-                    id: confirmation_id
-                }
+        //Create a document with the required fields
+        const docu = {
+            Title: title,
+            Body: body,
+            Author: userID,
+        }
+
+        //Check the role of the requester
+        if (role <= 2) {
+            try {
+                const newID = await mongo.createListing("route_mngt", "announcements", docu);
+                console.log(`Created announcement with ID: ${newID}`);
+                res.status(201).json({ message: "Post created successfully" });
+            } catch (err) {
+                res.status(500).json({ error: "Registration failed" });
             }
-            
-            json_message = JSON.stringify(response_body);
-
-            res.writeHead(202, { // Writing Response
-                'Content-Type': 'application/json'
-            });
-            res.write(JSON.stringify(response_body));
-            res.end();
-        });
+        } else {
+            res.status(403).json({ error: "Insufficient Permissions" });
+        }
     },
 
     // PUT Methods

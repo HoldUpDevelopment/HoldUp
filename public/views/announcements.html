@@ -24,13 +24,13 @@
             <a href="../dashboard" class="nav-link px-2 link-light link-opacity-75-hover">Home</a>
           </li>
           <li>
-            <a href="" class="nav-link px-2 link-light fw-bold">Gym Routes</a>
+            <a href="../routes" class="nav-link px-2 link-light link-opacity-75-hover">Gym Routes</a>
           </li>
           <li>
             <a href="../archive" class="nav-link px-2 link-light link-opacity-75-hover">Archive</a>
           </li>
           <li>
-            <a href="../news" class="nav-link px-2 link-light link-opacity-75-hover">News</a>
+            <a href="../news" class="nav-link px-2 link-light fw-bold">News</a>
           </li>
         </ul>
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
@@ -86,6 +86,8 @@
       </div>
     </div>
   </header>
+
+
 
   <!-- Create Route Modal -->
   <div class="modal fade" id="createRoute" tabindex="-1" aria-labelledby="createRoute" aria-hidden="true">
@@ -150,9 +152,52 @@
       <div class="d-flex flex-column align-items-center flex-shrink-0 bg-body-tertiary">
         <div class="list-group w-100 list-group-flush border-bottom scrollable h-100" id="newsList">
 
-          <!--Route List Object-->
-          
+          <!--News List Object-->
 
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="fixed position-absolute bottom-0 end-0 p-2 align-items-center logged-in role-setter"
+    style="display: none">
+    <button type="button" data-bs-toggle="modal" data-bs-target="#postAnnouncement"
+      class="btn p-2 bg-primary shadow-none rounded">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="white" class="bi bi-plus-lg"
+        viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+          d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+      </svg><data value="dd"></data>
+    </button>
+  </div>
+  <!-- Create Announcement Modal -->
+  <div class="modal fade" id="postAnnouncement" tabindex="-1" aria-labelledby="postAnnouncement" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="postTitle">Create a new announcement</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="p-5 modal-body">
+          <form id="postCreationForm">
+            <div class="input-group mb-4">
+              <span for="route-name-field" class="input-group-text">Post title</span>
+              <input type="text" name="title" class="form-control" id="route-name-field" aria-label="route type">
+            </div>
+
+            <div class="input-group mb-4">
+              <span class="input-group-text">Post body</span>
+              <textarea type="text" name="body" class="form-control" id="route-name-field"
+                placeholder="Enter Description" aria-label="route name"></textarea>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="createAnnouncementSubmit" class="btn btn-primary">Create Post</button>
         </div>
       </div>
     </div>
@@ -163,6 +208,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/mainHeader.js"></script>
   <script src="../js/buildAnnouncementList.js"></script>
+  <script src="../js/announcementForm.js"></script>
 </body>
 
 </html>
