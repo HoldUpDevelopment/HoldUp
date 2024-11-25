@@ -67,3 +67,10 @@ body {
     font-size: 20px;
     border-radius: 1000px;
 }
+
+.fixed-bottom-right {
+    position: fixed !important;
+    bottom: 0px;
+    right: 0px;
+    padding: 20px;
+}

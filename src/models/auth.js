@@ -29,7 +29,7 @@ function isEmail(string) {
 //Potential idea to look into
 //https://www.reddit.com/r/node/comments/17conpk/comment/k5u4hfs/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
 function signUser(userID, userRole) {
-    const token = jwt.sign({ userID: userID, role: userRole}, secret, { expiresIn: '15m' });
+    const token = jwt.sign({ userID: userID, role: userRole}, secret, { expiresIn: '30m' });
     console.log(`Token generated for '${userID}'`);
     return token;
 }
