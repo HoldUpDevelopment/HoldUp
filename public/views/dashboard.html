@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="fixed-top p-3 bg-black ">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a class="d-flex align-items-center me-3 mb-lg-2 fw-bold link-light fs-3 text-decoration-none" href="/">
+          HoldUp
+        </a>
+        <div class="vr link-light"></div>
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="" class="nav-link px-2 link-light fw-bold">Home</a></li>
+          <li><a href="../routes" class="nav-link px-2 link-light link-opacity-75-hover">Gym Routes</a></li>
+          <li><a href="../archive" class="nav-link px-2 link-light link-opacity-75-hover">Archive</a></li>
+          <li><a href="../news" class="nav-link px-2 link-light link-opacity-75-hover">News</a></li>
+        </ul>
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        </form>
+        <div class="dropdown text-end">
+          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <img src="https://img.icons8.com/?size=100&id=107049&format=png&color=000000"
+              style="background-color: #f8f9fa;" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu text-small">
+            <!--Logged in buttons-->
+            <li><button type="button" data-bs-toggle="modal" data-bs-target="#createRoute" class="dropdown-item logged-in role-setter" style="display: none;"> + New route</button></li>
+            <li><a class="dropdown-item logged-in" style="display: none;" href="#">Profile</a></li>
+            <li><a class="dropdown-item logged-in" style="display: none;" href="../settings">Settings</a></li>
+            <li>
+              <hr class="dropdown-divider logged-in" style="display: none;">
+            </li>
+            <li><a class="dropdown-item logged-in" style="display: none;" id="logoutButton" href="#">Logout</a></li>
+            <script>
+              //logout button
+              document.getElementById('logoutButton').addEventListener('click', function () {
+                // Perform logout logic here
+                alert("You have been logged out. Refreshing page...")
+                sessionStorage.removeItem("jwt")
+                window.location.reload();
+              });
+            </script>
+
+            <!--Logged out buttons-->
+            <li><a class="dropdown-item logged-out" style="display: none;" href='../account/login'>Login</a></li>
+            <li><a class="dropdown-item logged-out" style="display: none;" href='../account/signup'>Create an
+                Account</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Create Route Modal -->
+  <div class="modal fade" id="createRoute" tabindex="-1" aria-labelledby="createRoute" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="routeTitle">Create a new route</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="p-5 modal-body">
+          <form id="routeCreationForm">
+            <div class="mb-4">
+              <label class="form-label" for="settings-box-profile_picture">Route Image</label>
+              <input type="file" name="image" class="form-control" id="settings-box-profile_picture">
+            </div>
+
+            <div class="input-group mb-4">
+              <span for="route-name-field" class="input-group-text">Route Name</span>
+              <input type="text" name="name" class="form-control" id="route-name-field" aria-label="route type">
+            </div>
+            
+            
+            <div class="input-group mb-4">
+              <label class="input-group-text" for="inputGroupSelect01">Route Type</label>
+              <select class="form-select" name="type" id="inputGroupSelect01">
+                <option selected>Choose...</option>
+                <option value="1">Boulder</option>
+                <option value="2">Sport</option>
+              </select>
+            </div>
+            
+
+            <div class="input-group mb-4">
+              <span for="route-grade-field" class="input-group-text">Route Grade</span>
+              <input type="text" name="grade" class="form-control" id="route-name-field" aria-label="route grade">
+            </div>
+
+            <div class="input-group mb-4">
+              <span class="input-group-text">Route Description</span>
+              <textarea type="text" name="description" class="form-control" id="route-name-field" placeholder="Enter Description" aria-label="route name"></textarea>
+            </div>
+          
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="createRouteSubmit" class="btn btn-primary">Create Route</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  <!--Scripts-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/mainHeader.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@ const routeManagementController = require('../controllers/routeManagementControl
 
 const router = express.Router();
 
-router.post('/createRoute', routeManagementController.createRoute);
+router.post('/createRoute', express.urlencoded({ extended: true }), routeManagementController.createRoute);
 router.post('/archiveRoute', routeManagementController.archiveRoute);
 router.post('/unarchiveRoute', routeManagementController.unarchiveRoute);
 
@@ -12,6 +12,7 @@ router.delete('/deleteArchiveRoute', routeManagementController.deleteArchiveRout
 
 router.put('/editRouteDetails', routeManagementController.editRouteDetails);
 
+router.get('/getLiveRoutes', routeManagementController.getLiveRoutes);
 router.get('/getRouteDetails', routeManagementController.getRouteDetails);
 router.get('/getRouteInfo', routeManagementController.getRouteInfo);
 router.get('/getRouteMapData', routeManagementController.getRouteMapData);

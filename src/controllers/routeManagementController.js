@@ -1,45 +1,39 @@
 const express = require('express');
 const mongo = require('../models/mongo');
+const auth = require('../models/auth');
 
 module.exports = {
     // POST Methods
-    createRoute: (req, res) => {
-        var reqBody = '';
+    createRoute: async (req, res) => {
 
-        req.on('data', function (chunk) { // reading the request into a var.
-            reqBody += chunk.toString();
-        });
+        //auth
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
 
-        req.on('end', async () => {
-            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
-            response_body = {};
-            var confirmation_id = await mongo.createListing("route_mngt", "live_routes", reqBody);
-            if (confirmation_id == false) {
-                response_body = {
-                    isValid: false,
-                    id: 403
-                }
-                json_message = JSON.stringify(response_body);
+        //Body
+        const { image, name, type, grade, description } = req.body;
+        console.log(`${image}, ${name}, ${type}, ${grade}, ${description}`);
 
-                res.writeHead(403, { // Writing Response
-                    'Content-Type': 'application/json'
-                });
-                res.write(JSON.stringify(response_body));
-                res.end();
-            } else {
-                response_body = {
-                    isValid: true,
-                    id: confirmation_id
-                }
-                json_message = JSON.stringify(response_body);
+        //Create a document with the required fields
+        const docu = {
+            Name: name,
+            Type: type - 1,
+            Grade: grade,
+            Description: description,
+        }
 
-                res.writeHead(202, { // Writing Response
-                    'Content-Type': 'application/json'
-                });
-                res.write(JSON.stringify(response_body));
-                res.end();
+        //Check the role of the requester
+        if (role <= 2) {
+            try {
+                const newID = await mongo.createListing("route_mngt", "live_routes", docu);
+                console.log(`Created user with ID: ${newID}`);
+                res.status(201).json({ message: "Route created successfully" });
+            } catch (err) {
+                res.status(500).json({ error: "Registration failed" });
             }
-        });
+        } else {
+            res.status(403).json({ error: "Insufficient Permissions" });
+        }
     },
     archiveRoute: (req, res) => {
         //For Archiving a route, we take a live route and move it to the archived routes.
@@ -189,6 +183,10 @@ module.exports = {
     },
 
     // GET Methods
+    getLiveRoutes: async(req, res) => {
+        var response_body = await mongo.getListOfIDs("route_mngt", "live_routes");
+        res.status(200).json({ message: "Successful", routes: response_body });
+    },
     getRouteDetails: async (req, res) => {
         const routeId = req.query.routeId;
         const isArchived = req.query.isArchived;
@@ -202,22 +200,18 @@ module.exports = {
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Cache-Control': 'max-age=3600'
         });
         res.write(JSON.stringify(response_body));
         res.end();
     },
-    getRouteInfo: (req, res) => { //May Be Obsolete
-        // const routeId = req.query.routeId;
-        // const isArchived = req.query.isArchived;
-        // var response_body;
-        // json_message = JSON.stringify(response_body);
+    getRouteInfo: async (req, res) => { //May Be Obsolete
+        const routeId = req.query.routeId;
+        const isArchived = req.query.isArchived;
+        var response_body = await mongo.getRouteInfo(routeId);
 
-        res.writeHead(200, {
-             'Content-Type': 'application/json'
-        });
-        res.write(JSON.stringify({}));
-        res.end();
+        res.status(200).json({ message: `Matched route with id ${routeId}`, routeData: response_body });
     },
     //Check the excel for details
     getRouteMapData: async (req, res) => {

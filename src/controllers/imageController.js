@@ -8,4 +8,11 @@ module.exports = {
             root: public_path
         });
     },
+    iconView: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'image/svg+xml');
+        res.sendFile('images/icon.svg', {
+            root: public_path
+        });
+    },
 }
