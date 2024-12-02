@@ -22,6 +22,13 @@ module.exports = {
             root: root
         })
     },
+    dashboard_usersView: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/html');
+        res.sendFile('users.html', {
+            root: root
+        })
+    },
     announcementView: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/html');
@@ -68,6 +75,13 @@ module.exports = {
         res.status(200); //OK
         res.set('Content-Type', 'text/javascript');
         res.sendFile('announcementForm.js', {
+            root: 'public/js/'
+        })
+    },
+    buildUserListJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('buildUserList.js', {
             root: 'public/js/'
         })
     },

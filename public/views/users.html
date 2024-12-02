@@ -143,21 +143,21 @@
             </a>
             <ul class="list-unstyled overflow-auto ps-0">
               <li class="mb-1">
-                <button class="btn btn-toggle align-items-center rounded fw-semibold collapsed" data-bs-toggle="collapse"
+                <button class="btn btn-toggle align-items-center rounded fw-semibold " data-bs-toggle="collapse"
                   data-bs-target="#home-collapse" aria-expanded="false">
                   Users
                 </button>
-                <div class="collapse" id="home-collapse" style="">
+                <div class="collapse show" id="home-collapse" style="">
                   <ul class="ps-3 btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="dashboard/users.html" class="link-dark rounded">Users</a></li>
+                    <li><a href="#" class="link-dark fw-bolder rounded" style="background-color:#fffca6">Users</a></li>
                     <li><a href="#" class="link-dark rounded">Create a User</a></li>
                     <li><a href="#" class="link-dark rounded">Reports</a></li>
                   </ul>
                 </div>
               </li>
               <li class="mb-1">
-                <button class="btn btn-toggle align-items-center rounded fw-semibold collapsed" data-bs-toggle="collapse"
-                  data-bs-target="#dashboard-collapse" aria-expanded="false">
+                <button class="btn btn-toggle align-items-center rounded fw-semibold collapsed"
+                  data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
                   Routes
                 </button>
                 <div class="collapse" id="dashboard-collapse" style="">
@@ -169,8 +169,8 @@
                 </div>
               </li>
               <li class="mb-1">
-                <button class="btn btn-toggle align-items-center rounded fw-semibold collapsed" data-bs-toggle="collapse"
-                  data-bs-target="#orders-collapse" aria-expanded="false">
+                <button class="btn btn-toggle align-items-center rounded fw-semibold collapsed"
+                  data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
                   Announcements
                 </button>
                 <div class="collapse" id="orders-collapse">
@@ -187,18 +187,34 @@
           </div>
         </div>
         <div id="mainContent" class="col-10 ps-5 pt-4" style="background-color:#f8f9fa; width: 78%;">
-          
-    
-          
-          <div class="rounded border p-3 align-items-center" style="background-color:white ;height: 95%">
-            Page body goes here!
+
+
+
+          <div class="rounded border p-3 align-items-center overflow-scroll"
+            style="background-color:white ;height: 95%">
+            <table class="rounded table bdr">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Username</th>
+                  <th scope="col"> </th>
+                </tr>
+              </thead>
+              <tbody id="usersTable">
+                <script>
+                  
+
+                </script>
+              </tbody>
+            </table>
           </div>
         </div>
 
       </div>
     </div>
-    
-    
+
+
   </main>
 
 
@@ -208,6 +224,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/mainHeader.js"></script>
+  <script src="../js/buildUserList.js"></script>
 </body>
 
 </html>

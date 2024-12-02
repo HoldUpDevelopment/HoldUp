@@ -7,6 +7,7 @@ const port = 3000;
 //Routes
 const webRouting = require('./src/routes/routeIndex');
 const imageRoutes = require('./src/routes/image');
+const dashboardRoutes = require('./src/routes/dashboard');
 const userAccountRoutes = require('./src/routes/userAccountManagement');
 const routeManagementRoutes = require('./src/routes/routeManagement');
 const routeFeedbackRoutes = require('./src/routes/routeFeedback');
@@ -28,6 +29,7 @@ server.use('/route', routeManagementRoutes);
 server.use('/feedback', routeFeedbackRoutes);
 server.use('/announcements', announcementRoutes);
 server.use('/forum', forumManagementRoutes);
+server.use('/dashboard', dashboardRoutes)
 
 //Listen to server
 server.listen(port, hostname, async () => {

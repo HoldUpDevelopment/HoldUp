@@ -74,3 +74,6 @@ body {
     right: 0px;
     padding: 20px;
 }
+
+
+.bdr {border-radius: 6px; overflow:hidden; overflow-x:scroll;}

@@ -223,6 +223,7 @@ async function deleteListingByKey(dbName, collection, listingKey) {
   mongoose.connection.useDb(dbName);
 
   const Model = Models[collection];
+  console.log("Entered")
   try {
     result = await Model.deleteOne({_id: listingKey})
     console.log(`Deleted ${result.deletedCount} document(s).`);

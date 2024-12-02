@@ -107,8 +107,8 @@ module.exports = {
         if (!userID) return;
 
         response_body = {};
-        await mongo.updateListingByKey("route_mngt","users",userID,req.body);
-        
+        await mongo.updateListingByKey("route_mngt", "users", userID, req.body);
+
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
@@ -120,18 +120,17 @@ module.exports = {
 
     // DELETE Methods
     deleteAccount: async (req, res) => {
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
+
         const userId = req.query.userId;
-        var response_body = {};
-        await mongo.deleteListingByKey("route_mngt", "users", userId);
-
-        json_message = JSON.stringify(response_body);
-
-        res.writeHead(200, { // Writing Response
-            'Content-Type': 'application/json'
-        });
-        res.write(JSON.stringify(response_body));
-        res.end();
-
+        if (role <=1 ) {
+            await mongo.deleteListingByKey("route_mngt", "users", userId);
+            console.log(userId);
+            res.status(201).json({ message: "User Successfuly Deleted"});
+        } else {
+            res.status(403).json({message:"Access Denied"})
+        }
     },
 
     // GET Methods
@@ -234,5 +233,16 @@ module.exports = {
         });
         res.write(JSON.stringify(response_body));
         res.end();
+    },
+    getUsers: async (req, res) => {
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
+        if (role <= 1) {
+            var response_body = await mongo.getListOfIDs("route_mngt", "users");
+            res.status(200).json({ message: "Successful", users: response_body });
+        } else {
+            res.status(403).json({message:"bruh you cannot rn"});
+        }
+
     },
 }
