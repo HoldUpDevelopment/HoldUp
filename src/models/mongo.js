@@ -247,12 +247,34 @@ async function getRoutePacketFromUserId(userId) {
 
   const Model = Models["users"];
   try {
-    result = await Model.findById(userId, `displayname username`).lean();
+    result = await Model.findById(userId, `displayname username gyms`).lean();
     //returnBody
     result["pfp"]="";
     
     console.log(`Found user with id ${userId}`);
     
+    return result;
+  } catch (err) {
+    console.log(err);
+    return 404;
+  }
+}
+
+/**
+ * @description Gets a User's role from their ID.
+ * @param {String|Number|ObjectId} userId the `_id` property of the user being searched
+ * @returns Returns a JSON with the specified user's `gyms` and their matching roles.
+ * If no matching user was found, returns `404`.
+ */
+async function getRoleFromUserID(userId) {
+  mongoose.connection.useDb('route-mngt');
+
+  const Model = Models["users"];
+  try {
+    result = await Model.findById(userId, `gyms`).lean();
+    //returnBody
+    
+    console.log(`Found user with id ${userId}`);
     return result;
   } catch (err) {
     console.log(err);
@@ -421,5 +443,6 @@ module.exports = {
   getFieldFromListingById: getFieldFromListingById,
   getIdByKeyValue: getIdByKeyValue,
   getEmailByUserId: getEmailByUserId,
+  getRoleFromUserID: getRoleFromUserID,
   closeConnection: closeConnection
 };

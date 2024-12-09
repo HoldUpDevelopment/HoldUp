@@ -118,6 +118,29 @@ module.exports = {
         res.end();
     },
 
+    // PUT Methods
+    editUserRole: async (req, res) => {
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
+        console.log(req.body);
+        const {gymName, targetId, newRole} = req.body;
+        var targetRole = await mongo.getRoleFromUserID(targetId);
+        targetRole = targetRole["role"];
+
+        if (role < targetRole || targetRole == undefined) {
+            update = {
+                "gyms": {
+                    [gymName]: newRole
+                }
+            }
+            await mongo.updateListingByKey("route_mngt", "users", targetId, update);
+
+            res.status(202).json({ message: "Role successfully changed"});
+        } else {
+            res.status(403).json({ message: "Insufficient Permissions"});
+        }
+    },
+
     // DELETE Methods
     deleteAccount: async (req, res) => {
         const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
@@ -163,6 +186,16 @@ module.exports = {
         });
         res.write(JSON.stringify(response_body));
         res.end();
+    },
+    //Gets the role of the active user (from their JWT token)
+    getActiveUserRole: async (req, res) => {
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
+
+        //Returns the role from the JWT, found above with auth.authorize(..)
+        console.log(userID);
+        console.log(role);
+        res.status(200).json({ role: role});
     },
     //Gets information to be used when displaying a review. User name, profile picture, and display name.
     getRoutePacketFromID: async (req, res) => {

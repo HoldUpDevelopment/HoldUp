@@ -20,7 +20,7 @@ const authRoutes = require('./src/routes/authRoutes');
 const mongo = require('./src/models/mongo');
 
 const server = express();
-server.use(favicon('./public/favicon.ico')); 
+server.use(favicon('./public/favicon/favicon.ico')); 
 server.use('/', webRouting);
 server.use('/images', imageRoutes);
 server.use('/user', userAccountRoutes);
