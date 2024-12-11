@@ -83,7 +83,7 @@ async function submitLogin(validityReference) {
             event.stopPropagation();
         } else {
             event.preventDefault();
-            window.location.href = `${origin}/dashboard`; //Navigate to the login page!
+            window.location.href = `${origin}/`; //Navigate to the login page!
         }
         //form.classList.add('was-validated');
     }, false)
