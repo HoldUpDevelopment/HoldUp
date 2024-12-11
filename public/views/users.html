@@ -117,6 +117,54 @@
     </div>
   </div>
 
+  <!--Delete User MODAL-->
+  <div class="modal fade" id="deleteWarning" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="deleteWarningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteWarningLabel">Account Deletion</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="deletionBody">
+          <p class="h6" id="deletetionTargetLabel"></p>
+          <p class="text-danger h6 fw-bold">This action is irreversible. Are you sure you want to proceed?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="deleteUserButton">Delete User</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Select role change MODAL-->
+  <div class="modal fade" id="changeRole" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="changeRoleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="changeRoleLabel">Role Change</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2">Select a new role for this user:</div>
+          <div>
+            <form>
+              <select class="form-select" id="roleOptions" aria-label="Default select example">
+                <option value="-1" selected>Select a role</option>
+              </select>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-seconday" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="changeRoleButton">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!--Side NAVBAR-->
   <main>
@@ -147,7 +195,7 @@
                   data-bs-target="#home-collapse" aria-expanded="false">
                   Users
                 </button>
-                <div class="collapse show" id="home-collapse" style="">
+                <div class="collapse show" id="home-collapse">
                   <ul class="ps-3 btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     <li><a href="#" class="link-dark fw-bolder rounded" style="background-color:#fffca6">Users</a></li>
                     <li><a href="#" class="link-dark rounded">Create a User</a></li>
@@ -160,7 +208,7 @@
                   data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
                   Routes
                 </button>
-                <div class="collapse" id="dashboard-collapse" style="">
+                <div class="collapse" id="dashboard-collapse">
                   <ul class="ps-3 btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     <li><a href="#" class="link-dark rounded">Routes</a></li>
                     <li><a href="#" class="link-dark rounded">Edit Routes</a></li>
@@ -187,9 +235,6 @@
           </div>
         </div>
         <div id="mainContent" class="col-10 ps-5 pt-4" style="background-color:#f8f9fa; width: 78%;">
-
-
-
           <div class="rounded border p-3 align-items-center overflow-scroll"
             style="background-color:white ;height: 95%">
             <table class="rounded table bdr">
@@ -204,7 +249,7 @@
               </thead>
               <tbody id="usersTable">
                 <script>
-                  
+
 
                 </script>
               </tbody>
@@ -214,8 +259,6 @@
 
       </div>
     </div>
-
-
   </main>
 
 
