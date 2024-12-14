@@ -29,6 +29,27 @@ module.exports = {
             root: root
         })
     },
+    dashboard_routesView: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/html');
+        res.sendFile('routes.html', {
+            root: root
+        })
+    },
+    dashboard_archiveView: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/html');
+        res.sendFile('archive.html', {
+            root: root
+        })
+    },
+    dashboard_postsView: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/html');
+        res.sendFile('posts.html', {
+            root: root
+        })
+    },
     announcementView: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/html');
@@ -40,6 +61,13 @@ module.exports = {
         res.status(200); //OK
         res.set('Content-Type', 'text/html');
         res.sendFile('routeHomepage.html', {
+            root: root
+        })
+    },
+    archiveView: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/html');
+        res.sendFile('routeArchive.html', {
             root: root
         })
     },
@@ -57,10 +85,17 @@ module.exports = {
             root: 'public/js/'
         })
     },
-    buildRouteListJS: (req, res) => {
+    buildLiveRouteListJS: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/javascript');
-        res.sendFile('buildRouteList.js', {
+        res.sendFile('buildLiveRouteList.js', {
+            root: 'public/js/'
+        })
+    },
+    buildArchiveRouteListJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('buildArchiveRouteList.js', {
             root: 'public/js/'
         })
     },
@@ -78,10 +113,24 @@ module.exports = {
             root: 'public/js/'
         })
     },
-    buildUserListJS: (req, res) => {
+    buildUserDashJS: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/javascript');
-        res.sendFile('buildUserList.js', {
+        res.sendFile('buildUserDash.js', {
+            root: 'public/js/'
+        })
+    },
+    buildRouteDashJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('buildRouteDash.js', {
+            root: 'public/js/'
+        })
+    },
+    buildArchiveDashJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('buildArchiveDash.js', {
             root: 'public/js/'
         })
     },

@@ -35,88 +35,59 @@ module.exports = {
             res.status(403).json({ error: "Insufficient Permissions" });
         }
     },
-    archiveRoute: (req, res) => {
+    archiveRoute: async (req, res) => {
         //For Archiving a route, we take a live route and move it to the archived routes.
-        var reqBody = '';
 
-        req.on('data', function (chunk) { // reading the request into a var.
-            reqBody += chunk.toString();
-        });
+        //auth
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
 
-        req.on('end', async () => {
-            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
-            response_body = {};
-            status_code = 0;
-
-            var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", reqBody.routeid, "_id");
+        const { routeid, takedowndate } = req.body;
+        if (role <= 2) {
+            try {
+                var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", routeid, "_id");
             route_payload = JSON.parse(JSON.stringify(route_payload));
             delete route_payload["__v"];
             var confirmation_id = await mongo.createListing("route_mngt", "archived_routes", route_payload); //reqBody should have the object id of the live route
-            await mongo.deleteListingByKey("route_mngt", "live_routes", reqBody.routeid);
+            await mongo.deleteListingByKey("route_mngt", "live_routes", routeid);
 
-            if (confirmation_id == false) {
-                response_body = {
-                    isValid: false,
-                    id: 500
-                };
-                status_code = 500;
+            if (!confirmation_id) {
+                res.status(500).json({ error: "Archiving process failed" });
             } else {
-                response_body = {
-                    isValid: true,
-                    id: confirmation_id
-                };
-                status_code = 202;
+                res.status(202).json({ message: "Route archived successfully" });
             }
-
-
-            json_message = JSON.stringify(response_body);
-            res.writeHead(status_code, { // Writing Response
-                'Content-Type': 'application/json'
-            });
-            res.write(JSON.stringify(response_body));
-            res.end();
-        });
+            } catch (err) {
+                res.status(500).json({ error: "Archiving process failed" });
+            }
+        } else {
+            res.status(403).json({ error: "Insufficient Permissions" });
+        }
     },
-    unarchiveRoute: (req, res) => {
-        var reqBody = '';
+    unarchiveRoute: async (req, res) => {
+        //auth
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
 
-        req.on('data', function (chunk) { // reading the request into a var.
-            reqBody += chunk.toString();
-        });
-
-        req.on('end', async () => {
-            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
-            response_body = {};
-            status_code = 0;
-
-            var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "archived_routes", reqBody.routeid, "_id")
+        const { routeid } = req.body;
+        if (role <= 2) {
+            try {
+                var route_payload = await mongo.findOneListingByKeyValue("route_mngt", "archived_routes", routeid, "_id");
             route_payload = JSON.parse(JSON.stringify(route_payload));
             delete route_payload["__v"];
             var confirmation_id = await mongo.createListing("route_mngt", "live_routes", route_payload); //reqBody should have the object id of the live route
-            await mongo.deleteListingByKey("route_mngt", "archived_routes", reqBody.routeid);
+            await mongo.deleteListingByKey("route_mngt", "archived_routes", routeid);
 
-            if (confirmation_id == false) {
-                response_body = {
-                    isValid: false,
-                    id: 500
-                };
-                status_code = 500;
+            if (!confirmation_id) {
+                res.status(500).json({ error: "Archiving process failed" });
             } else {
-                response_body = {
-                    isValid: true,
-                    id: confirmation_id
-                };
-                status_code = 202;
+                res.status(202).json({ message: "Route archived successfully" });
             }
-
-
-            json_message = JSON.stringify(response_body);
-            res.writeHead(status_code, { // Writing Response
-                'Content-Type': 'application/json'
-            });
-            res.write(JSON.stringify(response_body));
-            res.end();
-        });
+            } catch (err) {
+                res.status(500).json({ error: "Archiving process failed" });
+            }
+        } else {
+            res.status(403).json({ error: "Insufficient Permissions" });
+        }
     },
 
     // PUT Methods
@@ -152,39 +123,39 @@ module.exports = {
 
     // DELETE Methods
     deleteLiveRoute: async (req, res) => {
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
+
         const routeId = req.query.routeId;
-
-        response_body = {};
-        await mongo.deleteListingByKey("route_mngt", "live_routes", routeId);
-
-        json_message = JSON.stringify(response_body);
-        console.log();
-
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
-        });
-        res.write(JSON.stringify(response_body));
-        res.end();
+        if (role <= 2) {
+            await mongo.deleteListingByKey("route_mngt", "live_routes", routeId);
+            console.log(routeId);
+            res.status(201).json({ message: "Route Successfuly Deleted" });
+        } else {
+            res.status(403).json({ message: "Access Denied" })
+        }
     },
-    deleteArchiveRoute: async (req, res) => {
+    deleteArchivedRoute: async (req, res) => {
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
+
         const routeId = req.query.routeId;
-
-        response_body = {};
-        await mongo.deleteListingByKey("route_mngt", "archived_routes", routeId);
-
-        json_message = JSON.stringify(response_body);
-        console.log();
-
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
-        });
-        res.write(JSON.stringify(response_body));
-        res.end();
+        if (role <= 2) {
+            await mongo.deleteListingByKey("route_mngt", "archived_routes", routeId);
+            console.log(routeId);
+            res.status(201).json({ message: "Route Successfuly Deleted" });
+        } else {
+            res.status(403).json({ message: "Access Denied" })
+        }
     },
 
     // GET Methods
-    getLiveRoutes: async(req, res) => {
+    getLiveRoutes: async (req, res) => {
         var response_body = await mongo.getListOfIDs("route_mngt", "live_routes");
+        res.status(200).json({ message: "Successful", routes: response_body });
+    },
+    getArchiveRoutes: async (req, res) => {
+        var response_body = await mongo.getListOfIDs("route_mngt", "archived_routes");
         res.status(200).json({ message: "Successful", routes: response_body });
     },
     getRouteDetails: async (req, res) => {
@@ -196,7 +167,7 @@ module.exports = {
         } else {
             response_body = await mongo.findOneListingByKeyValue("route_mngt", "live_routes", routeId, "_id")
         }
-        
+
         json_message = JSON.stringify(response_body);
 
         res.writeHead(200, {
@@ -209,7 +180,7 @@ module.exports = {
     getRouteInfo: async (req, res) => { //May Be Obsolete
         const routeId = req.query.routeId;
         const isArchived = req.query.isArchived;
-        var response_body = await mongo.getRouteInfo(routeId);
+        var response_body = await mongo.getRouteInfo(routeId, isArchived === "true");
 
         res.status(200).json({ message: `Matched route with id ${routeId}`, routeData: response_body });
     },

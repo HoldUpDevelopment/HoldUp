@@ -196,14 +196,18 @@ async function updateListingByKey(
 ///////////////////////////////////////////////////////////////////////////////////////
 
 async function getRouteInfo(
-  routeId
+  routeId, isArchived
 ) {
   mongoose.connection.useDb("route-mngt");
-
-  const Model = Models["live_routes"];
+  var Model;
+  if (isArchived) {
+    Model = Models["archived_routes"];
+  } else {
+    Model = Models["live_routes"];
+  }
   try {
     result = await Model.findOne({_id: routeId}, `Name CreationDate Grade Type`)
-    console.log(`Found document.`);
+    console.log("Found Document");
     return result;
   } catch (err) {
     console.log(err);

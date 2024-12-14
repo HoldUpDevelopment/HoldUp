@@ -4,15 +4,16 @@ const routeManagementController = require('../controllers/routeManagementControl
 const router = express.Router();
 
 router.post('/createRoute', express.urlencoded({ extended: true }), routeManagementController.createRoute);
-router.post('/archiveRoute', routeManagementController.archiveRoute);
-router.post('/unarchiveRoute', routeManagementController.unarchiveRoute);
+router.post('/archiveRoute', express.json(), routeManagementController.archiveRoute);
+router.post('/unarchiveRoute', express.json(), routeManagementController.unarchiveRoute);
 
 router.delete('/deleteLiveRoute', routeManagementController.deleteLiveRoute);
-router.delete('/deleteArchiveRoute', routeManagementController.deleteArchiveRoute);
+router.delete('/deleteArchivedRoute', routeManagementController.deleteArchivedRoute);
 
 router.put('/editRouteDetails', routeManagementController.editRouteDetails);
 
 router.get('/getLiveRoutes', routeManagementController.getLiveRoutes);
+router.get('/getArchivedRoutes', routeManagementController.getArchiveRoutes);
 router.get('/getRouteDetails', routeManagementController.getRouteDetails);
 router.get('/getRouteInfo', routeManagementController.getRouteInfo);
 router.get('/getRouteMapData', routeManagementController.getRouteMapData);
