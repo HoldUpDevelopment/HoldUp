@@ -117,6 +117,58 @@
     </div>
   </div>
 
+  <!-- Edit Route Modal -->
+  <div class="modal fade" id="editRoute" tabindex="-1" aria-labelledby="createRoute" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="e-routeTitle">
+
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="p-5 modal-body">
+          <form id="editRouteForm">
+            <div class="mb-4">
+              <label class="form-label" for="settings-box-profile_picture">Route Image</label>
+              <input type="file" name="image" class="form-control" id="settings-box-profile_picture">
+            </div>
+
+            <div class="input-group mb-4">
+              <span for="route-name-field" class="input-group-text">Route Name</span>
+              <input type="text" name="name" class="form-control" id="e-route-name-field" aria-label="route type">
+            </div>
+
+            <div class="input-group mb-4">
+              <label class="input-group-text" for="inputGroupSelect01">Route Type</label>
+              <select class="form-select" name="type" id="e-route-type">
+                <option selected id="e-Def">Choose...</option>
+                <option value="1" id="e-Boulder">Boulder</option>
+                <option value="2" id="e-Sport">Sport</option>
+              </select>
+            </div>
+
+            <div class="input-group mb-4">
+              <span for="route-grade-field" class="input-group-text">Route Grade</span>
+              <input type="text" name="grade" class="form-control" id="e-route-grade-field" aria-label="route grade">
+            </div>
+
+            <div class="input-group mb-4">
+              <span class="input-group-text">Route Description</span>
+              <textarea type="text" name="description" class="form-control" id="e-route-desc-field"
+                placeholder="Enter Description" aria-label="route name"></textarea>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" id="editRouteSubmit" class="btn btn-primary">Submit Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!--Delete User MODAL-->
   <div class="modal fade" id="deleteWarning" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="deleteWarningLabel" aria-hidden="true">
@@ -139,8 +191,8 @@
   </div>
 
   <!--Select role change MODAL-->
-  <div class="modal fade" id="changeRole" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="changeRoleLabel" aria-hidden="true">
+  <div class="modal fade" id="changeRole" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changeRoleLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -197,7 +249,7 @@
                 </button>
                 <div class="collapse" id="home-collapse">
                   <ul class="ps-3 btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="../dashboard/users.html" class="link-dark  rounded" >Users</a></li>
+                    <li><a href="../dashboard/users.html" class="link-dark  rounded">Users</a></li>
                     <li><a href="#" class="link-dark rounded">Create a User</a></li>
                     <li><a href="#" class="link-dark rounded">Reports</a></li>
                   </ul>
@@ -210,8 +262,9 @@
                 </button>
                 <div class="collapse show" id="dashboard-collapse">
                   <ul class="ps-3 btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="../dashboard/routes.html" class="link-dark  rounded" >Routes</a></li>
-                    <li><a href="#" class="link-dark fw-bolder rounded" style="background-color:#fffca6">Archive</a></li>
+                    <li><a href="../dashboard/routes.html" class="link-dark  rounded">Routes</a></li>
+                    <li><a href="#" class="link-dark fw-bolder rounded" style="background-color:#fffca6">Archive</a>
+                    </li>
                     <li><a href="#" class="link-dark rounded">Create a route</a></li>
                   </ul>
                 </div>

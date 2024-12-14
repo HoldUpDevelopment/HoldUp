@@ -1,5 +1,3 @@
-This is a ChatGPT-assisted README file. **BE ESPECIALLY WARY WITH THE INSTALLATION INSTRUCTIONS UNTIL THEY HAVE BEEN DOUBLE CHEKED**
-
 # HoldUp: Empowering Climbing Gyms and Communities
 
 Welcome to **HoldUp**, a full-stack platform designed to revolutionize the online community experience for commercial rock climbing gyms. HoldUp offers a range of tools that enable gyms to foster engaging and supportive online environments. Features include route management, route feedback, route archival, and community engagement, all designed to elevate the gym-to-climber connection.

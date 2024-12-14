@@ -10,7 +10,7 @@ router.post('/unarchiveRoute', express.json(), routeManagementController.unarchi
 router.delete('/deleteLiveRoute', routeManagementController.deleteLiveRoute);
 router.delete('/deleteArchivedRoute', routeManagementController.deleteArchivedRoute);
 
-router.put('/editRouteDetails', routeManagementController.editRouteDetails);
+router.put('/editRouteDetails', express.urlencoded({ extended: true }), routeManagementController.editRouteDetails);
 
 router.get('/getLiveRoutes', routeManagementController.getLiveRoutes);
 router.get('/getArchivedRoutes', routeManagementController.getArchiveRoutes);
