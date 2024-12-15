@@ -154,7 +154,7 @@ module.exports = {
         await mongo.updateListingByKey("route_mngt", "users", targetId, update);
 
         res.status(202).json({ message: "Role successfully changed" });
-        
+
       } else {
         res.status(403).json({ message: "Insufficient Permissions" });
       }
@@ -170,7 +170,7 @@ module.exports = {
     if (!userID) return;
 
     const userId = req.query.userId;
-    if (role <= 1) {
+    if (role <= 1 || userId == userID) {
       await mongo.deleteListingByKey("route_mngt", "users", userId);
       console.log(userId);
       res.status(201).json({ message: "User Successfuly Deleted" });
