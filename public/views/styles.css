@@ -100,6 +100,8 @@ body {
 
 .checked {
     color: orange;
+    /* background: linear-gradient(110deg, orange 60%, #212529 60%);
+    background-clip: text; */
 }
 
 /* Three column layout */
@@ -138,27 +140,27 @@ body {
 
 /* Individual bars */
 .bar-5 {
-    width: 60%;
+    width: 0%;
     height: 18px;
 }
 
 .bar-4 {
-    width: 30%;
+    width: 0%;
     height: 18px;
 }
 
 .bar-3 {
-    width: 10%;
+    width: 0%;
     height: 18px;
 }
 
 .bar-2 {
-    width: 4%;
+    width: 0%;
     height: 18px;
 }
 
 .bar-1 {
-    width: 15%;
+    width: 0%;
     height: 18px;
 }
 
@@ -180,4 +182,37 @@ body {
     width: 85%
 }
 
+@supports (transition: initial) {
 
+    /* CSS to use if transitions are supported */
+    /* Individual bars */
+    .bar-5 {
+        width: 0%;
+        height: 18px;
+        transition: width 0.25s;
+    }
+
+    .bar-4 {
+        width: 0%;
+        height: 18px;
+        transition: width 0.25s;
+    }
+
+    .bar-3 {
+        width: 0%;
+        height: 18px;
+        transition: width 0.25s;
+    }
+
+    .bar-2 {
+        width: 0%;
+        height: 18px;
+        transition: width 0.25s;
+    }
+
+    .bar-1 {
+        width: 0%;
+        height: 18px;
+        transition: width 0.25s;
+    }
+}
