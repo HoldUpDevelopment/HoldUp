@@ -134,6 +134,13 @@ module.exports = {
             root: 'public/js/'
         })
     },
+    buildAnnouncementDashJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('buildAnnouncementDash.js', {
+            root: 'public/js/'
+        })
+    },
     stylesheet: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/css');

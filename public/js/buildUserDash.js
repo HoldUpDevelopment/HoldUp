@@ -7,6 +7,34 @@ const Roles = {
     undefined: "N/A"
 }
 
+//create html for role badge on user name
+function makeRoleBadge(role) {
+    var roleName = Roles[role]
+    var style;
+
+    switch (role) {
+        
+        case 0:
+            style = "dark"
+            break;
+        case 1:
+            style = "warning"
+            break;
+        case 2:
+            style = "info"
+            break;
+        case 3:
+            style = "success"
+            break;
+        case 4:
+            style = "light"
+            break;
+        default:
+            style = "secondary"
+    }
+
+    return `<span class="badge rounded-pill text-bg-${style}">${roleName}</span>`
+}
 
 
 $(document).ready(async function () {
@@ -50,7 +78,7 @@ $(document).ready(async function () {
                         <th class=" align-middle" scope="row">${count}</th>
                         <td class="text-center align-middle" id="u${count}">${user._id}</td>
                         <td class="text-center align-middle">${username}</td>
-                        <td class="text-center align-middle">${Roles[role]}</td>
+                        <td class="text-center align-middle">${makeRoleBadge(role)}</td>
                         <td><div class="dropdown">
 
                         </div>
@@ -63,7 +91,7 @@ $(document).ready(async function () {
                         <th class=" align-middle" scope="row">${count}</th>
                         <td class="text-center align-middle" id="u${count}">${user._id}</td>
                         <td class="text-center align-middle">${username}</td>
-                        <td id="role${user._id}" class="text-center align-middle">${Roles[role]}</td>
+                        <td id="role${user._id}" class="text-center align-middle">${makeRoleBadge(role)}</td>
                         <td><div class="dropdown">
 
                         <a id="b${count}"class="btn top-0" role="button" data-bs-toggle="dropdown">
@@ -140,7 +168,7 @@ $(document).ready(async function () {
 
         if (response.status != 202) {
             alert("A problem has occurred, please try again");
-            return 
+            return
         }
 
         $(`#role${target}`).html(Roles[value])

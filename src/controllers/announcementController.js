@@ -4,7 +4,7 @@ const auth = require('../models/auth');
 module.exports = {
     // POST Methods
     createAnnouncement: async (req, res) => {
-        
+
         //auth
         const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
         if (!userID) return;
@@ -46,7 +46,7 @@ module.exports = {
         req.on('end', async () => {
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
             response_body = {};
-            var confirmation = await mongo.updateListingByKey("route_mngt", "announcements",query, reqBody);
+            var confirmation = await mongo.updateListingByKey("route_mngt", "announcements", query, reqBody);
             if (confirmation == false) {
                 response_body = {
                     success: false,
@@ -56,7 +56,7 @@ module.exports = {
                     success: true,
                 }
             }
-            
+
             json_message = JSON.stringify(response_body);
 
             res.writeHead(200, { // Writing Response
@@ -69,27 +69,17 @@ module.exports = {
 
     // DELETE Methods
     deleteAnnouncement: async (req, res) => {
-        const query = req.query.announcementId
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
 
-        response_body = {};
-        var confirmation = await mongo.deleteListingByKey("route_mngt", "announcements", query);
-        if (confirmation == false) {
-            response_body = {
-                success: false,
-            }
+        const announcementId = req.query.announcementId;
+        if (role <= 1) {
+            await mongo.deleteListingByKey("route_mngt", "announcements", announcementId);
+            console.log(announcementId);
+            res.status(201).json({ message: "Post Successfuly Deleted" });
         } else {
-            response_body = {
-                success: true,
-            }
+            res.status(403).json({ message: "Access Denied" })
         }
-        
-        json_message = JSON.stringify(response_body);
-
-        res.writeHead(200, { // Writing Response
-            'Content-Type': 'application/json'
-        });
-        res.write(JSON.stringify(response_body));
-        res.end();
     },
 
     // GET Methods
@@ -106,8 +96,8 @@ module.exports = {
         res.write(JSON.stringify(response_body));
         res.end();
     },
-    getAnnouncementList: async(req, res) => {
+    getAnnouncementList: async (req, res) => {
         var response_body = await mongo.getListOfIDs("route_mngt", "announcements");
-        res.status(200).json({ message: "Successful", routes: response_body });
+        res.status(200).json({ message: "Successful", posts: response_body });
     }
 }

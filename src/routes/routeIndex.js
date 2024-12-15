@@ -25,5 +25,6 @@ router.get('/js/announcementForm.js', webRouteController.announcementFormJS);
 router.get('/js/buildUserDash.js', webRouteController.buildUserDashJS);
 router.get('/js/buildRouteDash.js', webRouteController.buildRouteDashJS);
 router.get('/js/buildArchiveDash.js', webRouteController.buildArchiveDashJS);
+router.get('/js/buildAnnouncementDash.js', webRouteController.buildAnnouncementDashJS)
 
 module.exports = router;

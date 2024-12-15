@@ -9,7 +9,6 @@ const Roles = {
 
 // parse a date in yyyy-mm-dd format
 function parseDate(input) {
-
     let parts = input.split('-');
 
 
@@ -17,51 +16,33 @@ function parseDate(input) {
     return `${parts[1]}/${parts[2].slice(0, 2)}/${parts[0]}`; // Note: months are 0-based
 }
 
-function getType(type) {
-    if (type == 0) {
-        return `Boulder`;
+//create html for role badge on user name
+function makeRoleBadge(role) {
+    var roleName = Roles[role]
+    var style;
+
+    switch (role) {
+        
+        case 0:
+            style = "dark"
+            break;
+        case 1:
+            style = "warning"
+            break;
+        case 2:
+            style = "info"
+            break;
+        case 3:
+            style = "success"
+            break;
+        case 4:
+            style = "light"
+            break;
+        default:
+            style = "secondary"
     }
 
-    return `Sport`;
-}
-
-function getTypeStyle(type) {
-    if (type == 0) {
-        return `badge text-bg-primary`;
-    }
-
-    return `badge text-bg-danger`;
-}
-
-function getGradeType(type) {
-    if (type == 0) {
-        return `V`;
-    }
-    return `5.`;
-}
-
-function getGradeStyle(grade, type) {
-    if (type == 0) {
-        switch (grade) {
-            case 0:
-            case 1:
-            case 2:
-                return `badge text-bg-success`;
-            case 3:
-            case 4:
-            case 5:
-                return `badge text-bg-warning`;
-            case 6:
-            case 7:
-            case 8:
-                return `badge text-bg-danger`;
-            default:
-                return `badge text-bg-dark`;
-        }
-    }
-    else {
-        return `badge text-bg-secondary`;
-    }
+    return `<span class="badge text-bg-${style}" style="font-size: 9px;">${roleName}</span>`
 }
 
 
@@ -82,39 +63,44 @@ $(document).ready(async function () {
             }
         }
 
-        routeList = fetch(`${origin}/route/getLiveRoutes`, {
+        routeList = fetch(`${origin}/announcements/getAnnouncementList`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${sessionStorage.getItem('jwt')}`
             }
         }).then(response => response.json()).then(async response => {
             count = 1;
-            var routes = await response["routes"]
+            var posts = await response["posts"]
 
-            routes.forEach(async route => {
-                response = await fetch(`${origin}/route/getRouteDetails?routeId=${route._id}`, {
+            posts.forEach(async post => {
+                response = await fetch(`${origin}/announcements/getAnnouncementDetails?announcementId=${post._id}`, {
                     method: "GET"
                 })
 
                 var body = await response.json();
 
-                var name = body.Name;
-                var desc = body.Description;
-                var grade = body.Grade;
-                var type = getType(body.Type);
-                var typeStyle = getTypeStyle(body.Type);
-                var gradeType = getGradeType(body.Type);
-                var gradeStyle = getGradeStyle(grade, body.Type);
+                var title = body.Title;
+                var authorId = body.Author;
+                var postbody = body.Body;
                 var date = parseDate(body.CreationDate);
+
+                //get author details
+                response = await fetch(`${origin}/user/getRoutePacketFromID?userId=${authorId}`, {
+                    method: "GET"
+                })
+
+                body = await response.json();
+                var authorName = body.username;
+                var authorRole = body["gyms"]["ascend"];
+
                 //////////////////////////////////////
 
-                routeObjectHTML = `<tr id="${route._id}">
+                routeObjectHTML = `<tr id="${post._id}">
                         <th class=" align-middle" scope="row">${count}</th>
-                        <td class="text-center align-middle" id="r${count}">${route._id}</td>
-                        <td class="text-center text-truncate align-middle" style="max-width: 0.15vw;">${name}</td>
-                        <td class="text-center text-truncate text-dark-emphasis align-middle" style="max-width: 0.15vw;">${desc}</td>
-                        <td class="text-center align-middle"><span class="${gradeStyle}">${gradeType}${grade}</span></td>
-                        <td class="text-center align-middle"><span class="${typeStyle}">${type}</span></td>
+                        <td class="text-center align-middle" style="width: 0.2vw;" id="r${count}">${post._id}</td>
+                        <td class="text-center text-truncate align-middle" style="max-width: 0.15vw;">${title}</td>
+                        <td class="text-center align-middle" title="ID: ${authorId}">${makeRoleBadge(authorRole)} ${authorName}</td>
+                        <td class="text-center text-truncate text-dark-emphasis align-middle" style="max-width: 0.15vw;">${postbody}</td>
                         <td class="text-center align-middle">${date}</td>
                         <td><div class="dropdown">
 
@@ -124,8 +110,7 @@ $(document).ready(async function () {
                         </svg>
                         </a>
                         <ul class="dropdown-menu">
-                        <li><a id="edit${count}" class="dropdown-item" href="#">Edit route</a></li>
-                        <li><a id="archive${count}" class="dropdown-item" href="#">Archive route</a></li>
+                        <li><a id="edit${count}" class="dropdown-item" href="#">Edit post</a></li>
                         <li><a id="delete${count}" class="dropdown-item link-danger fw-bolder" href="#">Delete</a></li>
                         </ul>
 
@@ -135,13 +120,14 @@ $(document).ready(async function () {
                         </tr>`;
 
                 //////////////////////////////////////
-                $('#routesTable').append(routeObjectHTML)
+
+                $('#postTable').append(routeObjectHTML)
 
                 //Save the route data we are obtaining to construct the modals and edit the route
                 // $(`#edit${count}`).attr("data-name", name);
                 // $(`#edit${count}`).attr("data-desc", desc);
-                $(`#edit${count}`).attr("data-type", body.Type);
-                $(`#edit${count}`).attr("data-date", body.CreationDate);
+                // $(`#edit${count}`).attr("data-type", body.Type);
+                // $(`#edit${count}`).attr("data-date", body.CreationDate);
                 // $(`#edit${count}`).attr("data-grade", grade);
 
 
@@ -149,34 +135,34 @@ $(document).ready(async function () {
                 $(`#edit${count}`).unbind("click").on('click', async function (event) {
                     id = $(this).closest("tr").attr("id");
 
-                    $('#editRouteSubmit').attr("data-target", id);
-                    $('#editRouteSubmit').attr("data-date", $(this).attr("data-date"));
+                    // $('#editRouteSubmit').attr("data-target", id);
+                    // $('#editRouteSubmit').attr("data-date", $(this).attr("data-date"));
 
-                    //Change title
-                    titlehtml = `
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen me-2" viewBox="0 0 16 16">
-                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-                    </svg>
-                    Editting route '${id}'
-                    `;
+                    // //Change title
+                    // titlehtml = `
+                    // <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen me-2" viewBox="0 0 16 16">
+                    // <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                    // </svg>
+                    // Editting route '${id}'
+                    // `;
 
-                    $('#e-routeTitle').html(titlehtml);
+                    // $('#e-routeTitle').html(titlehtml);
 
-                    //populate fields
-                    $('#e-route-desc-field').val(desc)
-                    $('#e-route-name-field').val(name)
-                    $('#e-route-grade-field').val(grade)
+                    // //populate fields
+                    // $('#e-route-desc-field').val(desc)
+                    // $('#e-route-name-field').val(name)
+                    // $('#e-route-grade-field').val(grade)
 
 
 
-                    var type = $(this).attr("data-type") + 1;
-                    if (type == 1) {
-                        $('#e-Def').prop("selected", false)
-                        $('#e-Boulder').prop("selected", true)
-                    } else {
-                        $('#e-Def').prop("selected", false)
-                        $('#e-Sport').prop("selected", true)
-                    }
+                    // var type = $(this).attr("data-type") + 1;
+                    // if (type == 1) {
+                    //     $('#e-Def').prop("selected", false)
+                    //     $('#e-Boulder').prop("selected", true)
+                    // } else {
+                    //     $('#e-Def').prop("selected", false)
+                    //     $('#e-Sport').prop("selected", true)
+                    // }
 
 
                     $('#editRoute').modal("show");
@@ -203,8 +189,8 @@ $(document).ready(async function () {
                 $(`#delete${count}`).unbind("click").on('click', async function (event) {
                     id = $(this).closest("tr").attr("id");
 
-                    $('#deleteRouteButton').attr("data-target", id);
-                    $('#deletionTargetLabel').html(`Proceeding will permanently delete the route with the following ID: '${id}'.`);
+                    $('#deletePostButton').attr("data-target", id);
+                    $('#deletionTargetLabel').html(`Proceeding will permanently delete the post with the following ID: '${id}'.`);
 
                     $('#deleteWarning').modal("show");
                 });
@@ -215,25 +201,23 @@ $(document).ready(async function () {
         })
     });
 
-    //Change role Modal Behavior
-    $('#editRouteSubmit').unbind("click").on('click', async function (event) {
+    // Change role Modal Behavior
+    $('#editPostSubmit').unbind("click").on('click', async function (event) {
         target = $(this).attr("data-target")
-        value = $('#roleOptions').val();
 
         //Dont do anything if there isnt a target
         if (target == undefined) {
             return
         }
 
-        const formData = new FormData(document.getElementById("editRouteForm"));
+        const formData = new FormData(document.getElementById("editPostForm"));
         formData.append("creationDate", $(this).attr("data-date"))
         formData.append("targetId", target)
-        formData.append("isArchived", false)
         const urlEncoded = new URLSearchParams(formData).toString();
-        
+
 
         console.log(target)
-        var response = await fetch(`${origin}/route/editRouteDetails`, {
+        var response = await fetch(`${origin}/announcement/editAnnouncementDetails`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${sessionStorage.getItem('jwt')}`,
@@ -247,31 +231,31 @@ $(document).ready(async function () {
             return
         }
 
-        $('#editRoute').modal("hide");
+        $('#editPost').modal("hide");
         location.reload();
     });
 
     //Delete Route Modal Behavior
-    $('#deleteRouteButton').unbind("click").on('click', async function (event) {
+    $('#deletePostButton').unbind("click").on('click', async function (event) {
         target = $(this).attr("data-target")
         if (target == undefined) {
             return
         } else {
             console.log(target)
-            var response = await fetch(`${origin}/route/deleteLiveRoute?routeId=${target}`, {
+            var response = await fetch(`${origin}/announcements/deleteAnnouncement?announcementId=${target}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${sessionStorage.getItem('jwt')}`
                 }
             });
             alert("success");
-            $('#deleteRouteButton').attr("data-target", undefined); //unset the data target
+            $('#deletePostButton').attr("data-target", undefined); //unset the data target
             location.reload();
         }
     });
 
     //unset the data target on delete modal hidden
     $('#deleteWarning').on('hidden.bs.modal', async function (event) {
-        $('#deleteRouteButton').attr("data-target", undefined);
+        $('#deletePostButton').attr("data-target", undefined);
     });
 });

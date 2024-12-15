@@ -26,7 +26,7 @@ function parseDate(input) {
 }
 
 $(document).ready(async function () {
-  var documents = (await getAnnouncementList()).routes;
+  var documents = (await getAnnouncementList()).posts;
   console.log(JSON.stringify(documents));
 
   documents.forEach(async (announcement) => {

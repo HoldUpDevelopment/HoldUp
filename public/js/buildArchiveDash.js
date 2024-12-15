@@ -141,7 +141,7 @@ $(document).ready(async function () {
                 // $(`#edit${count}`).attr("data-name", name);
                 // $(`#edit${count}`).attr("data-desc", desc);
                 $(`#edit${count}`).attr("data-type", body.Type);
-                console.log($(`#edit${count}`).attr("data-type"));
+                $(`#edit${count}`).attr("data-date", body.CreationDate);
                 // $(`#edit${count}`).attr("data-grade", grade);
 
                 //Asign press listener
@@ -149,6 +149,7 @@ $(document).ready(async function () {
                     id = $(this).closest("tr").attr("id");
 
                     $('#editRouteSubmit').attr("data-target", id);
+                    $('#editRouteSubmit').attr("data-date", $(this).attr("data-date"));
 
                     //Change title
                     titlehtml = `
@@ -223,6 +224,7 @@ $(document).ready(async function () {
         }
 
         const formData = new FormData(document.getElementById("editRouteForm"));
+        formData.append("creationDate", $(this).attr("data-date"))
         formData.append("targetId", target)
         formData.append("isArchived", true)
         const urlEncoded = new URLSearchParams(formData).toString();

@@ -219,6 +219,19 @@
   </div>
 
 
+  <!--Add route button-->
+  <div class="fixed-bottom-right sticky position-absolute bottom-0 right-0 p-2 align-items-center logged-in role-setter"
+    style="display: none">
+    <button type="button" data-bs-toggle="modal" data-bs-target="#createRoute"
+      class="btn p-2 bg-primary shadow-none rounded" title="Create a Route">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="white" class="bi bi-plus-lg"
+        viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+          d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+      </svg><data value="dd"></data>
+    </button>
+  </div>
+
   <!--Side NAVBAR-->
   <main>
     <div id="body" class="container-fluid " style="height: 100vh;">
@@ -265,7 +278,7 @@
                   <ul class="ps-3 btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     <li><a href="#" class="link-dark  fw-bolder rounded" style="background-color:#fffca6">Routes</a></li>
                     <li><a href="../dashboard/archive.html" class="link-dark rounded">Archive</a></li>
-                    <li><a href="#" class="link-dark rounded">Create a route</a></li>
+                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#createRoute" class="link-dark rounded">Create a route</a></li>
                   </ul>
                 </div>
               </li>
@@ -276,8 +289,7 @@
                 </button>
                 <div class="collapse" id="orders-collapse">
                   <ul class="ps-3 btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a href="../dashboard/posts.html" class="link-dark rounded">Posts</a></li>
-                    <li><a href="#" class="link-dark rounded">Edit Posts</a></li>
+                    <li><a href="../dashboard/posts.html" class="link-dark rounded">Manage Posts</a></li>
                     <li><a href="#" class="link-dark rounded">Create a Post</a></li>
                   </ul>
                 </div>
@@ -307,10 +319,6 @@
                 </tr>
               </thead>
               <tbody id="routesTable">
-                <script>
-
-
-                </script>
               </tbody>
             </table>
           </div>

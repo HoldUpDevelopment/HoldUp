@@ -96,13 +96,14 @@ module.exports = {
         if (!userID) return;
         
         //data
-        const { image, name, type, grade, description, isArchived, targetId } = req.body;
+        const { image, name, type, grade, description, creationDate, isArchived, targetId } = req.body;
 
         const update = {
             Name: name,
             Type: type - 1,
             Grade: grade,
             Description: description,
+            CreationDate: creationDate
         }
 
         if (role <= 2) {
