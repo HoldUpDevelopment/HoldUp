@@ -195,6 +195,7 @@ $(document).ready(async function () {
             if (lastViewed == current) {
                 return
             }
+            lastViewed = current;
 
             $('#mainContent').empty()
 
@@ -325,7 +326,7 @@ $(document).ready(async function () {
 
             //show template
             $('#mainContent').append(clonedElement)
-            lastViewed = current;
+            
         });
     });
 
