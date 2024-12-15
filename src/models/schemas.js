@@ -176,7 +176,8 @@ const routeSchema = new mongoose.Schema({
         default: []
     },
     Rating: {
-        type: Number
+        type: Number,
+        default: 0
     }
 });
 
