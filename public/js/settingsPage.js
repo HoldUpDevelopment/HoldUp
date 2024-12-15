@@ -159,7 +159,7 @@ async function decodeUserID() {
               var element = `
               <div class="mb-1">
                 <label class="form-label" for="settings-box-profile_picture">Profile Picture</label>
-                <input type="file" class="form-control" id="settings-box-profile_picture">
+                <input type="file" disabled class="form-control" id="settings-box-profile_picture">
               </div>`;
               $("#settingsList").append(element);
             } else{
