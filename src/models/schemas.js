@@ -119,7 +119,11 @@ const reviewSchema = new mongoose.Schema({
     },
     Rating: {
         type: Number,
-        default: 5
+        default: 5,
+        enum: {
+            values: [1, 2, 3, 4, 5],
+            message: "{VALUE} is not a valid rating"
+        }
     },
     Verbose: {
         type: Boolean,
@@ -130,6 +134,8 @@ const reviewSchema = new mongoose.Schema({
         of: []
     }
 });
+
+
 
 const routeSchema = new mongoose.Schema({
     Name: String,
@@ -172,6 +178,9 @@ const routeSchema = new mongoose.Schema({
     Reviews: {
         type: [String],
         default: []
+    },
+    Rating: {
+        type: Number
     }
 });
 
