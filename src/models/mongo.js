@@ -266,6 +266,25 @@ async function getRouteInfo(
   }
 }
 
+async function getRouteReviews(
+  routeId, isArchived = false
+) {
+  mongoose.connection.useDb("route-mngt");
+  var Model;
+  if (isArchived) {
+    Model = Models["archived_routes"];
+  } else {
+    Model = Models["live_routes"];
+  }
+  try {
+    result = await Model.findOne({_id: routeId}, `Reviews`)
+    console.log("Found Document");
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -490,6 +509,7 @@ module.exports = {
   findOneListingByKeyValue: findOneListingByKeyValue,
   findManyListingsByKeyValue: findManyListingsByKeyValue,
   getListOfIDs: getListOfIDs,
+  getRouteReviews: getRouteReviews,
   updateRouteRating: updateRouteRating,
   getListOfReviewsForRoute: getListOfReviewsForRoute,
   updateListingByKey: updateListingByKey,
