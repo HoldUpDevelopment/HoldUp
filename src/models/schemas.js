@@ -119,7 +119,9 @@ const reviewSchema = new mongoose.Schema({
     },
     Rating: {
         type: Number,
-        default: 5
+        default: 5,
+        max: 5,
+        min: 0
     },
     Verbose: {
         type: Boolean,
@@ -130,6 +132,8 @@ const reviewSchema = new mongoose.Schema({
         of: []
     }
 });
+
+
 
 const routeSchema = new mongoose.Schema({
     Name: String,
@@ -172,6 +176,9 @@ const routeSchema = new mongoose.Schema({
     Reviews: {
         type: [String],
         default: []
+    },
+    Rating: {
+        type: Number
     }
 });
 

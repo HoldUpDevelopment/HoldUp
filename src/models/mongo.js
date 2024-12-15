@@ -161,22 +161,60 @@ async function getListOfIDs(dbName, collection) {
     }
 }
 
-async function getListOfReviewsForRoute(dbName, routeId) {
+async function getListOfReviewsForRoute(dbName, routeId, isArchived = false) {
   mongoose.connection.useDb(dbName);
 
-  const Model = Models["reviews"];
+  var Model;
+  if (isArchived) {
+    Model = Models["archived_routes"];
+  } else {
+    Model = Models["live_routes"];
+  }
+
   try {
-    result = await Model.find({_id: routeId}, `_id`);
+    result = await Model.findOne({_id: routeId}, `Reviews`);
     if (result == null) {
       console.log(`No reviews found for routeID ${routeId}`);
       return {};
     } else {
-      console.log(`Found ${result.length} reviews for routeID ${routeId}`);
+      console.log(`Found reviews for routeID ${routeId}`);
       return result;
     }
   } catch(err) {
     console.log(err);
     return {};
+  }
+}
+
+async function updateRouteRating(dbName, routeId, isArchived = false) {
+  mongoose.connection.useDb(dbName);
+
+
+  if (isArchived) {
+    Model = Models["archived_routes"];
+  } else {
+    Model = Models["live_routes"];
+  }
+
+  try {
+    const route = await Model.findById(routeId)
+    if (!route) {
+      throw new Error(`Route with ID ${routeId} not found`);
+    }
+
+    const reviews = route.Reviews;
+    if (!reviews || reviews.length === 0) {
+      route.Rating = null;
+    } else {
+      const totalRating = reviews.reduce((sum, review) => sum + review.Rating, 0);
+      const averageRating = totalRating / reviews.length;
+      route.Rating = averageRating;
+    }
+
+    await route.save();
+    console.log(`Updated route rating for route ${routeId}`);
+  } catch(err) {
+    console.log(err);
   }
 }
 
