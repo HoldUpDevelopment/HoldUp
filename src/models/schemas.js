@@ -120,8 +120,10 @@ const reviewSchema = new mongoose.Schema({
     Rating: {
         type: Number,
         default: 5,
-        max: 5,
-        min: 0
+        enum: {
+            values: [1, 2, 3, 4, 5],
+            message: "{VALUE} is not a valid rating"
+        }
     },
     Verbose: {
         type: Boolean,
