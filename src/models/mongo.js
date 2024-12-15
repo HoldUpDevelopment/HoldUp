@@ -186,7 +186,9 @@ async function getListOfReviewsForRoute(dbName, routeId, isArchived = false) {
   }
 }
 
-async function updateRouteRating(dbName, routeId, isArchived = false) {
+
+
+async function updateRouteRating(dbName, routeId, rating, isArchived = false) {
   mongoose.connection.useDb(dbName);
 
 
@@ -202,14 +204,7 @@ async function updateRouteRating(dbName, routeId, isArchived = false) {
       throw new Error(`Route with ID ${routeId} not found`);
     }
 
-    const reviews = route.Reviews;
-    if (!reviews || reviews.length === 0) {
-      route.Rating = null;
-    } else {
-      const totalRating = reviews.reduce((sum, review) => sum + review.Rating, 0);
-      const averageRating = totalRating / reviews.length;
-      route.Rating = averageRating;
-    }
+    route.Rating = rating;
 
     await route.save();
     console.log(`Updated route rating for route ${routeId}`);
@@ -495,6 +490,7 @@ module.exports = {
   findOneListingByKeyValue: findOneListingByKeyValue,
   findManyListingsByKeyValue: findManyListingsByKeyValue,
   getListOfIDs: getListOfIDs,
+  updateRouteRating: updateRouteRating,
   getListOfReviewsForRoute: getListOfReviewsForRoute,
   updateListingByKey: updateListingByKey,
   deleteListingByKey: deleteListingByKey,
