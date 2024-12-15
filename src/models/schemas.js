@@ -106,8 +106,8 @@ const reviewSchema = new mongoose.Schema({
         default: ""
     },
     RouteId: {
-        type: Number,
-        default: 0
+        type: String,
+        default: ""
     },
     Author: {
         type: String,
