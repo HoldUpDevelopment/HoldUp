@@ -161,6 +161,25 @@ async function getListOfIDs(dbName, collection) {
     }
 }
 
+async function getListOfReviewsForRoute(dbName, routeId) {
+  mongoose.connection.useDb(dbName);
+
+  const Model = Models["reviews"];
+  try {
+    result = await Model.find({_id: routeId}, `_id`);
+    if (result == null) {
+      console.log(`No reviews found for routeID ${routeId}`);
+      return {};
+    } else {
+      console.log(`Found ${result.length} reviews for routeID ${routeId}`);
+      return result;
+    }
+  } catch(err) {
+    console.log(err);
+    return {};
+  }
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -438,6 +457,7 @@ module.exports = {
   findOneListingByKeyValue: findOneListingByKeyValue,
   findManyListingsByKeyValue: findManyListingsByKeyValue,
   getListOfIDs: getListOfIDs,
+  getListOfReviewsForRoute: getListOfReviewsForRoute,
   updateListingByKey: updateListingByKey,
   deleteListingByKey: deleteListingByKey,
   getRouteInfo: getRouteInfo,
