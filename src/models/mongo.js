@@ -37,8 +37,16 @@ async function startConnection() {
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Closes the connection to the mongoDB.
+ */
+async function closeConnection() {
+  // Essentially the same as the standard mongo function.
+  console.log(`Closing Connection to ${mongoose.connection}.`);
+  await mongoose.connection.close();
+}
+
 
 // returns a list of databases (should be {gyms, test, route_mngt})
 async function listDatabases() {
@@ -50,6 +58,10 @@ async function listDatabases() {
     databasesList.databases.forEach((db) => console.log(` - ${db.name}`));
   });
 }
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -493,34 +505,40 @@ async function getEmailByUserId(userId) {
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * @description Closes the connection to the mongoDB.
- */
-async function closeConnection() {
-  // Essentially the same as the standard mongo function.
-  console.log(`Closing Connection to ${mongoose.connection}.`);
-  await mongoose.connection.close();
-}
+
 
 module.exports = {
+  //MONGO Connection
   startConnection: startConnection,
+  closeConnection: closeConnection,
   listDatabases: listDatabases,
+  
+
+  //Generalized CRUD Functions:
+  //POST
   createListing: createListing,
+  //PUT
+  updateListingByKey: updateListingByKey,
+  //DELETE
+  deleteListingByKey: deleteListingByKey,
+  //GET
   findOneListingByKeyValue: findOneListingByKeyValue,
   findManyListingsByKeyValue: findManyListingsByKeyValue,
+  getIdByKeyValue: getIdByKeyValue,
   getListOfIDs: getListOfIDs,
-  getRouteReviews: getRouteReviews,
-  updateRouteRating: updateRouteRating,
-  getListOfReviewsForRoute: getListOfReviewsForRoute,
-  updateListingByKey: updateListingByKey,
-  deleteListingByKey: deleteListingByKey,
-  getRouteInfo: getRouteInfo,
+  getFieldFromListingById: getFieldFromListingById,
+
+
+  //USER Functions
   getRoutePacketFromUserId: getRoutePacketFromUserId,
   getForumPacketFromUserId: getForumPacketFromUserId,
   getUserSettingsById: getUserSettingsById,
-  getFieldFromListingById: getFieldFromListingById,
-  getIdByKeyValue: getIdByKeyValue,
   getEmailByUserId: getEmailByUserId,
   getRoleFromUserID: getRoleFromUserID,
-  closeConnection: closeConnection
+
+  //ROUTE Functions
+  getRouteInfo: getRouteInfo,
+  updateRouteRating: updateRouteRating,
+  getRouteReviews: getRouteReviews,
+  getListOfReviewsForRoute: getListOfReviewsForRoute,
 };
