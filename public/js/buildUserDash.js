@@ -171,7 +171,7 @@ $(document).ready(async function () {
             return
         }
 
-        $(`#role${target}`).html(Roles[value])
+        $(`#role${target}`).html(makeRoleBadge(parseInt(value)))
         $('#changeRole').modal("hide");
         // location.reload();
     });
