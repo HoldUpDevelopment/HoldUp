@@ -16,6 +16,14 @@ async function getAnnouncementData(announcementId) {
   return JSON.parse(xmlHttp.responseText);
 }
 
+async function getUserNameAndRole(id) {
+  var response = await fetch(`${origin}/user/getRoutePacketFromID?userId=${id}`, {
+    method: "GET"
+  })
+  var body = await response.json();
+  return { "username": body["username"], "role": body["gyms"]["ascend"] };
+}
+
 function parseDate(input) {
 
   let parts = input.split('-');
@@ -23,6 +31,45 @@ function parseDate(input) {
 
   // new Date(year, month [, day [, hours[, minutes[, seconds[, ms]]]]])
   return `${parts[1]}/${parts[2].slice(0, 2)}/${parts[0]}`; // Note: months are 0-based
+}
+
+//roles 
+const Roles = {
+  0: "Owner",
+  1: "Admin",
+  2: "Setter",
+  3: "Member",
+  4: "Visitor",
+  undefined: "N/A"
+}
+
+//create html for role badge on user name
+function makeRoleBadge(role) {
+  var roleName = Roles[role]
+  var style;
+
+  switch (role) {
+
+    case 0:
+      style = "dark"
+      break;
+    case 1:
+      style = "warning"
+      break;
+    case 2:
+      style = "info"
+      break;
+    case 3:
+      style = "success"
+      break;
+    case 4:
+      style = "light"
+      break;
+    default:
+      style = "secondary"
+  }
+
+  return `<span class="ms badge text-bg-${style}" style="font-size: 9px;">${roleName}</span>`
 }
 
 $(document).ready(async function () {
@@ -33,6 +80,7 @@ $(document).ready(async function () {
     var announcementData = (await getAnnouncementData(announcement._id));
     var postDate = parseDate(announcementData.CreationDate);
 
+    var data = await getUserNameAndRole(announcementData.Author)
     console.log(announcementData);
     $("#newsList").append(
       `<div class="card">
@@ -42,10 +90,16 @@ $(document).ready(async function () {
                 <small class="fst-italic text-black-50">${postDate}</small>
               </div>
 
-              <div>
-                <text>
-                  Written by ${announcementData.Author}
-                </text>
+              <div class="d-flex">
+                <span>
+                  Written by 
+                </span>
+                <div class="ms-1" style="background-color:rgb(255, 251, 198)">
+                  <span class="fw-semibold">
+                  ${data["username"]}
+                </span>
+                ${makeRoleBadge(data["role"])}
+                </div>
               </div>
 
               <div>

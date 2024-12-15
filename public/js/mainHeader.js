@@ -21,6 +21,14 @@ async function loginState() {
     }
 }
 
+async function getUserName(id) {
+    var response = await fetch(`${origin}/user/getRoutePacketFromID?userId=${id}`, {
+        method: "GET"
+    })
+    var body = await response.json();
+    return username = body["username"];
+}
+
 async function submitFormHTTP(body) {
     var xmlHttp = new XMLHttpRequest();
     
@@ -54,9 +62,10 @@ $(document).ready(async function () {
     $("#h").attr("data-userRole", role);
 
     if (state) {
-        loggedInElements.forEach(element => {
+        loggedInElements.forEach(async element => {
+            
             //Show elements
-
+            $("#userName").html(await getUserName(id));
             if (element.classList.contains("role-setter")) {
                 if (role <= 2) {
                     element.style.display = 'block';

@@ -59,8 +59,13 @@ async function submitLogin(validityReference) {
 //////////////////////////////////////////////////////////////////
 
 //Runs the code on the page
-(() => {
+$(document).ready(async function () {
     'use strict'
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    });
+    // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
+    let redir = params.redir;
 
     const formFields = document.querySelectorAll('.form-validator');
     var form = document.getElementById("login-form");//This is using JQuery functionality. Jquery must be loaded into the HTML for it to compile
@@ -83,8 +88,8 @@ async function submitLogin(validityReference) {
             event.stopPropagation();
         } else {
             event.preventDefault();
-            window.location.href = `${origin}/`; //Navigate to the login page!
+            window.location.href = `${origin}${redir}`; //Navigate to the login page!
         }
         //form.classList.add('was-validated');
     }, false)
-})();
+});

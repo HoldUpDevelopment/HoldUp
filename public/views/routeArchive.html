@@ -21,10 +21,11 @@
         </a>
         <div class="vr link-light"></div>
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="../dashboard" class="nav-link px-2 link-light link-opacity-75-hover">Home</a></li>
-          <li><a href="../routes" class="nav-link px-2 link-light link-opacity-75-hover">Gym Routes</a></li>
-          <li><a href="" class="nav-link px-2  link-light fw-bold">Archive</a></li>
-          <li><a href="../news" class="nav-link px-2 link-light link-opacity-75-hover">News</a></li>
+          
+          <li><a href="../routes" style="display: none;" class="nav-link px-2 logged-in logged-out link-light link-opacity-75-hover">Gym Routes</a></li>
+          <li><a href="" style="display: none;" class="nav-link px-2 logged-in logged-out  link-light fw-bold">Archive</a></li>
+          <li><a href="../news" style="display: none;" class="nav-link px-2 link-light logged-in logged-out  link-opacity-75-hover">News</a></li>
+          <li><a href="../dashboard" style="display: none;" class="role-setter logged-in logged-out nav-link px-2 link-light link-opacity-75-hover">Dashboard</a></li>
         </ul>
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
           <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
@@ -37,8 +38,13 @@
           </a>
           <ul class="dropdown-menu text-small">
             <!--Logged in buttons-->
-            <li><button type="button" data-bs-toggle="modal" data-bs-target="#createRoute" class="dropdown-item logged-in role-setter" style="display: none;"> + New route</button></li>
-            <li><a class="dropdown-item logged-in" style="display: none;" href="#">Profile</a></li>
+            <li>
+              <div id="userName" class="fw-bold ms-3 text-truncate logged-in" style="max-width: 120px;"></div>
+            </li>
+            <li>
+              <button type="button" data-bs-toggle="modal" data-bs-target="#createRoute"
+                class="dropdown-item logged-in role-setter" style="display: none;"> + New route</button>
+            </li>
             <li><a class="dropdown-item logged-in" style="display: none;" href="../settings">Settings</a></li>
             <li>
               <hr class="dropdown-divider logged-in" style="display: none;">
@@ -55,7 +61,14 @@
             </script>
 
             <!--Logged out buttons-->
-            <li><a class="dropdown-item logged-out" style="display: none;" href='../account/login'>Login</a></li>
+            <li><a id="loginButton" class="dropdown-item logged-out" style="display: none;" href="#">Login</a></li>
+            <script>
+              //login button
+              document.getElementById('loginButton').addEventListener('click', function () {
+                // Perform logout logic here
+                window.location.href = `${origin}/account/login?redir=${window.location.pathname}${window.location.search}`;
+              });
+            </script>
             <li><a class="dropdown-item logged-out" style="display: none;" href='../account/signup'>Create an
                 Account</a></li>
           </ul>

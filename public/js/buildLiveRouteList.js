@@ -307,7 +307,7 @@ $(document).ready(async function () {
                 var routegrade = routeData.Grade;
                 var routetype = getType(routeData.Type);
                 var routetypeStyle = getTypeStyle(routeData.Type);
-                var routegradeType = getGradeType(routeData.Type);
+                var routegradeType = getGradeType(0, routeData.Type);
                 var routegradeStyle = getGradeStyle(grade, routeData.Type);
                 var routedate = parseDate(routeData.CreationDate);
                 var gtnHTML = `
