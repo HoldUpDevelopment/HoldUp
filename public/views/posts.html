@@ -165,8 +165,48 @@
     </div>
   </div>
 
+  <!-- Create Announcement Modal -->
+  <div class="modal fade" id="postAnnouncement" tabindex="-1" aria-labelledby="postAnnouncement" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="postTitle">Create a new announcement</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="p-5 modal-body">
+          <form id="postCreationForm">
+            <div class="input-group mb-4">
+              <span for="route-name-field" class="input-group-text">Post title</span>
+              <input type="text" name="title" class="form-control" id="route-name-field" aria-label="route type">
+            </div>
 
+            <div class="input-group mb-4">
+              <span class="input-group-text">Post body</span>
+              <textarea type="text" name="body" class="form-control" id="route-name-field"
+                placeholder="Enter Description" aria-label="route name"></textarea>
+            </div>
 
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="createAnnouncementSubmit" class="btn btn-primary">Create Post</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--Add post button-->
+  <div class="fixed-bottom-right sticky position-absolute bottom-0 right-0 p-2 align-items-center logged-in role-setter"
+    style="display: none">
+    <button type="button" data-bs-toggle="modal" data-bs-target="#postAnnouncement"
+      class="btn p-2 bg-primary shadow-none rounded" title="Create a Route">
+      <svg xmlns="http://www.w3.org/2000/svg" width="30px" height="30px" fill="white" class="bi bi-plus-lg"
+        viewBox="0 0 16 16">
+        <path fill-rule="evenodd"
+          d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+      </svg><data value="dd"></data>
+    </button>
+  </div>
 
   <!-- Edit Post Modal -->
   <div class="modal fade" id="editPost" tabindex="-1" aria-labelledby="createPost" aria-hidden="true">
@@ -180,33 +220,19 @@
         </div>
         <div class="p-5 modal-body">
           <form id="editPostForm">
-            <div class="mb-4">
-              <label class="form-label" for="settings-box-profile_picture">Post Image</label>
-              <input type="file" name="image" class="form-control" id="settings-box-profile_picture">
+            <div class="input-group mb-4">
+              <span for="post-name-field" class="input-group-text">Post Title</span>
+              <input type="text" name="title" class="form-control" id="e-post-title-field" aria-label="post title">
             </div>
 
             <div class="input-group mb-4">
-              <span for="post-name-field" class="input-group-text">Post Name</span>
-              <input type="text" name="name" class="form-control" id="e-post-name-field" aria-label="post type">
+              <span for="post-grade-field" class="input-group-text">Post Author</span>
+              <input type="text" name="author" class="form-control" id="e-post-author-field" aria-label="post author">
             </div>
 
             <div class="input-group mb-4">
-              <label class="input-group-text" for="inputGroupSelect01">Post Type</label>
-              <select class="form-select" name="type" id="e-post-type">
-                <option selected id="e-Def">Choose...</option>
-                <option value="1" id="e-Boulder">Boulder</option>
-                <option value="2" id="e-Sport">Sport</option>
-              </select>
-            </div>
-
-            <div class="input-group mb-4">
-              <span for="post-grade-field" class="input-group-text">Post Grade</span>
-              <input type="text" name="grade" class="form-control" id="e-post-grade-field" aria-label="post grade">
-            </div>
-
-            <div class="input-group mb-4">
-              <span class="input-group-text">Post Description</span>
-              <textarea type="text" name="description" class="form-control" id="e-post-desc-field"
+              <span class="input-group-text">Post Body</span>
+              <textarea type="text" name="body" class="form-control" id="e-post-body-field"
                 placeholder="Enter Description" aria-label="post name"></textarea>
             </div>
 
@@ -322,6 +348,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/mainHeader.js"></script>
   <script src="../js/buildAnnouncementDash.js"></script>
+  <script src="../js/announcementForm.js"></script>
 </body>
 
 </html>

@@ -89,9 +89,9 @@ $(document).ready(async function () {
                     method: "GET"
                 })
 
-                body = await response.json();
-                var authorName = body.username;
-                var authorRole = body["gyms"]["ascend"];
+                user = await response.json();
+                var authorName = user.username;
+                var authorRole = user["gyms"]["ascend"];
 
                 //////////////////////////////////////
 
@@ -127,7 +127,7 @@ $(document).ready(async function () {
                 // $(`#edit${count}`).attr("data-name", name);
                 // $(`#edit${count}`).attr("data-desc", desc);
                 // $(`#edit${count}`).attr("data-type", body.Type);
-                // $(`#edit${count}`).attr("data-date", body.CreationDate);
+                $(`#edit${count}`).attr("data-date", body.CreationDate);
                 // $(`#edit${count}`).attr("data-grade", grade);
 
 
@@ -135,37 +135,25 @@ $(document).ready(async function () {
                 $(`#edit${count}`).unbind("click").on('click', async function (event) {
                     id = $(this).closest("tr").attr("id");
 
-                    // $('#editRouteSubmit').attr("data-target", id);
-                    // $('#editRouteSubmit').attr("data-date", $(this).attr("data-date"));
+                    $('#editPostSubmit').attr("data-target", id);
+                    $('#editPostSubmit').attr("data-date", $(this).attr("data-date"));
 
-                    // //Change title
-                    // titlehtml = `
-                    // <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen me-2" viewBox="0 0 16 16">
-                    // <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-                    // </svg>
-                    // Editting route '${id}'
-                    // `;
+                    //Change title
+                    titlehtml = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen me-2" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                    </svg>
+                    Editting post '${id}'
+                    `;
 
-                    // $('#e-routeTitle').html(titlehtml);
+                    $('#e-postTitle').html(titlehtml);
 
-                    // //populate fields
-                    // $('#e-route-desc-field').val(desc)
-                    // $('#e-route-name-field').val(name)
-                    // $('#e-route-grade-field').val(grade)
+                    //populate fields
+                    $('#e-post-body-field').val(postbody)
+                    $('#e-post-title-field').val(title)
+                    $('#e-post-author-field').val(authorId)
 
-
-
-                    // var type = $(this).attr("data-type") + 1;
-                    // if (type == 1) {
-                    //     $('#e-Def').prop("selected", false)
-                    //     $('#e-Boulder').prop("selected", true)
-                    // } else {
-                    //     $('#e-Def').prop("selected", false)
-                    //     $('#e-Sport').prop("selected", true)
-                    // }
-
-
-                    $('#editRoute').modal("show");
+                    $('#editPost').modal("show");
                 });
 
                 $(`#archive${count}`).unbind("click").on('click', async function (event) {
@@ -217,7 +205,7 @@ $(document).ready(async function () {
 
 
         console.log(target)
-        var response = await fetch(`${origin}/announcement/editAnnouncementDetails`, {
+        var response = await fetch(`${origin}/announcements/editAnnouncement`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${sessionStorage.getItem('jwt')}`,

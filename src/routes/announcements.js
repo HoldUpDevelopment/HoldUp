@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/createAnnouncement', express.urlencoded({ extended: true }), announcementController.createAnnouncement);
 
-router.put('/editAnnouncement', announcementController.editAnnouncement);
+router.put('/editAnnouncement', express.urlencoded({ extended: true }), announcementController.editAnnouncement);
 
 router.delete('/deleteAnnouncement', announcementController.deleteAnnouncement);
 

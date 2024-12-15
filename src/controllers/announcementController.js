@@ -35,36 +35,34 @@ module.exports = {
     },
 
     // PUT Methods
-    editAnnouncement: (req, res) => {
-        var reqBody = '';
-        const query = req.query.announcementId
+    editAnnouncement: async (req, res) => {
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
 
-        req.on('data', function (chunk) { // reading the request into a var.
-            reqBody += chunk.toString();
-        });
+        //data
+        const { title, author, body, creationDate, targetId } = req.body;
 
-        req.on('end', async () => {
-            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
-            response_body = {};
-            var confirmation = await mongo.updateListingByKey("route_mngt", "announcements", query, reqBody);
-            if (confirmation == false) {
-                response_body = {
-                    success: false,
-                }
-            } else {
-                response_body = {
-                    success: true,
-                }
+        const update = {
+            Title: title,
+            Author: author,
+            Body: body,
+            CreationDate: creationDate
+        }
+
+        if (role <= 2) {
+            try {
+                console.log(targetId);
+                console.log(update);
+                await mongo.updateListingByKey("route_mngt", "announcements", targetId, update);
+
+                res.status(202).json({ message: "Post successfully editted" });
+            } catch (err) {
+                console.log(err)
+                res.status(500).json({ error: "Editting process failed" });
             }
-
-            json_message = JSON.stringify(response_body);
-
-            res.writeHead(200, { // Writing Response
-                'Content-Type': 'application/json'
-            });
-            res.write(JSON.stringify(response_body));
-            res.end();
-        });
+        } else {
+            res.status(403).json({ message: "Insufficient Permissions" });
+        }
     },
 
     // DELETE Methods
