@@ -112,7 +112,52 @@ function makeRoleBadge(role) {
             style = "secondary"
     }
 
-    return `<span class="badge text-bg-${style}" style="font-size: 9px;">${roleName}</span>`
+    return `<span class="ms-1 badge text-bg-${style}" style="font-size: 9px;">${roleName}</span>`
+}
+
+
+function getRatingHTML(rating) {
+    var c1 = "";
+    var c2 = "";
+    var c3 = "";
+    var c4 = "";
+    var c5 = "";
+    
+    switch (rating) {
+        case 1:
+            c1 = "checked";
+            break;
+        case 2:
+            c1 = "checked";
+            c2 = "checked";
+            break;
+        case 3:
+            c1 = "checked";
+            c2 = "checked";
+            c3 = "checked";
+            break;
+        case 4:
+            c1 = "checked";
+            c2 = "checked";
+            c3 = "checked";
+            c4 = "checked";
+            break;
+        case 5:
+            c1 = "checked";
+            c2 = "checked";
+            c3 = "checked";
+            c4 = "checked";
+            c5 = "checked";
+            break;
+    }
+
+    return `
+        <span class="fa fa-star ${c1}"></span>
+        <span class="fa fa-star ${c2}"></span>
+        <span class="fa fa-star ${c3}"></span>
+        <span class="fa fa-star ${c4}"></span>
+        <span class="fa fa-star ${c5}"></span>
+    `;
 }
 
 $(document).ready(async function () {
@@ -146,11 +191,11 @@ $(document).ready(async function () {
             event.preventDefault();
 
             //dont show if it is the same object
-            var current = $(this).attr('id'); 
-            if(lastViewed == current) {
+            var current = $(this).attr('id');
+            if (lastViewed == current) {
                 return
             }
-            
+
             $('#mainContent').empty()
 
 
@@ -159,6 +204,7 @@ $(document).ready(async function () {
             // var mTitle = mymodal.find('.modal-title');
             var button = $(this);
             var id = button.attr("id");
+            $('#createReviewSubmit').attr("data-target", id)
 
             var clonedElement = $("#template").contents().clone();
             var gradeTypeName = clonedElement.find("#gradeTypeName");
@@ -166,6 +212,8 @@ $(document).ready(async function () {
             var author = clonedElement.find("#uploader");
             var description = clonedElement.find("#routeDescription");
             var scorecard = clonedElement.find("#reviewScorecard")
+            var reviewTable = clonedElement.find("#reviewList")
+            var rating = scorecard.find("#ratingInfo");
             var bar1 = scorecard.find(".bar-1");
             var bar2 = scorecard.find(".bar-2");
             var bar3 = scorecard.find(".bar-3");
@@ -192,11 +240,78 @@ $(document).ready(async function () {
             date.append(routedate);
             author.append("...");
             description.append(desc);
-            
+
 
             //review info
+            reviewCount = await fetch(`${origin}/feedback/getReviewCount?routeId=${route._id}&isArchived=false`, {
+                method: "GET"
+            })
+            reviewCount = await reviewCount.json();
+            routeRating = await fetch(`${origin}/feedback/getRouteRating?routeId=${route._id}&isArchived=false`, {
+                method: "GET"
+            })
+            routeRating = await routeRating.json();
+            var rRating = routeRating.rating;
+            if (routeRating.rating == undefined) rRating = 0;
+            rating.html(`${Math.round(rRating * 100) / 100} average based on ${reviewCount.review_count} review(s).`);
+
+
+
+            //user reviews
+            var reviewList = await fetch(`${origin}/feedback/getReviewsOnRoute?routeId=${route._id}`, {
+                method: "GET"
+            })
+            var body = await reviewList.json();
+            var reviews = body.reviews;
+
+            reviews.forEach(async review => {
+                var response = await fetch(`${origin}/feedback/getReviewDetails?reviewId=${review}`, {
+                    method: "GET"
+                })
+                var body = await response.json();
+
+                var author = body.Author;
+                var authorData = await fetch(`${origin}/user/getRoutePacketFromID?userId=${author}`, {
+                    method: "GET"
+                })
+                var authorData = await authorData.json();
+                var authorName = authorData["username"];
+                var role = authorData["gyms"]["ascend"];
+                var Body = body.Body;
+                var Rating = body.Rating;
+                var Verbose = body.Verbose;
+
+                var html;
+                if (Verbose) {
+                    html = `
+                            <div class="m-3 reviewWidth">
+                            <img src="https://img.icons8.com/?size=100&id=107049&format=png&color=000000"
+                            style="background-color: #f8f9fa;" alt="mdo" width="32" height="32" class="rounded-circle">
+                            <span>${authorName}${makeRoleBadge(role)}</span>
+                            <div class="d-flex border-bottom"><span class="me-2">${getRatingHTML(Rating)}</span></div>
+                            <span>${Body}</span>
+                            </div>
+                        `
+                } else {
+                    html = `
+                            <div class="m-3 reviewWidth">
+                            <img src="https://img.icons8.com/?size=100&id=107049&format=png&color=000000"
+                            style="background-color: #f8f9fa;" alt="mdo" width="32" height="32" class="rounded-circle">
+                            <span>${authorName}${makeRoleBadge(role)}</span>
+                            <div class="d-flex border-bottom"><span class="me-2">${getRatingHTML(Rating)}</span></div>
+                            </div>
+                        `
+                }
+
+                reviewTable.append(html)
+            });
+
+
+
+
+
             var barStyle = "bg-primary";
-            if(routeData.Type != 0) {
+            if (routeData.Type != 0) {
                 barStyle = "bg-danger";
             }
             bar1.addClass(barStyle);
@@ -206,12 +321,15 @@ $(document).ready(async function () {
             bar5.addClass(barStyle);
 
 
-            
+
 
             //show template
             $('#mainContent').append(clonedElement)
-            lastViewed = current; 
+            lastViewed = current;
         });
     });
+
+
+
 });
 

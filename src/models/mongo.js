@@ -209,7 +209,9 @@ async function updateRouteRating(dbName, routeId, rating, isArchived = false) {
     await route.save();
     console.log(`Updated route rating for route ${routeId}`);
   } catch(err) {
+    
     console.log(err);
+    throw(err)
   }
 }
 

@@ -97,10 +97,6 @@ const userSchema = new mongoose.Schema({
 });
 
 const reviewSchema = new mongoose.Schema({
-    Title: {
-        type: String,
-        default: ""
-    },
     Body: {
         type: String,
         default: ""

@@ -113,6 +113,13 @@ module.exports = {
             root: 'public/js/'
         })
     },
+    reviewFormJS: (req, res) => {
+        res.status(200); //OK
+        res.set('Content-Type', 'text/javascript');
+        res.sendFile('reviewForm.js', {
+            root: 'public/js/'
+        })
+    },
     buildUserDashJS: (req, res) => {
         res.status(200); //OK
         res.set('Content-Type', 'text/javascript');
