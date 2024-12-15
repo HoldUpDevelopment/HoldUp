@@ -16,6 +16,14 @@ Models["live_routes"] = mongoose.model("live_routes", Schemas.live_routes);
 Models["archived_routes"] = mongoose.model("archived_routes", Schemas.archived_routes);
 Models["accounts"] = mongoose.model("accounts", Schemas.accounts);
 
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+// MONGO CONNECTION FUNCTIONS
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
 // Initializes connection to MongoDB through Mongoose.
 /**
  * @description Initializes connection to mongoDB and initializes mongoose models.
@@ -58,10 +66,11 @@ async function listDatabases() {
     databasesList.databases.forEach((db) => console.log(` - ${db.name}`));
   });
 }
+
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-
+// GENERALIZED CRUD OPERATIONS
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -88,140 +97,6 @@ async function createListing(dbName, collection, newListing) {
   } catch (err) {
     console.log(err);
     throw err;
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @description Searches for a document in the mongoDB by a specified key/value pair.
- * @param {String} dbName name of database
- * @param {String} collection name of database collection
- * @param {String} listingQuery the value of the listing you are serching
- * @param {String} listingKey name of key to search by
- * @returns A mongoose document. If unsucessful, returns an empty set.
- */
-async function findOneListingByKeyValue(dbName, collection, listingQuery, listingKey) {
-  mongoose.connection.useDb(dbName);
-
-  const Model = Models[collection];
-  
-
-  try {
-    result = await Model.findOne({[listingKey]: listingQuery})
-    if (result == null) {
-      console.log(`No document found with key matching ${listingQuery}`);
-      return {};
-    } else {
-      console.log(`Found document with key matching ${listingQuery}`);
-      return result;
-    }
-  } catch (err) {
-    console.log(err);
-    return {};
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @description Searches for multiple document in the mongoDB matching the specified key/value pair.
- * @param {String} dbName name of database
- * @param {String} collection name of database collection
- * @param {String} listingQuery the value of the listing you are serching
- * @param {String} listingKey name of key to search by
- * @returns A set of mongoose document. If unsucessful, returns an empty set.
- */
-async function findManyListingsByKeyValue(dbName, collection, listingQuery, listingKey) {
-  mongoose.connection.useDb(dbName);
-
-  const Model = Models[collection];
-  try {
-    result = await Model.findMany({[listingKey]: listingQuery})
-    if (result == null) {
-      console.log(`No documents found with key matching ${listingQuery}`);
-      return {};
-    } else {
-      console.log(`Found ${result.length} documents with key matching ${listingQuery}`);
-      return result;
-    }
-    } catch (err) {
-      console.log(err);
-      return {};
-    }
-}
-
-
-async function getListOfIDs(dbName, collection) {
-  mongoose.connection.useDb(dbName);
-
-  const Model = Models[collection];
-  try {
-    result = await Model.find({}, `_id`);
-    if (result == null) {
-      console.log(`No documents found in collection ${collection}`);
-      return {};
-    } else {
-      console.log(`Found ${result.length} documents in collection ${collection}`);
-      return result;
-    }
-    } catch (err) {
-      console.log(err);
-      return {};
-    }
-}
-
-async function getListOfReviewsForRoute(dbName, routeId, isArchived = false) {
-  mongoose.connection.useDb(dbName);
-
-  var Model;
-  if (isArchived) {
-    Model = Models["archived_routes"];
-  } else {
-    Model = Models["live_routes"];
-  }
-
-  try {
-    result = await Model.findOne({_id: routeId}, `Reviews`);
-    if (result == null) {
-      console.log(`No reviews found for routeID ${routeId}`);
-      return {};
-    } else {
-      console.log(`Found reviews for routeID ${routeId}`);
-      return result;
-    }
-  } catch(err) {
-    console.log(err);
-    return {};
-  }
-}
-
-
-
-async function updateRouteRating(dbName, routeId, rating, isArchived = false) {
-  mongoose.connection.useDb(dbName);
-
-
-  if (isArchived) {
-    Model = Models["archived_routes"];
-  } else {
-    Model = Models["live_routes"];
-  }
-
-  try {
-    const route = await Model.findById(routeId)
-    if (!route) {
-      throw new Error(`Route with ID ${routeId} not found`);
-    }
-
-    route.Rating = rating;
-
-    await route.save();
-    console.log(`Updated route rating for route ${routeId}`);
-  } catch(err) {
-    console.log(err);
   }
 }
 
@@ -259,47 +134,6 @@ async function updateListingByKey(
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
-async function getRouteInfo(
-  routeId, isArchived
-) {
-  mongoose.connection.useDb("route-mngt");
-  var Model;
-  if (isArchived) {
-    Model = Models["archived_routes"];
-  } else {
-    Model = Models["live_routes"];
-  }
-  try {
-    result = await Model.findOne({_id: routeId}, `Name CreationDate Grade Type`)
-    console.log("Found Document");
-    return result;
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-async function getRouteReviews(
-  routeId, isArchived = false
-) {
-  mongoose.connection.useDb("route-mngt");
-  var Model;
-  if (isArchived) {
-    Model = Models["archived_routes"];
-  } else {
-    Model = Models["live_routes"];
-  }
-  try {
-    result = await Model.findOne({_id: routeId}, `Reviews`)
-    console.log("Found Document");
-    return result;
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-
 /**
  * @descripton Deletes a document in the mongoDB.
  * @param {String} dbName name of database
@@ -319,6 +153,142 @@ async function deleteListingByKey(dbName, collection, listingKey) {
     console.log(err);
   }
 }
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @description Searches for a document in the mongoDB by a specified key/value pair.
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {String} listingQuery the value of the listing you are serching
+ * @param {String} listingKey name of key to search by
+ * @returns A mongoose document. If unsucessful, returns an empty set.
+ */
+async function findOneListingByKeyValue(dbName, collection, listingQuery, listingKey) {
+  mongoose.connection.useDb(dbName);
+
+  const Model = Models[collection];
+  
+
+  try {
+    result = await Model.findOne({[listingKey]: listingQuery})
+    if (result == null) {
+      console.log(`No document found with key matching ${listingQuery}`);
+      return {};
+    } else {
+      console.log(`Found document with key matching ${listingQuery}`);
+      return result;
+    }
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+}
+
+
+/**
+ * @description Searches for multiple document in the mongoDB matching the specified key/value pair.
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {String} listingQuery the value of the listing you are serching
+ * @param {String} listingKey name of key to search by
+ * @returns A set of mongoose document. If unsucessful, returns an empty set.
+ */
+async function findManyListingsByKeyValue(dbName, collection, listingQuery, listingKey) {
+  mongoose.connection.useDb(dbName);
+
+  const Model = Models[collection];
+  try {
+    result = await Model.findMany({[listingKey]: listingQuery})
+    if (result == null) {
+      console.log(`No documents found with key matching ${listingQuery}`);
+      return {};
+    } else {
+      console.log(`Found ${result.length} documents with key matching ${listingQuery}`);
+      return result;
+    }
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+}
+
+
+/**
+ * @description Searches the mongoDB for a document matching the provided key/value
+ * pair, and returns its `_id`.
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {String} listingQuery value used to find document (EX: `fakeBryan`)
+ * @param {String} listingKey key used with query value (EX: `username`)
+ * @returns Returns a document's `_id` if it was found, if not returns `404`.
+ */
+async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
+  mongoose.connection.useDb(dbName);
+
+  const Model = Models[collection];
+  try {
+    result = await Model.findOne({[listingKey]: listingQuery})
+    if (result == null) {
+      throw new mongoose.Error.DocumentNotFoundError(listingQuery);
+    }
+    console.log(`Found document with key matching ${listingQuery}`);
+    return result._id;
+  } catch (err) {
+    console.log(err);
+    return 404;
+  }
+}
+
+
+async function getListOfIDs(dbName, collection) {
+  mongoose.connection.useDb(dbName);
+
+  const Model = Models[collection];
+  try {
+    result = await Model.find({}, `_id`);
+    if (result == null) {
+      console.log(`No documents found in collection ${collection}`);
+      return {};
+    } else {
+      console.log(`Found ${result.length} documents in collection ${collection}`);
+      return result;
+    }
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+}
+
+
+/**
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @param {String|Number|ObjectId} listingQuery the `_id` of the document you want to search
+ * @param {String} searchKey the name of the key field you want to retrieve (EX: email)
+ * @returns JSON object with the supplied listing's `searchKey`.
+ * Returns `404` if no document matching `listingQuery` was not found.
+ */
+async function getFieldFromListingById(dbName, collection, listingQuery, searchKey) {
+  mongoose.connection.useDb(dbName);
+
+  const Model = Models[collection];
+  try {
+    result = await Model.findOne({_id: listingQuery}, searchKey);
+    console.log(result);
+    console.log(`Found document with id ${listingQuery}`);
+    return(result);
+  } catch (err) {
+    console.log(err);
+    return 404;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+// USER SPECIFIC FUNCTIONS
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -347,30 +317,6 @@ async function getRoutePacketFromUserId(userId) {
   }
 }
 
-/**
- * @description Gets a User's role from their ID.
- * @param {String|Number|ObjectId} userId the `_id` property of the user being searched
- * @returns Returns a JSON with the specified user's `gyms` and their matching roles.
- * If no matching user was found, returns `404`.
- */
-async function getRoleFromUserID(userId) {
-  mongoose.connection.useDb('route-mngt');
-
-  const Model = Models["users"];
-  try {
-    result = await Model.findById(userId, `gyms`).lean();
-    //returnBody
-    
-    console.log(`Found user with id ${userId}`);
-    return result;
-  } catch (err) {
-    console.log(err);
-    return 404;
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * @description Gets a User's username and profile picture.
@@ -396,34 +342,6 @@ async function getForumPacketFromUserId(userId) {
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @param {String} dbName name of database
- * @param {String} collection name of database collection
- * @param {String|Number|ObjectId} listingQuery the `_id` of the document you want to search
- * @param {String} searchKey the name of the key field you want to retrieve (EX: email)
- * @returns JSON object with the supplied listing's `searchKey`.
- * Returns `404` if no document matching `listingQuery` was not found.
- */
-async function getFieldFromListingById(dbName, collection, listingQuery, searchKey) {
-  mongoose.connection.useDb(dbName);
-
-  const Model = Models[collection];
-  try {
-    result = await Model.findOne({_id: listingQuery}, searchKey);
-    console.log(result);
-    console.log(`Found document with id ${listingQuery}`);
-    return(result);
-  } catch (err) {
-    console.log(err);
-    return 404;
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
 
 /**
  * @description Searches the mongoDB for a user's settings.
@@ -448,38 +366,6 @@ async function getUserSettingsById(userId) {
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @description Searches the mongoDB for a document matching the provided key/value
- * pair, and returns its `_id`.
- * @param {String} dbName name of database
- * @param {String} collection name of database collection
- * @param {String} listingQuery value used to find document (EX: `fakeBryan`)
- * @param {String} listingKey key used with query value (EX: `username`)
- * @returns Returns a document's `_id` if it was found, if not returns `404`.
- */
-async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
-  mongoose.connection.useDb(dbName);
-
-  const Model = Models[collection];
-  try {
-    result = await Model.findOne({[listingKey]: listingQuery})
-    if (result == null) {
-      throw new mongoose.Error.DocumentNotFoundError(listingQuery);
-    }
-    console.log(`Found document with key matching ${listingQuery}`);
-    return result._id;
-  } catch (err) {
-    console.log(err);
-    return 404;
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
-
 /**
  * @description Searches the mongoDB for a user and returns its `email`.
  * @param {String|Number|ObjectId} userId the `_id` property of the user being searched
@@ -502,10 +388,130 @@ async function getEmailByUserId(userId) {
   }
 }
 
+
+/**
+ * @description Gets a User's role from their ID.
+ * @param {String|Number|ObjectId} userId the `_id` property of the user being searched
+ * @returns Returns a JSON with the specified user's `gyms` and their matching roles.
+ * If no matching user was found, returns `404`.
+ */
+async function getRoleFromUserID(userId) {
+  mongoose.connection.useDb('route-mngt');
+
+  const Model = Models["users"];
+  try {
+    result = await Model.findById(userId, `gyms`).lean();
+    //returnBody
+    
+    console.log(`Found user with id ${userId}`);
+    return result;
+  } catch (err) {
+    console.log(err);
+    return 404;
+  }
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
+// ROUTE SPECIFIC FUNCTIONS
 
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
+async function getRouteInfo(
+  routeId, isArchived
+) {
+  mongoose.connection.useDb("route-mngt");
+  var Model;
+  if (isArchived) {
+    Model = Models["archived_routes"];
+  } else {
+    Model = Models["live_routes"];
+  }
+  try {
+    result = await Model.findOne({_id: routeId}, `Name CreationDate Grade Type`)
+    console.log("Found Document");
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
+async function updateRouteRating(dbName, routeId, rating, isArchived = false) {
+  mongoose.connection.useDb(dbName);
+
+
+  if (isArchived) {
+    Model = Models["archived_routes"];
+  } else {
+    Model = Models["live_routes"];
+  }
+
+  try {
+    const route = await Model.findById(routeId)
+    if (!route) {
+      throw new Error(`Route with ID ${routeId} not found`);
+    }
+
+    route.Rating = rating;
+
+    await route.save();
+    console.log(`Updated route rating for route ${routeId}`);
+  } catch(err) {
+    console.log(err);
+  }
+}
+
+
+async function getRouteReviews(
+  routeId, isArchived = false
+) {
+  mongoose.connection.useDb("route-mngt");
+  var Model;
+  if (isArchived) {
+    Model = Models["archived_routes"];
+  } else {
+    Model = Models["live_routes"];
+  }
+  try {
+    result = await Model.findOne({_id: routeId}, `Reviews`)
+    console.log("Found Document");
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
+async function getListOfReviewsForRoute(dbName, routeId, isArchived = false) {
+  mongoose.connection.useDb(dbName);
+
+  var Model;
+  if (isArchived) {
+    Model = Models["archived_routes"];
+  } else {
+    Model = Models["live_routes"];
+  }
+
+  try {
+    result = await Model.findOne({_id: routeId}, `Reviews`);
+    if (result == null) {
+      console.log(`No reviews found for routeID ${routeId}`);
+      return {};
+    } else {
+      console.log(`Found reviews for routeID ${routeId}`);
+      return result;
+    }
+  } catch(err) {
+    console.log(err);
+    return {};
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
   //MONGO Connection
