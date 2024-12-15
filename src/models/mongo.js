@@ -241,7 +241,13 @@ async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
   }
 }
 
-
+/**
+ * @description gets a complete list of the IDs of all documents in a collection
+ * @param {String} dbName name of database
+ * @param {String} collection name of database collection
+ * @returns JSON object with the `_id` field of all documents in `collection`.
+ * Returns an empty set if no documents were found.
+ */
 async function getListOfIDs(dbName, collection) {
   mongoose.connection.useDb(dbName);
 
@@ -419,8 +425,16 @@ async function getRoleFromUserID(userId) {
 ///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * 
+ * @param {String} routeId The `_id` of the route you are searching for.
+ * @param {Boolean} isArchived Specifies whether or not the route is live or archived.
+ * Default is `false`.
+ * @returns Mongoose document containing the route's `Name`, `CreationDate`, `Grade`,
+ * and `Type`.
+ */
 async function getRouteInfo(
-  routeId, isArchived
+  routeId, isArchived = false
 ) {
   mongoose.connection.useDb("route-mngt");
   var Model;
@@ -438,7 +452,15 @@ async function getRouteInfo(
   }
 }
 
-
+/**
+ * 
+ * @param {String} dbName name of database
+ * @param {String} routeId The `_id` of the route you are updating.
+ * @param {Number} rating The new value you are updating the route's `Rating`
+ *  property to match.
+ * @param {Boolean} isArchived Specifies whether or not the route is live or archived.
+ * Default is `false`.
+ */
 async function updateRouteRating(dbName, routeId, rating, isArchived = false) {
   mongoose.connection.useDb(dbName);
 
@@ -464,7 +486,13 @@ async function updateRouteRating(dbName, routeId, rating, isArchived = false) {
   }
 }
 
-
+/**
+ * 
+ * @param {String} routeId The `_id` of the route you are updating.
+ * @param {Boolean} isArchived Specifies whether or not the route is live or archived.
+ * Default is `false`.
+ * @returns Mongoose document containing the `Reviews` array of the route.
+ */
 async function getRouteReviews(
   routeId, isArchived = false
 ) {
@@ -484,7 +512,14 @@ async function getRouteReviews(
   }
 }
 
-
+/**
+ * @description Deprecated?
+ * @param {String} dbName name of database
+ * @param {String} routeId The `_id` of the route you are updating.
+ * @param {Boolean} isArchived Specifies whether or not the route is live or archived.
+ * Default is `false`.
+ * @returns Mongoose document containing the `Reviews` array of the route.
+ */
 async function getListOfReviewsForRoute(dbName, routeId, isArchived = false) {
   mongoose.connection.useDb(dbName);
 
