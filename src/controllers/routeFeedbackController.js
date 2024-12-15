@@ -50,61 +50,73 @@ module.exports = {
     },
 
     // PUT Methods
-    editReview: (req, res) => {
-        var reqBody = '';
-        const query = req.query.reviewId
+    editReview: async (req, res) => {
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
 
-        req.on('data', function (chunk) { // reading the request into a var.
-            reqBody += chunk.toString();
-        });
+        //data
+        const { rating, description, creationDate, targetId, isVerbose } = req.body;
 
-        req.on('end', async () => {
-            reqBody = JSON.parse(reqBody); // converting the request into a JSON object
-            response_body = {};
-            var confirmation = await mongo.updateListingByKey("route_mngt", "reviews", query, reqBody);
-            if (confirmation == false) {
-                response_body = {
-                    success: false,
-                }
-            } else {
-                response_body = {
-                    success: true,
-                }
+        const update = {
+            Rating: rating,
+            Body: description,
+            Verbose: isVerbose,
+            CreationDate: creationDate
+        }
+
+        const authorId = (await mongo.getFieldFromListingById("route_mngt", "reviews", targetId, "Author"))["Author"];
+
+        if (userID == authorId) {
+            try {
+                console.log(targetId);
+                console.log(update);
+                await mongo.updateListingByKey("route_mngt", "reviews", targetId, update);
+
+                res.status(202).json({ message: "Review successfully editted" });
+            } catch (err) {
+                console.log(err)
+                res.status(500).json({ error: "Editting process failed" });
             }
-
-            json_message = JSON.stringify(response_body);
-
-            res.writeHead(200, { // Writing Response
-                'Content-Type': 'application/json'
-            });
-            res.write(JSON.stringify(response_body));
-            res.end();
-        });
+        } else {
+            res.status(403).json({ message: "Insufficient Permissions" });
+        }
     },
 
     // DELETE Methods
     deleteReview: async (req, res) => {
-        const query = req.query.reviewId
+        const { userID, role } = auth.authorize(req, res); //user Authentification; retrieve userID
+        if (!userID) return;
 
-        response_body = {};
-        var confirmation = await mongo.deleteListingByKey("route_mngt", "reviews", query);
-        if (confirmation == false) {
-            response_body = {
-                success: false,
+        console.log("/////////////////////// DELETE ROUTE //////////////////////")
+        const reviewId = req.query.reviewId;
+        try {
+            const authorId = (await mongo.getFieldFromListingById("route_mngt", "reviews", reviewId, "Author"))["Author"];
+            const routeId = (await mongo.getFieldFromListingById("route_mngt", "reviews", reviewId, "RouteId"))["RouteId"];
+            if (role <= 1 || userID == authorId) {
+
+                var routeReviews = await mongo.getListOfReviewsForRoute("route_mngt", routeId, false);
+                routeReviews = routeReviews[["Reviews"]]
+                const index = routeReviews.indexOf(reviewId);
+                routeReviews.splice(index, 1);
+
+                const routeUpdate = {
+                    Reviews: routeReviews
+                }
+                await mongo.deleteListingByKey("route_mngt", "reviews", reviewId);
+                await mongo.updateListingByKey("route_mngt", "live_routes", routeId, routeUpdate);
+
+                console.log("/////////////////////// DELETE ROUTE //////////////////////")
+                res.status(201).json({ message: "Review Successfuly Deleted" });
+            } else {
+                console.log("/////////////////////// DELETE ROUTE //////////////////////")
+                res.status(403).json({ message: "Access Denied" })
             }
-        } else {
-            response_body = {
-                success: true,
-            }
+        } catch (err) {
+            console.log(err)
+            console.log("/////////////////////// DELETE ROUTE //////////////////////")
+            res.status(500).json({ error: "Review deletion failed" });
         }
 
-        json_message = JSON.stringify(response_body);
-
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
-        });
-        res.write(JSON.stringify(response_body));
-        res.end();
     },
 
     // GET Methods
@@ -137,11 +149,8 @@ module.exports = {
         } else {
             currentRating = (await mongo.getFieldFromListingById("route_mngt", "live_routes", routeId, 'Rating'))["Rating"];
         }
-        
-        res.status(200).json({ message: `Matched route with id ${routeId}`, rating: currentRating });
-    },
-    getRatingDistribution: async (req, res) => {
 
+        res.status(200).json({ message: `Matched route with id ${routeId}`, rating: currentRating });
     },
     getReviewsOnRoute: async (req, res) => {
         const routeId = req.query.routeId

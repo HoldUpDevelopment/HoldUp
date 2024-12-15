@@ -48,7 +48,10 @@ $(document).ready(async function () {
     const loggedInElements = document.querySelectorAll('.logged-in');
 
     const userPayload = await loginState();
+    const id = userPayload._id;
     const role = userPayload.role;
+    $("#h").attr("data-userId", id);
+    $("#h").attr("data-userRole", role);
 
     if (state) {
         loggedInElements.forEach(element => {

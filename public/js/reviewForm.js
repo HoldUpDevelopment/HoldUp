@@ -12,13 +12,15 @@ async function submitFormHTTP(body) {
     };
 }
 
-async function submitData(urlEncoded){
+async function submitData(urlEncoded, routeId){
     var response = await submitFormHTTP(urlEncoded);
     console.log(response);
     console.log(response.status);
     if (response.status == 201) {
-        window.location.reload();
+        window.location.href = `${window.location.protocol}//${window.location.host}${window.location.pathname}?view=${routeId}`;
     }
+
+    alert("Please log in to make a review.");
 }
 
 $(document).ready(async function () {
@@ -37,6 +39,6 @@ $(document).ready(async function () {
 
         const urlEncoded = new URLSearchParams(formData).toString();
 
-        await submitData(urlEncoded);
+        await submitData(urlEncoded, routeTarget);
     })
 });
