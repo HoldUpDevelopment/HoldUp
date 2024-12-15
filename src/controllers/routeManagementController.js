@@ -78,12 +78,12 @@ module.exports = {
                 await mongo.deleteListingByKey("route_mngt", "archived_routes", routeid);
 
                 if (!confirmation_id) {
-                    res.status(500).json({ error: "Archiving process failed" });
+                    res.status(500).json({ error: "Unarchiving process failed" });
                 } else {
-                    res.status(202).json({ message: "Route archived successfully" });
+                    res.status(202).json({ message: "Route unarchived successfully" });
                 }
             } catch (err) {
-                res.status(500).json({ error: "Archiving process failed" });
+                res.status(500).json({ error: "Unarchiving process failed" });
             }
         } else {
             res.status(403).json({ error: "Insufficient Permissions" });
