@@ -10,5 +10,6 @@ router.put('/editReview', routeFeedbackController.editReview);
 router.delete('/deleteReview', routeFeedbackController.deleteReview);
 
 router.get('/getReviewDetails', routeFeedbackController.getReviewDetails);
+router.get('/getReviewsOnRoute', routeFeedbackController.getReviewsOnRoute);
 
 module.exports = router;

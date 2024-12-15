@@ -24,7 +24,7 @@ module.exports = {
                     id: confirmation_id
                 }
             }
-            
+
             json_message = JSON.stringify(response_body);
 
             res.writeHead(202, { // Writing Response
@@ -47,7 +47,7 @@ module.exports = {
         req.on('end', async () => {
             reqBody = JSON.parse(reqBody); // converting the request into a JSON object
             response_body = {};
-            var confirmation = await mongo.updateListingByKey("route_mngt", "reviews",query, reqBody);
+            var confirmation = await mongo.updateListingByKey("route_mngt", "reviews", query, reqBody);
             if (confirmation == false) {
                 response_body = {
                     success: false,
@@ -57,7 +57,7 @@ module.exports = {
                     success: true,
                 }
             }
-            
+
             json_message = JSON.stringify(response_body);
 
             res.writeHead(200, { // Writing Response
@@ -85,7 +85,7 @@ module.exports = {
         }
 
         json_message = JSON.stringify(response_body);
-    
+
         res.writeHead(200, {
             'Content-Type': 'application/json'
         });
@@ -106,5 +106,11 @@ module.exports = {
         });
         res.write(JSON.stringify(response_body));
         res.end();
-    }
+    },
+    getReviewsOnRoute: async (req, res) => {
+        const reviewId = req.query.routeId
+
+        var response_body = await mongo.getListOfIDs("route_mngt", "reviews", );
+        res.status(200).json({ message: "Successful", reviews: response_body });
+    },
 }
