@@ -1,6 +1,4 @@
-const { MongoClient, Collection, MongoErrorLabel } = require("mongodb");
 const mongoose = require("mongoose");
-var client;
 var Admin = mongoose.mongo.Admin;
 
 // Importing Schemas
