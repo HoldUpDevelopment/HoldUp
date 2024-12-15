@@ -108,9 +108,9 @@ module.exports = {
         res.end();
     },
     getReviewsOnRoute: async (req, res) => {
-        const reviewId = req.query.routeId
+        const routeId = req.query.routeId
 
-        var response_body = await mongo.getListOfIDs("route_mngt", "reviews", reviewId);
+        var response_body = await mongo.getListOfReviewsForRoute("route_mngt", "reviews", routeId);
         res.status(200).json({ message: "Successful", reviews: response_body });
     },
 }
