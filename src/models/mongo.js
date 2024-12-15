@@ -300,7 +300,8 @@ async function getFieldFromListingById(dbName, collection, listingQuery, searchK
 /**
  * @description Gets a User's username, displayname, and profile picture.
  * @param {String|Number|ObjectId} userId the `_id` property of the user being searched
- * @returns Returns a JSON with the specified user's `username`, `displayname`, and `pfp`.
+ * @returns Returns a JSON with the specified user's `username`, `displayname`,
+ * `pfp`, and `gyms: roles`.
  * If no matching user was found, returns `404`.
  */
 async function getRoutePacketFromUserId(userId) {
