@@ -137,8 +137,12 @@ module.exports = {
         const routeId = req.query.routeId;
         const isArchived = req.query.isArchived === 'true';
         var routeReviews = (await mongo.getListOfReviewsForRoute("route_mngt", routeId))["Reviews"];
-
-        res.status(200).json({ message: `Matched route with id ${routeId}`, review_count: routeReviews.length });
+        try {
+            res.status(200).json({ message: `Matched route with id ${routeId}`, review_count: routeReviews.length });
+        } catch (err) {
+            res.status(500).json({ message: `Internal server error`, error: err });
+        }
+        
     },
     getRouteRating: async (req, res) => {
         const routeId = req.query.routeId;
