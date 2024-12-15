@@ -110,7 +110,7 @@ module.exports = {
     getReviewsOnRoute: async (req, res) => {
         const reviewId = req.query.routeId
 
-        var response_body = await mongo.getListOfIDs("route_mngt", "reviews", );
+        var response_body = await mongo.getListOfIDs("route_mngt", "reviews", reviewId);
         res.status(200).json({ message: "Successful", reviews: response_body });
     },
 }
