@@ -170,7 +170,7 @@ module.exports = {
     if (!userID) return;
 
     const userId = req.query.userId;
-    if (role <= 1 || userId == userID) {
+    if (role <= 1) {
       await mongo.deleteListingByKey("route_mngt", "users", userId);
       console.log(userId);
       res.status(201).json({ message: "User Successfuly Deleted" });
