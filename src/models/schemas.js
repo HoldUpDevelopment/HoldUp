@@ -145,8 +145,7 @@ const routeSchema = new mongoose.Schema({
     },
     Description: {
         type: String,
-        default: "",
-        maxLength: 200
+        default: ""
     },
     Grade: {
         type: Number,
