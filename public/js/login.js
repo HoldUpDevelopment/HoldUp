@@ -88,6 +88,10 @@ $(document).ready(async function () {
             event.stopPropagation();
         } else {
             event.preventDefault();
+
+            if (redir == null) {
+                redir = "/"
+            }
             window.location.href = `${origin}${redir}`; //Navigate to the login page!
         }
         //form.classList.add('was-validated');
