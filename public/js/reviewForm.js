@@ -18,9 +18,11 @@ async function submitData(urlEncoded, routeId){
     console.log(response.status);
     if (response.status == 201) {
         window.location.href = `${window.location.protocol}//${window.location.host}${window.location.pathname}?view=${routeId}`;
+    } else {
+        alert("Please log in to make a review.");
     }
 
-    alert("Please log in to make a review.");
+    
 }
 
 $(document).ready(async function () {
