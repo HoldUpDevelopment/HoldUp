@@ -7,6 +7,12 @@ Bryan Caskey, Ian Timchak, Justin Wendelboe
 - If you are running this on a local machine (undockerized), change the hostname in server.js to be 127.0.0.1.
 - If you are composing a docker container (and running locally, not hosting the application), change the hostname in server.js to be 0.0.0.0.
 
+## Database and Auth Setup
+
+- The project architecture requires an appropriately configured MongoDB. To run, there are two required environment variables that need to be manually configured in a new .env file.  
+`JWT_SECRET`: seeds the JWT auth. Must be consistently used when running the application, otherwise any new auth calls will fail.  
+`MONGO_SECRET`: access to the MongoDB, refer to the mongo.js file for specific variable usage. Generally in form: `user:secret`.
+
 ## Dependencies
 
 - run `npm install` in the project root to install dependencies.
