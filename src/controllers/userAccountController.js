@@ -172,7 +172,7 @@ module.exports = {
     const userId = req.query.userId;
     if (role <= 1) {
       await mongo.deleteListingByKey("route_mngt", "users", userId);
-      console.log(userId);
+      //console.log(userId);
       res.status(201).json({ message: "User Successfuly Deleted" });
     } else {
       res.status(403).json({ message: "Access Denied" });
@@ -212,7 +212,7 @@ module.exports = {
     );
 
     json_message = JSON.stringify(response_body);
-    console.log(json_message);
+    //console.log(json_message);
 
     res.writeHead(200, {
       "Content-Type": "application/json",
@@ -226,8 +226,8 @@ module.exports = {
     if (!userID) return;
 
     //Returns the role from the JWT, found above with auth.authorize(..)
-    console.log(userID);
-    console.log(role);
+    //console.log(userID);
+    //console.log(role);
     res.status(200).json({ role: role });
   },
   //Gets information to be used when displaying a review. User name, profile picture, and display name.
@@ -274,7 +274,7 @@ module.exports = {
     if (!userID) return;
 
     var response_body;
-    console.log(userID);
+    //console.log(userID);
     response_body = await mongo.getUserSettingsById(userID); //Needs custom DB call
 
     json_message = JSON.stringify(response_body);
@@ -292,7 +292,7 @@ module.exports = {
     response_body = await mongo.getEmailByUserId(userId);
 
     json_message = JSON.stringify(response_body);
-    console.log(json_message);
+    //console.log(json_message);
 
     res.writeHead(200, {
       "Content-Type": "application/json",
