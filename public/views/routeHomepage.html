@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header id="h" class="fixed-top p-3 bg-black ">
+    <div id="header" class="container">
+      <div id="hCont" class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a class="d-flex align-items-center me-3 mb-lg-2 fw-bold link-light fs-3 text-decoration-none" href="/">
+          HoldUp
+        </a>
+        <div class="vr link-light"></div>
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          
+          <li><a href="" style="display: none;" class="nav-link px-2 logged-in logged-out  link-light fw-bold">Gym Routes</a></li>
+          <li><a href="../archive" style="display: none;" class="nav-link px-2 logged-in logged-out  link-light link-opacity-75-hover">Archive</a></li>
+          <li><a href="../news" style="display: none;" class="nav-link px-2 link-light logged-in logged-out link-opacity-75-hover">News</a></li>
+          <li><a href="../dashboard" style="display: none;" class="role-setter logged-in logged-out nav-link px-2 link-light link-opacity-75-hover">Dashboard</a></li>
+        </ul>
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        </form>
+        <div class="dropdown text-end">
+          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <img src="https://img.icons8.com/?size=100&id=107049&format=png&color=000000"
+              style="background-color: #f8f9fa;" alt="mdo" width="32" height="32" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu text-small">
+            <!--Logged in buttons-->
+            <li>
+              <div id="userName" class="fw-bold ms-3 text-truncate logged-in" style="max-width: 120px;"></div>
+            </li>
+            <li>
+              <button type="button" data-bs-toggle="modal" data-bs-target="#createRoute"
+                class="dropdown-item logged-in role-setter" style="display: none;"> + New route</button>
+            </li>
+            <li><a class="dropdown-item logged-in" style="display: none;" href="../settings">Settings</a></li>
+            <li>
+              <hr class="dropdown-divider logged-in" style="display: none;">
+            </li>
+            <li><a class="dropdown-item logged-in" style="display: none;" id="logoutButton" href="#">Logout</a></li>
+            <script>
+              //logout button
+              document.getElementById('logoutButton').addEventListener('click', function () {
+                // Perform logout logic here
+                alert("You have been logged out. Refreshing page...")
+                sessionStorage.removeItem("jwt")
+                window.location.reload();
+              });
+            </script>
+
+            <!--Logged out buttons-->
+            <li><a id="loginButton" class="dropdown-item logged-out" style="display: none;" href="#">Login</a></li>
+            <script>
+              //login button
+              document.getElementById('loginButton').addEventListener('click', function () {
+                // Perform logout logic here
+                window.location.href = `${origin}/account/login?redir=${window.location.pathname}${window.location.search}`;
+              });
+            </script>
+            <li><a class="dropdown-item logged-out" style="display: none;" href='../account/signup'>Create an
+                Account</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Create Route Modal -->
+  <div class="modal fade" id="createRoute" tabindex="-1" aria-labelledby="createRoute" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="routeTitle">Create a new route</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="p-5 modal-body">
+          <form id="routeCreationForm">
+            <div class="mb-4">
+              <label class="form-label" for="settings-box-profile_picture">Route Image</label>
+              <input type="file" name="image" disabled class="form-control" id="settings-box-profile_picture" />
+            </div>
+
+            <div class="input-group mb-4">
+              <span for="route-name-field" class="input-group-text">Route Name</span>
+              <input type="text" name="name" class="form-control" id="route-name-field" aria-label="route type">
+            </div>
+
+            <div class="input-group mb-4">
+              <label class="input-group-text" for="inputGroupSelect01">Route Type</label>
+              <select class="form-select" name="type" id="inputGroupSelect01">
+                <option selected>Choose...</option>
+                <option value="1">Boulder</option>
+                <option value="2">Sport</option>
+              </select>
+            </div>
+
+            <div class="input-group mb-4">
+              <span for="route-grade-field" class="input-group-text">Route Grade</span>
+              <input type="text" name="grade" class="form-control" id="route-name-field" aria-label="route grade">
+            </div>
+
+            <div class="input-group mb-4">
+              <span class="input-group-text">Route Description</span>
+              <textarea type="text" name="description" class="form-control" id="route-name-field"
+                placeholder="Enter Description" aria-label="route name"></textarea>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="createRouteSubmit" class="btn btn-primary">Create Route</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!--Create review modal-->
+  <div class="modal fade" id="createReview" tabindex="-1" aria-labelledby="createReview" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="routeTitle">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item ">Route name</li>
+              <li class="breadcrumb-item active" aria-current="page">Create a review</li>
+            </ol>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="p-5 modal-body">
+          <form id="reviewCreationForm">
+
+            <div class="input-group mb-4">
+              <span for="form-select-rating" class="input-group-text">
+                <div class="fa fa-star checked me-2"></div>
+                Rating
+              </span>
+              <select name="rating" class="form-select-rating" aria-label="starSelect">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+
+            <div class="input-group mb-4">
+              <span class="input-group-text">Review Details</span>
+              <textarea type="text" name="description" class="form-control" id="review-desc-field"
+                placeholder="Enter a review body or leave blank for a non-verbose review"
+                aria-label="route name"></textarea>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" id="createReviewSubmit" class="btn btn-primary">Post Review</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--edit review modal-->
+  <div class="modal fade" id="editReview" tabindex="-1" aria-labelledby="editReview" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="reviewTitle">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item ">Route name</li>
+              <li class="breadcrumb-item active" aria-current="page">Create a review</li>
+            </ol>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="p-5 modal-body">
+          <form id="editReviewForm">
+
+            <div class="input-group mb-4">
+              <span for="form-select-rating" class="input-group-text">
+                <div class="fa fa-star checked me-2"></div>
+                Rating
+              </span>
+              <select id="eRating" name="rating" class="form-select-rating" aria-label="starSelect">
+                <option id="e1" value="1" selected>1</option>
+                <option id="e2" value="2">2</option>
+                <option id="e3" value="3">3</option>
+                <option id="e4" value="4">4</option>
+                <option id="e5" value="5">5</option>
+              </select>
+            </div>
+
+            <div class="input-group mb-4">
+              <span class="input-group-text">Review Details</span>
+              <textarea type="text" name="description" class="form-control" id="e-review-desc-field"
+                placeholder="Enter a review body or leave blank for a non-verbose review"
+                aria-label="route name"></textarea>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" id="editReviewSubmit" class="btn btn-primary">Edit Review</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Delete review modal-->
+  <!--Delete User MODAL-->
+  <div class="modal fade" id="deleteWarning" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="deleteWarningLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="deleteWarningLabel">Review Deletion</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="deletionBody">
+          <p class="h6" id="deletionTargetLabel"></p>
+          <p class="text-danger h6 fw-bold">This action is irreversible. Are you sure you want to proceed?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="deleteReviewButton">Delete Review</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Trash button template-->
+  <template id="options">
+    <div class="">
+      <button id="delButton" type="button" class="btn btn-danger mt-2 fw-bolder" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+          <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+        </svg>
+      </button>
+    </div>
+  </template>
+  <!--Edit button template-->
+  <template id="edButton">
+      <button type="button" class="btn btn-outline-secondary mt-2 fw-bolder" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen"
+                viewBox="0 0 16 16">
+                <path
+                  d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z" />
+              </svg>
+      </button>
+  </template>
+  <!--template for route page-->
+  <template id="template">
+
+    <row>
+      <!--Route info header-->
+      <div class="sticky-top p-1 border" style="background-color:white;">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <!--Title-->
+          <div id="gradeTypeName" class="d-flex align-items-center">
+            <!--grade, type, name-->
+          </div>
+          <!--Date-->
+          <div class="d-flex">
+            <span class="text-black-50 fst-italic me-1">published on</span>
+            <span id="date" class="text-black-50"></span>
+          </div>
+        </div>
+
+        <div class="d-flex  pb-1">
+          <span class="text-black-50 fst-italic me-1">set by:</span>
+          <span id="uploader"></span>
+        </div>
+      </div>
+
+      <div class="p-2 align-middle" style="max-height: 300px; overflow-y: hidden;">
+        <img src="../images/placeholder.png" class="img-fluid" alt="..." style="z-index: -1;">
+      </div>
+      <!--Route info description-->
+      <span class="ms-2 fst-italic text-black-50">Description:</span>
+      <div class="d-flex m-2 pe-4 w-100">
+
+        <div id="routeDescription" class="p-3 border" style="background-color: #fdfdfd;">
+
+        </div>
+      </div>
+
+
+      <hr class="hr" />
+      <!--Route info rating-->
+      <div id="reviewScorecard" class="m-2">
+        <div class="d-flex justify-content-between">
+          <div class="">
+            <span class="heading">User Rating</span>
+            <span id="star1" class="fa fa-star"></span>
+            <span id="star2" class="fa fa-star"></span>
+            <span id="star3" class="fa fa-star"></span>
+            <span id="star4" class="fa fa-star"></span>
+            <span id="star5" class="fa fa-star"></span>
+            <p id="ratingInfo" class="">
+              
+            </p>
+          </div>
+          <div>
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#createReview">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen me-2"
+                viewBox="0 0 16 16">
+                <path
+                  d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z" />
+              </svg>
+              Write a review
+            </button>
+          </div>
+        </div>
+
+
+
+        <div class="row p-2 mb-3 ms-1 border-bottom w-100">
+          <div class="w-50" style="min-width: 300px;">
+            <div class="side">
+              <div>5 star</div>
+            </div>
+            <div class="middle">
+              <div class="bar-container">
+                <div class="bar-5 "></div>
+              </div>
+            </div>
+            <div id="b5Count" class="side right text-black-50">
+              <div>0</div>
+            </div>
+            <div class="side">
+              <div>4 star</div>
+            </div>
+            <div class="middle">
+              <div class="bar-container">
+                <div class="bar-4 "></div>
+              </div>
+            </div>
+            <div id="b4Count" class="side right text-black-50">
+              <div>0</div>
+            </div>
+            <div class="side">
+              <div>3 star</div>
+            </div>
+            <div class="middle">
+              <div class="bar-container">
+                <div class="bar-3 "></div>
+              </div>
+            </div>
+            <div id="b3Count" class="side right text-black-50">
+              <div>0</div>
+            </div>
+            <div class="side">
+              <div>2 star</div>
+            </div>
+            <div class="middle">
+              <div class="bar-container">
+                <div class="bar-2 "></div>
+              </div>
+            </div>
+            <div id="b2Count" class="side right text-black-50">
+              <div>0</div>
+            </div>
+            <div class="side">
+              <div>1 star</div>
+            </div>
+            <div class="middle">
+              <div class="bar-container">
+                <div class="bar-1 "></div>
+              </div>
+            </div>
+            <div id="b1Count" class="side right text-black-50">
+              <div>0</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!--Route info reviews-->
+      <ul class="row d-flex justify-content-center " style="background-color: white;" id="reviewList">
+        
+      </ul>
+
+    </row>
+  </template>
+
+  <!--Main Page Body-->
+  <main>
+    <div id="body" class="container-fluid " style="height: 100vh;">
+      <script>
+        function e(event) {
+          //do work
+          var b = document.getElementById("body");
+          var h = document.getElementById("h");
+          b.style.paddingTop = h.offsetHeight + "px";
+        }
+        document.addEventListener("DOMContentLoaded", e);
+        addEventListener('resize', e);
+
+      </script>
+      <!--Sidebar, with routes-->
+      <div class="d-flex align-items-start row sticky-top flex-nowrap h-100">
+        <div class="col-2 border-end h-100" style="background-color: rgb(247, 247, 247); width: 320px;">
+          <!--Body-->
+          <div>
+            <h3 class="mt-4 ms-2 fw-bolder border-bottom">Live Routes</h3>
+          </div>
+          <div class="container w-100" style="width: 100%; max-height: 100vh;">
+            <div class="row ">
+
+              <div class="d-flex  flex-column align-items-center flex-shrink-0 bg-body-tertiary">
+                <div class="list-group   w-100 list-group-flush border-bottom scrollable h-100"
+                  style="max-height: 80vh; overflow-y: scroll" id="routeList">
+                  <!--Route List Object-->
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--page selected-->
+        <div class="col-10 ps-5 pt-4 overflow-y-scroll" style="background-color:#f8f9fa; width: 82%; max-height: 90vh;">
+          <div class="rounded border p-3 align-items-center" style="background-color:white ;height: 100%"
+            id="mainContent">
+
+
+          </div>
+        </div>
+      </div>
+
+  </main>
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="routeView" tabindex="-1" aria-labelledby="routeView" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="routeTitle">Route title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Scripts-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/buildLiveRouteList.js"></script>
+  <script src="../js/mainHeader.js"></script>
+  <script src="../js/reviewForm.js"></script>
+</body>
+
+</html>

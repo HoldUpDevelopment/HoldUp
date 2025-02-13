@@ -1,0 +1,218 @@
+/*
+ * Custom CSS
+ */
+
+:root {
+    --bs-body-bg: var(--bs-gray-100);
+}
+
+body {
+    min-height: 100vh;
+}
+
+.container-bg {
+    /* background-image: url('images/ascend.png'); */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0)), url('images/ascend.png');
+    background-size: cover;
+    min-height: 100vh;
+}
+
+.fill {
+    min-height: 100%;
+    height: 100%;
+}
+
+.route-list {
+    background-color: bisque;
+}
+
+.route-view {
+    background-color: bisque;
+}
+
+.routePageContainer {
+    background-color: blue;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: s0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+}
+
+.btn-circle.btn-lg {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 25px;
+}
+
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 0;
+    font-size: 24px;
+    line-height: 1.33;
+    border-radius: 35px;
+}
+
+.btn-xl {
+    padding: 10px 20px;
+    font-size: 20px;
+    border-radius: 1000px;
+}
+
+.fixed-bottom-right {
+    position: fixed !important;
+    bottom: 0px;
+    right: 0px;
+    padding: 20px;
+}
+
+
+.bdr {
+    border-radius: 6px;
+    overflow: hidden;
+    overflow-x: scroll;
+}
+
+
+
+* {
+    box-sizing: border-box;
+}
+
+.heading {
+    font-size: 25px;
+    margin-right: 25px;
+}
+
+.fa {
+    font-size: 20px;
+    z-index: 10;
+}
+
+.checked {
+    color: orange;
+    /* background: linear-gradient(110deg, orange 60%, #212529 60%);
+    background-clip: text; */
+}
+
+/* Three column layout */
+.side {
+    float: left;
+    width: 15%;
+    margin-top: 10px;
+
+}
+
+.middle {
+    float: left;
+    width: 70%;
+    margin-top: 10px;
+}
+
+/* Place text to the right */
+.right {
+    text-align: right;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* The bar container */
+.bar-container {
+    width: 100%;
+    background-color: #f1f1f1;
+    text-align: center;
+    color: white;
+}
+
+/* Individual bars */
+.bar-5 {
+    width: 0%;
+    height: 18px;
+}
+
+.bar-4 {
+    width: 0%;
+    height: 18px;
+}
+
+.bar-3 {
+    width: 0%;
+    height: 18px;
+}
+
+.bar-2 {
+    width: 0%;
+    height: 18px;
+}
+
+.bar-1 {
+    width: 0%;
+    height: 18px;
+}
+
+/* Responsive layout - make the columns stack on top of each other instead of next to each other */
+@media (max-width: 400px) {
+
+    .side,
+    .middle {
+        width: 100%;
+    }
+
+    /* Hide the right column on small screens */
+    .right {
+        display: none;
+    }
+}
+
+.reviewWidth {
+    width: 85%
+}
+
+@supports (transition: initial) {
+
+    /* CSS to use if transitions are supported */
+    /* Individual bars */
+    .bar-5 {
+        width: 0%;
+        height: 18px;
+        transition: width 0.25s;
+    }
+
+    .bar-4 {
+        width: 0%;
+        height: 18px;
+        transition: width 0.25s;
+    }
+
+    .bar-3 {
+        width: 0%;
+        height: 18px;
+        transition: width 0.25s;
+    }
+
+    .bar-2 {
+        width: 0%;
+        height: 18px;
+        transition: width 0.25s;
+    }
+
+    .bar-1 {
+        width: 0%;
+        height: 18px;
+        transition: width 0.25s;
+    }
+}
