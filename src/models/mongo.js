@@ -39,7 +39,7 @@ async function startConnection() {
     //return true;
   } catch {
     //return false;
-    console.log(`did not create database connections`);
+    //console.log(`did not create database connections`);
   }
 }
 
@@ -49,7 +49,7 @@ async function startConnection() {
  */
 async function closeConnection() {
   // Essentially the same as the standard mongo function.
-  console.log(`Closing Connection to ${mongoose.connection}.`);
+  //console.log(`Closing Connection to ${mongoose.connection}.`);
   await mongoose.connection.close();
 }
 
@@ -57,10 +57,10 @@ async function closeConnection() {
 // returns a list of databases (should be {gyms, test, route_mngt})
 async function listDatabases() {
   new Admin(mongoose.connection.db).listDatabases(function (err, result) {
-    console.log("listDatabases succeeded");
+    //console.log("listDatabases succeeded");
     // database list stored in result.databases
     var databasesList = result.databases;
-    console.log("Databases:");
+    //console.log("Databases:");
     databasesList.databases.forEach((db) => console.log(` - ${db.name}`));
   });
 }
@@ -81,19 +81,19 @@ async function listDatabases() {
  * @returns The document's `_id`. If creation was unsucessful, returns an error message.
  */
 async function createListing(dbName, collection, newListing) {
-  console.log(newListing);
+  //console.log(newListing);
   mongoose.connection.useDb(dbName);
 
   try {
     const Model = Models[collection];
-    console.log("hi");
-    console.log(newListing);
+    //console.log("hi");
+    //console.log(newListing);
     var doc = await new Model(newListing).save().then().catch(); //Catch key indexing errors in asynchronous calls.
-    console.log(doc);
-    console.log("Created Listing with _id: ", doc._id);
+    //console.log(doc);
+    //console.log("Created Listing with _id: ", doc._id);
     return doc._id;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     throw err;
   }
 }
@@ -122,10 +122,10 @@ async function updateListingByKey(
   const Model = Models[collection];
   try {
     result = await Model.updateOne({_id: listingKey}, updatedListing, {upsert: doUpsert})
-    console.log(`Updated ${result.modifiedCount} document(s).`);
+    //console.log(`Updated ${result.modifiedCount} document(s).`);
     
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 }
 
@@ -142,13 +142,13 @@ async function deleteListingByKey(dbName, collection, listingKey) {
   mongoose.connection.useDb(dbName);
 
   const Model = Models[collection];
-  console.log("Entered")
+  //console.log("Entered")
   try {
     result = await Model.deleteOne({_id: listingKey})
-    console.log(`Deleted ${result.deletedCount} document(s).`);
+    //console.log(`Deleted ${result.deletedCount} document(s).`);
     
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 }
 
@@ -172,14 +172,14 @@ async function findOneListingByKeyValue(dbName, collection, listingQuery, listin
   try {
     result = await Model.findOne({[listingKey]: listingQuery})
     if (result == null) {
-      console.log(`No document found with key matching ${listingQuery}`);
+      //console.log(`No document found with key matching ${listingQuery}`);
       return {};
     } else {
-      console.log(`Found document with key matching ${listingQuery}`);
+      //console.log(`Found document with key matching ${listingQuery}`);
       return result;
     }
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return {};
   }
 }
@@ -200,14 +200,14 @@ async function findManyListingsByKeyValue(dbName, collection, listingQuery, list
   try {
     result = await Model.findMany({[listingKey]: listingQuery})
     if (result == null) {
-      console.log(`No documents found with key matching ${listingQuery}`);
+      //console.log(`No documents found with key matching ${listingQuery}`);
       return {};
     } else {
-      console.log(`Found ${result.length} documents with key matching ${listingQuery}`);
+      //console.log(`Found ${result.length} documents with key matching ${listingQuery}`);
       return result;
     }
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       return {};
     }
 }
@@ -231,10 +231,10 @@ async function getIdByKeyValue(dbName, collection, listingQuery, listingKey) {
     if (result == null) {
       throw new mongoose.Error.DocumentNotFoundError(listingQuery);
     }
-    console.log(`Found document with key matching ${listingQuery}`);
+    //console.log(`Found document with key matching ${listingQuery}`);
     return result._id;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return 404;
   }
 }
@@ -253,14 +253,14 @@ async function getListOfIDs(dbName, collection) {
   try {
     result = await Model.find({}, `_id`);
     if (result == null) {
-      console.log(`No documents found in collection ${collection}`);
+      //console.log(`No documents found in collection ${collection}`);
       return {};
     } else {
-      console.log(`Found ${result.length} documents in collection ${collection}`);
+      //console.log(`Found ${result.length} documents in collection ${collection}`);
       return result;
     }
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       return {};
     }
 }
@@ -280,11 +280,11 @@ async function getFieldFromListingById(dbName, collection, listingQuery, searchK
   const Model = Models[collection];
   try {
     result = await Model.findOne({_id: listingQuery}, searchKey);
-    console.log(result);
-    console.log(`Found document with id ${listingQuery}`);
+    //console.log(result);
+    //console.log(`Found document with id ${listingQuery}`);
     return(result);
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return 404;
   }
 }
@@ -313,11 +313,11 @@ async function getRoutePacketFromUserId(userId) {
     //returnBody
     result["pfp"]="";
     
-    console.log(`Found user with id ${userId}`);
+    //console.log(`Found user with id ${userId}`);
     
     return result;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return 404;
   }
 }
@@ -338,11 +338,11 @@ async function getForumPacketFromUserId(userId) {
     //returnBody
     result["pfp"]="";
     
-    console.log(`Found user with id ${userId}`);
+    //console.log(`Found user with id ${userId}`);
 
     return result;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return 404;
   }
 }
@@ -363,10 +363,10 @@ async function getUserSettingsById(userId) {
     if (result == null) {
       throw new mongoose.Error.DocumentNotFoundError(userId);
     }
-    console.log(`Found user with id ${userId}`);
+    //console.log(`Found user with id ${userId}`);
     return result;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return 404;
   }
 }
@@ -385,10 +385,10 @@ async function getEmailByUserId(userId) {
     if (result == null) {
       throw new mongoose.Error.DocumentNotFoundError(userId);
     }
-    console.log(`Found user with id ${userId}`);
+    //console.log(`Found user with id ${userId}`);
     return result;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return 404;
   }
 }
@@ -408,10 +408,10 @@ async function getRoleFromUserID(userId) {
     result = await Model.findById(userId, `gyms`).lean();
     //returnBody
     
-    console.log(`Found user with id ${userId}`);
+    //console.log(`Found user with id ${userId}`);
     return result;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     return 404;
   }
 }
@@ -444,10 +444,10 @@ async function getRouteInfo(
   }
   try {
     result = await Model.findOne({_id: routeId}, `Name CreationDate Grade Type`)
-    console.log("Found Document");
+    //console.log("Found Document");
     return result;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 }
 
@@ -479,10 +479,10 @@ async function updateRouteRating(dbName, routeId, rating, isArchived = false) {
     route.Rating = rating;
 
     await route.save();
-    console.log(`Updated route rating for route ${routeId}`);
+    //console.log(`Updated route rating for route ${routeId}`);
   } catch(err) {
     
-    console.log(err);
+    //console.log(err);
     throw(err)
   }
 }
@@ -506,10 +506,10 @@ async function getRouteReviews(
   }
   try {
     result = await Model.findOne({_id: routeId}, `Reviews`)
-    console.log("Found Document");
+    //console.log("Found Document");
     return result;
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
 }
 
@@ -534,14 +534,14 @@ async function getListOfReviewsForRoute(dbName, routeId, isArchived = false) {
   try {
     result = await Model.findOne({_id: routeId}, `Reviews`);
     if (result == null) {
-      console.log(`No reviews found for routeID ${routeId}`);
+      //console.log(`No reviews found for routeID ${routeId}`);
       return {};
     } else {
-      console.log(`Found reviews for routeID ${routeId}`);
+      //console.log(`Found reviews for routeID ${routeId}`);
       return result;
     }
   } catch(err) {
-    console.log(err);
+    //console.log(err);
     return {};
   }
 }
