@@ -1,7 +1,7 @@
 const http = require('node:http');
 const favicon = require('serve-favicon');
 const express = require('express');
-const hostname = '127.0.0.1'; //Localhost
+const hostname = '0.0.0.0'; //Localhost
 const port = 3000;
 
 //Routes

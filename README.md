@@ -2,6 +2,11 @@
 Bryan Caskey, Ian Timchak, Justin Wendelboe
 12/15/2024
 
+## Server and Docker
+
+- If you are running this on a local machine (undockerized), change the hostname in server.js to be 127.0.0.1.
+- If you are composing a docker container (and running locally, not hosting the application), change the hostname in server.js to be 0.0.0.0.
+
 ## Dependencies
 
 - run `npm install` in the project root to install dependencies.
